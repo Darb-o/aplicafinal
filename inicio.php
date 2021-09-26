@@ -47,7 +47,7 @@ session_start();
                   if(isset( $_SESSION['user'])){
                     if($_SESSION['user']!=null){
                       echo "<li><button type='button' id='btnPerfil' class='btn dropdown-item' data-toggle='modal'>Mi perfil</button></li>
-                      <li><a id='btnSalirSesion' class='dropdown-item' href='./conexion/logout.php' >Cerrar sesion</a></li>";
+                      <li><button type='button' id='btnSalirSesion' class='btn dropdown-item' data-toggle='modal'>Cerrar sesion</button></li>";
                     }               
                   }else{
                     echo "<li><button type='button' id='btnInicioSesion' class='btn dropdown-item' data-toggle='modal'>Iniciar sesion</button></li>
