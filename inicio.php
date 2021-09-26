@@ -129,35 +129,62 @@ session_start();
     <div class="modal fade" id="modalRegistrarse" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
+              
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel"></h5>
+                    <h4 id="texto" class="modal-title">Registrarse</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true"></span>
-                    </button>
+                    </button>          
                 </div>
+                
                 <!--FORMULARIO-->
+                
                 <form id="formRegistrarse">
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="form group">
-                                    <label for="" class="col-form-label">Correo</label>
-                                    <input type="text" class="form-control" placeholder="Nombre usuario" id="correo">
-                                </div>
-                            </div>
-                            <div class="col-12 ">
-                                <div class="form group">
-                                    <label for="" class="col-form-label">nombre</label>
-                                    <input type="password" class="form-control" placeholder="Contraseña" id="nom">
-                                </div>
-                            </div>                         
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                        <button type="submit" id="btnRegistro" class="btn btn-primary" value="Registrarse"></button>
+                    <div class="modal-body px-5">
+
+                      <div class="input-group px-4">
+                        <label for="" id="txtlabel" class="col-md-12 col-form-label">Nombre*</label>
+                        <span class="input-group-text material-icons" id="iconosModal">person</span>
+                        <input type="texto" id="nombre_r" class="form-control" required>
+                      </div>
+
+                      <div class="input-group px-4">
+                        <label for="" id="txtlabel" class="col-md-12 col-form-label">Telefono contacto*</label>
+                        <span class="input-group-text material-icons" id="iconosModal">phone_iphone</span>
+                        <input type="number" id="tel_r" class="form-control" required>
+                      </div>
+
+                      <div class="input-group px-4">
+                        <label for="" id="txtlabel" class="col-md-12 col-form-label">Correo electronico*</label>
+                        <span class="input-group-text material-icons" id="iconosModal">email</span>
+                        <input type="email" id="correo_r" class="form-control" required>
+                      </div>                    
+
+                      <div class="input-group mb-2 px-4">
+                        <label for="" id="txtlabel" class="col-md-12 col-form-label">Contraseña*</label>
+                        <span class="input-group-text material-icons" id="iconosModal">lock</span>
+                        <input type="password" id="password_r" class="form-control" required>
+                      </div>  
+
+                      <div class="input-group mb-2 px-4">
+                        <label for="" id="txtlabel" class="col-md-12 col-form-label">Fecha nacimiento*</label>
+                        <span class="input-group-text material-icons" id="iconosModal" >calendar_today</span>
+                        <input type="date" id="fechanac_r" class="form-control" required >
+                      </div>
+                      
+                      <div class="input-group mb-4 px-4">
+                        <label for="" id="txtlabel" class="col-md-12 col-form-label">Direccion</label>
+                        <span class="input-group-text material-icons" id="iconosModal">gite</span>
+                        <input type="text" id="direccion_r" class="form-control">
+                      </div>
+                      
+                      <div class="input-group mb-4 px-4">
+                        <input type="submit" id="btnEnviarRegistro" class="form-control" value="Registrarse">
+                      </div> 
+
                     </div>
                 </form>
+
             </div>
         </div>
     </div>
