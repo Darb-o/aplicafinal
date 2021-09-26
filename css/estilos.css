@@ -1,0 +1,49 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+#iconosMenu {
+    font-size: 30px;
+    color: #151313;
+}
+
+#btnCarro:hover {
+    background-color: #D4546D;
+}
+
+#navbarScrollingDropdown:hover {
+    background-color: #D4546D;
+}
+
+.navbar {
+    background-color: #D72347;
+}
+
+#texto {
+    font-family: Verdana;
+    color: white;
+}
+
+
+/* Modal */
+
+.modal-header {
+    background-color: #D72347;
+}
+
+#iconosModal {
+    font-size: 30px;
+    color: #151313;
+}
+
+#txtlabel {
+    text-align: center;
+    font-weight: bold;
+}
+
+#btnIngreso {
+    background-color: #D72347;
+    color: white;
+    height: 45px;
+}

@@ -1,0 +1,10 @@
+<?php
+session_start();
+unset($_SESSION['session']);
+unset($_SESSION['user']);
+unset($_SESSION['id_rol']);
+unset($_SESSION['nombre']);
+unset($_SESSION['rol']);
+session_destroy();
+header('Location:../inicio.php');
+?>
