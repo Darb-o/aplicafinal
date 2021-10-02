@@ -1,8 +1,8 @@
 <?php
+session_start();
 include("./conexion.php");
 $ob = new Conexion();
 $link = $ob->Conectar();
-
 $nombre_r=(isset($_REQUEST['nombre_r']))?$_REQUEST['nombre_r']:'';
 $correo_r=(isset($_REQUEST['correo_r']))?$_REQUEST['correo_r']:'';
 $tel_r=(isset($_REQUEST['tel_r']))?$_REQUEST['tel_r']:'';
@@ -19,7 +19,8 @@ switch($opcion){
         $res->execute();
         if($res->rowCount()>=1){
             $data = $res->fetchAll(PDO::FETCH_ASSOC);
-        }else{ 
+        }else{
+            $password_r = password_hash($password_r,PASSWORD_DEFAULT);
             $sql = "insert into usuario values('$correo_r','$password_r','$nombre_r','$tel_r','$fechanac_r','$direccion_r',$id_rol)"; 
             $res = $link->prepare($sql); //prepara la consulta
             $res->execute(); //ejecuta la consulta
@@ -28,28 +29,39 @@ switch($opcion){
         }  
         break;
     case 2: //actualizar
-        /*$sql = "update alumnos set nomb_a ='$nom',apel_a='$ape',email_a='$email' where id_a = $cod";
+        $sql = "update usuario set nombre='$nombre_r',telefono='$tel_r',fecha_nac='$fechanac_r', direccion='$direccion_r' where correo = '$correo_r'";
         $res = $link->prepare($sql);
         $res->execute();
-        //mostrar los datos
-        $data = mostrar($link);
-        break;*/
-    case 3: //consultar
-        /*$data = mostrar($link);
-        break; */
+        $data = $res->fetchAll(PDO::FETCH_ASSOC);
+        break;
+    case 3: //consultar datos usuario actual en sesion
+        $user = $_SESSION['user'];
+        $sql = "select * from usuario where correo = '$user'";
+        $res = $link -> prepare($sql);
+        $res->execute();
+        $data = $res->fetchAll(PDO::FETCH_ASSOC);                  
+        break;
+    case 4: //consultar usuario con correo
+        $sql = "select * from usuario where correo = '$correo_r'";
+        $res = $link->prepare($sql);
+        $res->execute();
+        if($res->rowCount()>=1){
+            $data = $res->fetchAll(PDO::FETCH_ASSOC);
+        }else{
+            $data = null;
+        }
+        break;
+    case 5: //actualizar contraseña actualizar       
+        $password_r = password_hash($password_r,PASSWORD_DEFAULT);
+        $sql = "update usuario set clave='$password_r' where correo = '$correo_r'";
+        $res = $link->prepare($sql);
+        $res->execute();
+        $_SESSION['datosusuario'][0]['clave'] = $password_r;
+        break;
+
 }
 
 //se envia el array en formato JSON a AJAX
-print json_encode($data,JSON_UNESCAPED_UNICODE);
-
-function mostrar($link){
-    //mostrar los datos
-    $sql = "select * from usuario";
-    $res = $link->prepare($sql);
-    $res->execute();
-    //guarda la tabla en un array
-    $data = $res->fetchAll(PDO::FETCH_ASSOC);
-    return $data;
-}
+print json_encode($data);
 
 ?>

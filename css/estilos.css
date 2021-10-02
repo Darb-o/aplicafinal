@@ -1,14 +1,21 @@
-body {
+* {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
 
 #iconosMenu {
-    font-size: 30px;
+    font-size: 32px;
     color: #151313;
 }
 
-#btnCarro:hover {
+nav {
+    padding: 20px 40px;
+    height: 60px;
+}
+
+#btnCarro:hover,
+#btnFacturaActual:hover {
     background-color: #D4546D;
 }
 
@@ -21,8 +28,11 @@ body {
 }
 
 #texto {
-    font-family: Verdana;
     color: white;
+}
+
+#cajas {
+    height: 40px;
 }
 
 
@@ -33,23 +43,29 @@ body {
 }
 
 #iconosModal {
-    font-size: 30px;
+    font-size: 18px;
     color: #151313;
+    padding: auto;
 }
 
-#txtlabel {
+#txtlabel,
+#btnRecuperar {
     text-align: center;
     font-weight: bold;
+    font-size: 14px;
 }
 
-#btnIngreso {
+#btnIngreso,
+#btnEnviarRegistro,
+#btnEditarPerfil,
+#btnCambioPassword {
     background-color: #D72347;
     color: white;
-    height: 45px;
+    height: 40px;
 }
 
-#btnEnviarRegistro {
-    background-color: #D72347;
-    color: white;
-    height: 45px;
+#btnEditarPerfil,
+#btnCambioPassword {
+    padding: 0px;
+    margin: 0px;
 }
