@@ -16,7 +16,7 @@ session_start();
 </head>
 <body>
   <!-- MENU -->
-        <nav id="menu" class="navbar navbar-expand-lg navbar-light sticky-top">
+        <nav id="menuInicio" class="navbar navbar-expand-lg navbar-light sticky-top">
          <div class="container-fluid">     
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -119,7 +119,7 @@ session_start();
                         <label for="" id="txtlabel" class="col-12 col-form-label">Contraseña:</label>
                         <span class="input-group-text material-icons" id="iconosModal">lock</span>
                         <input type="password" id="password" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
-                      </div> 
+                      </div>                     
  
                       <div class="input-group input-group-sm mb-2 px-4">
                         <a type="button" class="col-12 col-form-label" id="btnRecuperar" >Recuperar contraseña?</a>
@@ -171,13 +171,7 @@ session_start();
                         <label for="" id="txtlabel" class="col-12 col-form-label">Correo electronico*</label>
                         <span class="input-group-text material-icons" id="iconosModal">email</span>
                         <input type="email" id="correo_r" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
-                      </div>                    
-
-                      <div class="input-group input-group-sm px-4">
-                        <label for="" id="txtlabel" class="col-12 col-form-label">Contraseña*</label>
-                        <span class="input-group-text material-icons" id="iconosModal">lock</span>
-                        <input type="password" id="password_r" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
-                      </div>  
+                      </div>                                         
 
                       <div class="input-group input-group-sm px-4">
                         <label for="" id="txtlabel" class="col-12 col-form-label">Fecha nacimiento*</label>
@@ -185,10 +179,41 @@ session_start();
                         <input type="date" id="fechanac_r" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required >
                       </div>
                       
-                      <div class="input-group input-group-sm mb-4 px-4">
-                        <label for="" id="txtlabel" class="col-12 col-form-label">Direccion</label>
+                      <div class="input-group input-group-sm px-4">
+                        <label for="" id="txtlabel" class="col-12 col-form-label">Direccion*</label>
                         <span class="input-group-text material-icons" id="iconosModal">gite</span>
                         <input type="text" id="direccion_r" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                      </div>
+
+                      <div class="input-group input-group-sm px-4">
+                        <label for="" id="txtlabel" class="col-12 col-form-label">Contraseña*</label>
+                        <span class="input-group-text material-icons" id="iconosModal">lock</span>
+                        <input type="password" id="password_r" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                      </div> 
+
+                      <div class="input-group input-group-sm px-4">
+                        <label for="" id="txtlabel" class="col-12 col-form-label">Pregunta de seguridad</label>
+                        <span class="input-group-text material-icons" id="iconosModal">lock</span>
+                        <select class="form-select form-control form-select-sm" id="selectPregunta" required aria-label=".form-select-sm example">
+                          <?php
+                            include("./bd/conexion.php");
+                            $ob = new Conexion();
+                            $link = $ob->Conectar();
+                            $sql = "select * from preguntas";
+                            $res=$link->prepare($sql);
+                            $res->execute();
+                            $data=$res->fetchAll(PDO::FETCH_ASSOC);
+                            foreach ($data as $valores):
+                              echo '<option value="'.$valores["idpregunta"].'">'.$valores["descripcion"].'</option>';
+                            endforeach;
+                          ?>
+                          </select>
+                      </div> 
+
+                      <div class="input-group input-group-sm mb-4 px-4">
+                        <label for="" id="txtlabel" class="col-12 col-form-label">Respuesta*</label>
+                        <span class="input-group-text material-icons" id="iconosModal">lock</span>
+                        <input type="text" id="respuesta" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                       </div>
                       
                       <div class="input-group mb-4 px-4">

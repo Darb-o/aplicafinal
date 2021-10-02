@@ -16,23 +16,30 @@ $(document).ready(function() {
             data: { user: user, password: password, opcion: opcion },
             success: function(data) {
                 if (data == null) {
-                    Swal.fire({
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top',
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                            toast.addEventListener('mouseenter', Swal.stopTimer)
+                            toast.addEventListener('mouseleave', Swal.resumeTimer)
+                        }
+                    })
+                    Toast.fire({
                         icon: 'error',
-                        title: 'Usuario y contraseña incorrectos',
+                        title: 'Usuario o contraseña incorrectos'
                     })
                 } else {
-                    window.location.href = 'inicio.php';
-                    /*Swal.fire({
-                        icon: 'success',
-                        title: `Bienvenido ${data[0].nombre}`,
-                        allowOutsideClick: false,
-                        allowEscapeKey: false,
-                        confirmButtonText: 'OK',
-                    }).then((result) => {
-                        if (result.value) {
-                            
-                        }
-                    })*/
+                    opcion = data[0].id_rol;
+                    if (opcion == 1) {
+                        window.location.href = 'admin.php';
+                    } else if (opcion == 2) {
+                        window.location.href = 'empleado.php';
+                    } else {
+                        window.location.href = 'inicio.php';
+                    }
                 }
             }
         });
@@ -44,7 +51,7 @@ $(document).ready(function() {
     });
 
     $("#btnRecuperar").click(function() {
-        opcion = 4;
+        opcion = 6;
         (async() => {
             const { value: correo } = await Swal.fire({
                 title: 'Recuperacion de contraseña',
@@ -54,10 +61,11 @@ $(document).ready(function() {
                 inputAttributes: {
                     maxlength: 100,
                     autocapitalize: 'off',
-                    autocorrect: 'off'
+                    autocorrect: 'off',
+                    required: true
                 }
             })
-            if (correo) {
+            if (correo.length > 0) {
                 $.ajax({
                     url: './bd/crud_usuario.php',
                     type: 'POST',
@@ -65,15 +73,93 @@ $(document).ready(function() {
                     data: { correo_r: correo, opcion: opcion },
                     success: function(data) {
                         if (data != null) {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'contraseña enviada a tu correo',
-                            })
-                            $("#modalInicioSesion").modal('hide');
+                            (async() => {
+                                const { value: respuesta } = await Swal.fire({
+                                    title: 'Responda la pregunta',
+                                    input: 'text',
+                                    inputLabel: `${data[0].descripcion}`,
+                                    inputPlaceholder: 'escriba su respuesta',
+                                    inputAttributes: {
+                                        maxlength: 100,
+                                        autocapitalize: 'off',
+                                        autocorrect: 'off',
+                                        required: true
+                                    }
+                                })
+                                if (respuesta.length > 0) {
+                                    (async() => {
+                                        const { value: newclave } = await Swal.fire({
+                                            title: 'Nueva contraseña',
+                                            input: 'password',
+                                            inputLabel: 'por favor, escriba su nueva contraseña',
+                                            inputPlaceholder: 'digite contraseña',
+                                            inputAttributes: {
+                                                maxlength: 100,
+                                                autocapitalize: 'off',
+                                                autocorrect: 'off',
+                                                required: true,
+                                            }
+                                        })
+                                        if (newclave.length > 0) {
+                                            opcion = 5;
+                                            $.ajax({
+                                                url: './bd/crud_usuario.php',
+                                                type: 'POST',
+                                                dataType: 'json',
+                                                data: { correo_r: data[0].correo, password_r: newclave, opcion: opcion },
+                                            })
+                                            const Toast = Swal.mixin({
+                                                toast: true,
+                                                position: 'top',
+                                                showConfirmButton: false,
+                                                timer: 5000,
+                                                timerProgressBar: true,
+                                                didOpen: (toast) => {
+                                                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                                                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                                                }
+                                            })
+                                            Toast.fire({
+                                                icon: 'success',
+                                                title: 'contraseña cambiada',
+                                            })
+                                        }
+                                    })()
+                                } else {
+                                    const Toast = Swal.mixin({
+                                        toast: true,
+                                        position: 'top',
+                                        showConfirmButton: false,
+                                        timer: 5000,
+                                        timerProgressBar: true,
+                                        didOpen: (toast) => {
+                                            toast.addEventListener('mouseenter', Swal.stopTimer)
+                                            toast.addEventListener('mouseleave', Swal.resumeTimer)
+                                        }
+                                    })
+                                    Toast.fire({
+                                        icon: 'error',
+                                        title: 'Respuesta incorrecta',
+                                    })
+                                }
+                            })()
+
                         } else {
-                            Swal.fire({
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: 'top',
+                                showConfirmButton: false,
+                                timer: 3000,
+                                timerProgressBar: true,
+                                didOpen: (toast) => {
+                                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                                }
+                            })
+                            Toast.fire({
                                 icon: 'error',
-                                title: 'Correo no registrado',
+                                title: 'usuario no registrada en el sistema',
+                                text: 'verifique su correo',
                             })
                         }
                     }
@@ -92,7 +178,8 @@ $(document).ready(function() {
         let password_r = $.trim($("#password_r").val());
         let fechanac_r = $.trim($("#fechanac_r").val());
         let direccion_r = $.trim($("#direccion_r").val());
-        console.log(opcion, id_rol, fechanac_r);
+        let idpregunta = $.trim($("#selectPregunta").val());
+        let respuesta = $.trim($("#respuesta").val());
         Swal.fire({
             title: 'Confirmar datos',
             text: `Nombre: ${nombre_r}, Correo: ${correo_r}, 
@@ -109,21 +196,38 @@ $(document).ready(function() {
                     url: './bd/crud_usuario.php',
                     type: 'POST',
                     dataType: 'json',
-                    data: { nombre_r: nombre_r, correo_r: correo_r, tel_r: tel_r, password_r: password_r, fechanac_r, fechanac_r, direccion_r: direccion_r, opcion: opcion, id_rol: id_rol },
+                    data: { nombre_r: nombre_r, correo_r: correo_r, tel_r: tel_r, password_r: password_r, fechanac_r, fechanac_r, direccion_r: direccion_r, opcion: opcion, id_rol: id_rol, idpregunta: idpregunta, respuesta: respuesta },
                     success: function(data) {
                         if (data == null) {
                             $("#modalRegistrarse").modal('hide');
-                            Swal.fire({
-                                icon: 'success',
-                                title: `Usuario ${nombre_r} registrado con exito`,
-                                confirmButtonText: 'OK',
-                            }).then((result) => {
-                                if (result.value) {
-                                    $("#modalRegistrarse").modal('hide');
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: 'top',
+                                showConfirmButton: false,
+                                timer: 5000,
+                                timerProgressBar: true,
+                                didOpen: (toast) => {
+                                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                                    toast.addEventListener('mouseleave', Swal.resumeTimer)
                                 }
                             })
+                            Toast.fire({
+                                icon: 'success',
+                                title: `Usuario ${nombre_r} registrado con exito`
+                            })
                         } else {
-                            Swal.fire({
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: 'top',
+                                showConfirmButton: false,
+                                timer: 5000,
+                                timerProgressBar: true,
+                                didOpen: (toast) => {
+                                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                                }
+                            })
+                            Toast.fire({
                                 icon: 'error',
                                 title: 'Correo ya registrado',
                                 text: 'El usuario ya esta registrado, acceda con su cuenta o verifique los datos',
@@ -138,6 +242,20 @@ $(document).ready(function() {
     $("#btnRegistrarse").click(() => {
         opcion = 1;
         id_rol = 3;
+        $("#formRegistrarse").trigger("reset");
+        $("#modalRegistrarse").modal('show');
+    })
+
+    $("#btnRegistrarEmpleado").click(() => {
+        opcion = 1;
+        id_rol = 2;
+        $("#formRegistrarse").trigger("reset");
+        $("#modalRegistrarse").modal('show');
+    })
+
+    $("#btnRegistrarAdmin").click(() => {
+        opcion = 1;
+        id_rol = 1;
         $("#formRegistrarse").trigger("reset");
         $("#modalRegistrarse").modal('show');
     })
@@ -179,7 +297,6 @@ $(document).ready(function() {
             dataType: 'json',
             data: { opcion: opcion },
             success: function(data) {
-                console.log(data);
                 $("#nom_edit").val(data[0].nombre);
                 $("#tel_edit").val(data[0].telefono);
                 $("#correo_edit").val(data[0].correo);
@@ -222,7 +339,7 @@ $(document).ready(function() {
                             if (data != null) {
                                 const Toast = Swal.mixin({
                                     toast: true,
-                                    position: 'top-end',
+                                    position: 'top',
                                     showConfirmButton: false,
                                     timer: 3000,
                                     timerProgressBar: true,
@@ -253,9 +370,9 @@ $(document).ready(function() {
                 } else {
                     const Toast = Swal.mixin({
                         toast: true,
-                        position: 'top-end',
+                        position: 'top',
                         showConfirmButton: false,
-                        timer: 3000,
+                        timer: 4000,
                         timerProgressBar: true,
                         didOpen: (toast) => {
                             toast.addEventListener('mouseenter', Swal.stopTimer)
@@ -301,21 +418,43 @@ $(document).ready(function() {
                     success: function(data) {
                         if (data != null) {
                             opcion = 5;
-                            console.log("hola entre");
                             $.ajax({
                                 url: './bd/crud_usuario.php',
                                 type: 'POST',
                                 dataType: 'json',
                                 data: { correo_r: data[0].correo, password_r: nueva, opcion: opcion },
                             })
-                            Swal.fire({
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: 'top',
+                                showConfirmButton: false,
+                                timer: 3000,
+                                timerProgressBar: true,
+                                didOpen: (toast) => {
+                                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                                }
+                            })
+                            Toast.fire({
                                 icon: 'success',
-                                title: 'Contraseña actualizada',
+                                title: 'contraseña actualizada'
                             })
                         } else {
-                            Swal.fire({
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: 'top',
+                                showConfirmButton: false,
+                                timer: 3000,
+                                timerProgressBar: true,
+                                background: '',
+                                didOpen: (toast) => {
+                                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                                }
+                            })
+                            Toast.fire({
                                 icon: 'error',
-                                title: 'Contraseña actual erronea',
+                                title: 'contraseña actual erronea'
                             })
                         }
                     }
@@ -382,6 +521,18 @@ $(document).ready(function() {
             icon: 'success',
             title: 'Signed in successfully'
         })
+    })
+
+    $("#btnProductos").click(() => {
+        window.location.href = 'CRUD_Productos.php';
+    })
+
+    $("#btnPromociones").click(() => {
+        window.location.href = 'CRUD_Promo.php';
+    })
+
+    $("#btnGrupo").click(() => {
+        window.location.href = 'CRUD_grupoP.php';
     })
 
 

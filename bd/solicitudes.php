@@ -50,9 +50,10 @@
             $data=$res->fetchAll(PDO::FETCH_ASSOC);
             break;
         case 3://elimina datos de la tabla grupo
-            $sql="delete from grupo where id_grupo='$id_grupo'";
+            $sql="delete from grupo where id_grupo = $id_grupo";
             $res=$link->prepare($sql);
             $res->execute();
+            $data=$res->fetchAll(PDO::FETCH_ASSOC);
             break;
         case 4://consulta los datos de la tabla grupos
             $sql="select * from grupo";

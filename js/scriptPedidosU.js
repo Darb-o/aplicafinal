@@ -15,7 +15,6 @@ $(document).ready(function() {
                 descuento.push(data[i].descuento);
             }
             fillGrupo();
-            console.log(data);
         }
 
     });
@@ -30,7 +29,6 @@ $(document).ready(function() {
     $('#formPedidos').submit(function(e) {
         e.preventDefault(); //evitar la funcion del submit para recargar la pagina
         cantidad = $.trim($('#cantidad').val());
-        console.log(cantidad + "comprobar cantidad");
         opcion = 19;
         $.ajax({
             url: "bd/solicitudes.php",
@@ -38,7 +36,6 @@ $(document).ready(function() {
             dataType: "json",
             data: { opcion: opcion, usuario: "hugo" }, //por cambiar para usuario de verdad
             success: function(data) {
-                console.log(data);
                 if (data.length == 0) {
                     crearNuevaFactura(cantidad);
                 } else {
@@ -69,7 +66,6 @@ function fillGrupo() {
 
 function fillCards(grupo) {
     var att = document.getElementById("" + grupo);
-    console.log(att);
     opcion = 17;
     var pd;
     var hecho;
@@ -79,7 +75,6 @@ function fillCards(grupo) {
         dataType: "json",
         data: { opcion: opcion, grupo: grupo },
         success: function(data) {
-            console.log(data);
             for (var i = 0; i < data.length; i++) {
                 hecho = 0;
                 for (var j = 0; j < id_conD.length; j++) {
@@ -106,7 +101,6 @@ function modal(id) {
         dataType: "json",
         data: { opcion: opcion, id_p: id },
         success: function(data) {
-            console.log(data);
             $("#formPedidos").trigger("reset"); // resetear o limpiar el formulario
             $(".modal-header").css("background-color", "#198754");
             $(".modal-header").css("color", "white");
@@ -148,7 +142,6 @@ function crearNuevaFactura(cantidad) {
 }
 
 function CrearyConsultCarrito(data, cantidad, opcion) { //opcion?
-    console.log("aun no realizado" + opcion + " y " + data[0].id_factura);
     //opcion 6 crea nuevo
     //opcion 7 consulta el id_orden utilizando el id_factura 
     $.ajax({
@@ -157,8 +150,6 @@ function CrearyConsultCarrito(data, cantidad, opcion) { //opcion?
         dataType: "json",
         data: { opcion: opcion, id_factura: data[0].id_factura },
         success: function(data) { //data retorna id_orden
-            console.log("DAta orden");
-            console.log(data);
             insertarOrden_Producto(data, cantidad);
         }
     });

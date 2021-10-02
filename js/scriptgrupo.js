@@ -53,7 +53,6 @@ $(document).ready(function() {
             data: { id_grupo: id, nombre_grupo: nombre_g, descripcion_grupo: descripcion_g, opcion: opcion },
             success: function(data) {
                 if (data != null) {
-                    console.log("entre");
                     tablaGrupos.ajax.reload();
                 }
             }
@@ -90,6 +89,7 @@ $(document).ready(function() {
     $(document).on("click", ".btnBorrar", function() {
         fila = $(this);
         id = parseInt($(this).closest('tr').find('td:eq(0)').text());
+        console.log(id);
         opcion = 3;
         var confirmacion = confirm("Esta seguro de eliminar el registro " + id + "?");
         if (confirmacion) {
@@ -97,12 +97,12 @@ $(document).ready(function() {
                 url: "./bd/solicitudes.php",
                 type: "post",
                 dataType: "json",
-                data: { opcion: opcion, id: id },
+                data: { opcion: opcion, id_grupo: id },
                 success: function() {
-                    tablaGrupos.row(fila).parents('tr').remove().draw();
+                    tablaGrupos.ajax.reload(null, false);
                 }
             });
-            tablaGrupos.ajax.reload(null, false);
+
         }
     })
 });

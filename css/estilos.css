@@ -23,8 +23,16 @@ nav {
     background-color: #D4546D;
 }
 
-.navbar {
+#menuInicio {
     background-color: #D72347;
+}
+
+#menuAdmin {
+    background-color: #2E54F1;
+}
+
+#menuEmpleado {
+    background-color: #B5C00D;
 }
 
 #texto {
