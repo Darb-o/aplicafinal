@@ -54,7 +54,7 @@ $(document).ready(function() {
             { "data": "img" },
             { "data": "estado_producto" },
             { "data": "grupo" },
-            { "defaultContent": "<div class='text-center'><div class='btn-group'><button class='btn btn-primary btn-sm btnEditar'>EDITAR PRODUCTO<span class='material-icons'>edit</span></button><button class='btn btn-warning btn-sm btnCambiar'>CAMBIAR ESTADO<span class='material-icons'>change_circle</span></button><button class='btn btn-danger btn-sm btnBorrar'>BORRAR PRODUCTO<span class='material-icons'>delete</span></button></div></div>" }
+            { "defaultContent": "<div class='text-center'><div class='btn-group'><button id='btnEditar' type='button' class='btn btn-primary btn-sm'><i id='iconitos' class='bi bi-pen'></i>Editar producto</button><button type='button' class='btn btn-warning btn-sm' id='btnCambiar'><i id='iconitos' class='bi bi-toggles'></i>Cambiar estado</button><button type='button' id='btnBorrar' class='btn btn-danger btn-sm'><i id='iconitos' class='bi bi-trash'></i>Borrar producto</button></div></div>" }
         ]
     });
     var fila;
@@ -88,7 +88,7 @@ $(document).ready(function() {
         $("#modalProductos").modal('show');
     });
 
-    $(document).on("click", ".btnEditar", function() {
+    $(document).on("click", "#btnEditar", function() {
         fila = $(this).closest('tr');
         id_p = parseInt(fila.find('td:eq(0)').text());
         nom_p = fila.find('td:eq(1)').text();
@@ -110,7 +110,7 @@ $(document).ready(function() {
         $("#modalProductos").modal('show');
     });
 
-    $(document).on("click", ".btnCambiar", function() {
+    $(document).on("click", "#btnCambiar", function() {
         fila = $(this).closest('tr');
         id_p = parseInt(fila.find('td:eq(0)').text());
         estado = parseInt(fila.find('td:eq(5)').text());
@@ -135,22 +135,46 @@ $(document).ready(function() {
         }
     });
 
-    $(document).on("click", ".btnBorrar", function() {
+    $(document).on("click", "#btnBorrar", function() {
         fila = $(this);
         id_p = parseInt($(this).closest('tr').find('td:eq(0)').text());
         opcion = 7;
-        var confirmacion = confirm("Esta seguro de eliminar el registro " + id_p + "?");
-        if (confirmacion) {
-            $.ajax({
-                url: "bd/solicitudes.php",
-                type: "post",
-                dataType: "json",
-                data: { opcion: opcion, id_p: id_p },
-                success: function() {
-                    tablaProductos.row(fila).parents('tr').remove().draw();
-                }
-            });
-            tablaProductos.ajax.reload(null, false);
-        }
+        Swal.fire({
+            title: 'Seguro de borrar?',
+            text: "esta accion no se podra revertir!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'si, borralo!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: "bd/solicitudes.php",
+                    type: "post",
+                    dataType: "json",
+                    data: { opcion: opcion, id_p: id_p },
+                    success: function() {
+                        tablaProductos.row(fila).parents('tr').remove().draw();
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal.stopTimer)
+                                toast.addEventListener('mouseleave', Swal.resumeTimer)
+                            }
+                        })
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Borrado con exito'
+                        })
+                    }
+                });
+                tablaProductos.ajax.reload(null, false);
+            }
+        })
     });
 })

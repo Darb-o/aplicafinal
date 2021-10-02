@@ -46,6 +46,9 @@ $(document).ready(function() {
     });
 
     $("#btnInicioSesion").click(function() {
+        $(".modal-header").css("background-color", "#D72347");
+        $(".modal-header").css("color", "white");
+        $(".modal-title").text("Iniciar sesion");
         $("#formInicioSesion").trigger("reset");
         $("#modalInicioSesion").modal('show');
     });
@@ -242,6 +245,9 @@ $(document).ready(function() {
     $("#btnRegistrarse").click(() => {
         opcion = 1;
         id_rol = 3;
+        $(".modal-header").css("background-color", "#D72347");
+        $(".modal-header").css("color", "white");
+        $(".modal-title").text("Registrar usuario");
         $("#formRegistrarse").trigger("reset");
         $("#modalRegistrarse").modal('show');
     })
@@ -250,12 +256,18 @@ $(document).ready(function() {
         opcion = 1;
         id_rol = 2;
         $("#formRegistrarse").trigger("reset");
+        $(".modal-header").css("background-color", "#2E54F1");
+        $(".modal-header").css("color", "white");
+        $(".modal-title").text("Registrar empleado");
         $("#modalRegistrarse").modal('show');
     })
 
     $("#btnRegistrarAdmin").click(() => {
         opcion = 1;
         id_rol = 1;
+        $(".modal-header").css("background-color", "#2E54F1");
+        $(".modal-header").css("color", "white");
+        $(".modal-title").text("Registrar Administrador");
         $("#formRegistrarse").trigger("reset");
         $("#modalRegistrarse").modal('show');
     })
@@ -304,6 +316,9 @@ $(document).ready(function() {
                 $("#direccion_edit").val(data[0].direccion);
             }
         })
+        $(".modal-header").css("background-color", "#D72347");
+        $(".modal-header").css("color", "white");
+        $(".modal-title").text("Editar perfil");
         $("#modalEditarPerfil").modal('show');
         $("#nom_edit").prop('disabled', true);
         $("#tel_edit").prop('disabled', true);

@@ -14,25 +14,38 @@ nav {
     height: 60px;
 }
 
-#btnCarro:hover,
-#btnFacturaActual:hover {
-    background-color: #D4546D;
-}
 
-#navbarScrollingDropdown:hover {
-    background-color: #D4546D;
-}
+/*MENUS*/
 
 #menuInicio {
     background-color: #D72347;
+}
+
+#iconousuarioinicio:hover,
+#btnCarro:hover,
+#btnFacturaActual:hover {
+    background-color: #D4546D;
 }
 
 #menuAdmin {
     background-color: #2E54F1;
 }
 
+#btnProductos:hover,
+#btnPromociones:hover,
+#btnGrupo:hover,
+#btnFacturas:hover,
+#iconousuarioadmin:hover {
+    background-color: #4968E8;
+}
+
 #menuEmpleado {
-    background-color: #B5C00D;
+    background-color: #9A2CCA;
+}
+
+#btnfacturasemp:hover,
+#iconousuarioempleado:hover {
+    background-color: #A44DCA;
 }
 
 #texto {
@@ -45,10 +58,6 @@ nav {
 
 
 /* Modal */
-
-.modal-header {
-    background-color: #D72347;
-}
 
 #iconosModal {
     font-size: 18px;
@@ -76,4 +85,13 @@ nav {
 #btnCambioPassword {
     padding: 0px;
     margin: 0px;
+}
+
+
+/*Extra*/
+
+#iconitos {
+    color: black;
+    padding-right: 5px;
+    font-size: 19px;
 }

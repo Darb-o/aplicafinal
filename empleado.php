@@ -35,7 +35,7 @@ if(isset( $_SESSION['user'])){
             </li>
 
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <a class="nav-link dropdown-toggle" href="#" id="iconousuarioempleado" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               <span id="iconosMenu" class="material-icons">account_circle</span>
               </a>
               <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
@@ -45,7 +45,7 @@ if(isset( $_SESSION['user'])){
             </li>
 
              <li class="nav-item">
-             <button type='button' id='btnFacturaActual' class='btn'>
+             <button type='button' id='btnfacturasemp' class='btn'>
                     <span id='iconosMenu' class='material-icons'>receipt_long</span>
                   </button>
              </li> 

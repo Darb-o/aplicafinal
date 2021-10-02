@@ -21,10 +21,15 @@ if(isset( $_SESSION['user'])){
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs5/dt-1.11.3/datatables.min.css">
     <link rel="stylesheet" type="text/css" href="./css/estilos.css"/>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css"
+    />
 </head>
 
 <body>
-<nav id="menuAdmin" class="navbar navbar-expand-lg navbar-light sticky-top">
+     <!--MENU ADMIN-->
+     <nav id="menuAdmin" class="navbar navbar-expand-lg navbar-light sticky-top">
          <div class="container-fluid">     
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -36,7 +41,7 @@ if(isset( $_SESSION['user'])){
             </li>
 
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <a class="nav-link dropdown-toggle" href="#" id="iconousuarioadmin" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               <span id="iconosMenu" class="material-icons">account_circle</span>
               </a>
               <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
@@ -48,26 +53,26 @@ if(isset( $_SESSION['user'])){
             </li>
 
              <li class="nav-item">
-             <button type='button' id='btnFacturaActual' class='btn'>
+             <button type='button' id='btnFacturas' class='btn'>
                     <span id='iconosMenu' class='material-icons'>receipt_long</span>
                 </button>
              </li> 
 
              <li class="nav-item">
              <button type='button' id='btnProductos' class='btn'>
-                    <span id='iconosMenu' class='material-icons'>receipt_long</span>
+                    <span id='iconosMenu' class='material-icons'>inventory_2</span>
                 </button>
              </li>
 
              <li class="nav-item">
              <button type='button' id='btnPromociones' class='btn'>
-                    <span id='iconosMenu' class='material-icons'>receipt_long</span>
+                    <span id='iconosMenu' class='material-icons'>point_of_sale</span>
                 </button>
              </li>
 
              <li class="nav-item">
              <button type='button' id='btnGrupo' class='btn'>
-                    <span id='iconosMenu' class='material-icons'>receipt_long</span>
+                    <span id='iconosMenu' class='material-icons'>production_quantity_limits</span>
                 </button>
              </li>
 
@@ -88,18 +93,20 @@ if(isset( $_SESSION['user'])){
            </div>
          </div>
     </nav>
-    <div class="container">
+
+    <!--TABLA PRODUCTOS-->
+    <div class="container-xl">
         <div class="row">
-            <div class="col-lg-12 text-center">
-                <button type="button" id="btnnuevo" class="btn btn-success" data-toggle="modal">
-                    AGREGAR NUEVO GRUPO DE PRODUCTO <span class="material-icons">add_circle_outline</span> 
-                </button>
-            </div>
-        </div>
-    </div>
-    <br>
-    <div class="container">
-        <div class="row">
+
+            <div class="col-9 mt-4 mb-3">
+              <h4>Listado secciones de productos</h4>
+            </div> 
+              <div class="col-3 mt-4 mb-3 d-flex justify-content-end">
+                  <button type="button" id="btnnuevo" class="btn btn-success" data-toggle="modal">
+                  <i id="iconitos" class="bi bi-cloud-plus-fill"></i>Agregar seccion 
+                  </button>
+              </div>
+
             <div class="col-lg-12">
                 <div class="table-responsive">
                     <table id="tablaGrupos" class="table table-striped table-bordered
@@ -119,7 +126,8 @@ if(isset( $_SESSION['user'])){
             </div>
         </div>
     </div>
-    <!--ventana modal -->
+
+    <!--MODAL PRODUCTOS -->
     <!-- Modal -->
     <div class="modal fade" id="modalGProductos" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">

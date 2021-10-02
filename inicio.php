@@ -12,6 +12,10 @@ session_start();
     <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs5/dt-1.11.2/datatables.min.css"/>
     <link rel="stylesheet" type="text/css" href="./css/estilos.css"/>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css"
+    />
     <title>Inicio</title>
 </head>
 <body>
@@ -27,7 +31,7 @@ session_start();
               <a class="nav-link" href="./inicio.php"><h5 class="navbar-brand" id="texto">Restaurante</h5></a>
             </li>
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <a class="nav-link dropdown-toggle" href="#" id="iconousuarioinicio" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                <span id="iconosMenu" class="material-icons">restaurant_menu</span>
               </a>
               <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
@@ -399,6 +403,21 @@ session_start();
             </div>
         </div>
     </div>
+
+
+    <div class="text-center">
+      <div class="btn-group">
+        <button id="btnEditar" type="button" class="btn btn-primary btn-sm">
+          <i id="iconitos" class="bi bi-pen"></i>Editar producto
+        </button>
+        <button type="button" class="btn btn-warning btn-sm" id="btnCambiar">
+          <i id="iconitos" class="bi bi-toggles"></i>Cambiar estado         
+          </button>
+        <button type="button" id="btnBorrar" class="btn btn-danger btn-sm">
+          <i id="iconitos" class="bi bi-trash"></i>Borrar producto          
+          </button>
+        </div>
+      </div>
 
     <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>

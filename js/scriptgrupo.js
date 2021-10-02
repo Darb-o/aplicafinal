@@ -38,7 +38,7 @@ $(document).ready(function() {
             { "data": "id_grupo" },
             { "data": "nombre_grupo" },
             { "data": "descripcion_grupo" },
-            { "defaultContent": "<div class='text-center'><div class='btn-group'><button class='btn btn-primary btn-sm btnEditar'>EDITAR PRODUCTO<span class='material-icons-outlined'>edit</span></button><button class='btn btn-danger btn-sm btnBorrar'>BORRAR PRODUCTO<span class='material-icons-outlined'>delete</span></button></div></div>" }
+            { "defaultContent": "<div class='text-center'><div class='btn-group'><button class='btn btn-primary btn-sm btnEditar'>EDITAR <span class='material-icons-outlined'>edit</span></button><button class='btn btn-danger btn-sm btnBorrar'>BORRAR PRODUCTO<span class='material-icons-outlined'>delete</span></button></div></div>" }
         ]
     });
 
