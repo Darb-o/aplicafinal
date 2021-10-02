@@ -54,11 +54,17 @@ $(document).ready(function() {
             { "data": "descuento" },
             { "data": "fecha_i" },
             { "data": "fecha_f" },
-            { "defaultContent": "<div class='text-center'><div class='btn-group'><button class='btn btn-primary btn-sm btnEditar'>EDITAR PRODUCTO<span class='material-icons-outlined'>edit</span></button><button class='btn btn-danger btn-sm btnBorrar'>BORRAR PRODUCTO<span class='material-icons-outlined'>delete</span></button></div></div>" }
+            { "defaultContent": "<div class='text-center'><div class='btn-group'><button id='btnEditar' type='button' class='btn btn-primary btn-sm mx-1'><i id='iconitos' class='bi bi-pen'></i>Editar descuento</button><button type='button' id='btnBorrar' class='btn btn-danger btn-sm'><i id='iconitos' class='bi bi-trash'></i>Borrar descuento</button></div></div>" }
         ]
     });
     var fila;
     $('#formDescuentos').submit(function(e) {
+        let mensaje = "";
+        if (opcion == 11) {
+            mensaje = "agregado con exito";
+        } else {
+            mensaje = "actualizado con exito";
+        }
         e.preventDefault(); //evitar la funcion del submit para recargar la pagina
         id_p = $.trim($('#seleccion').val());
         descuento = $.trim($('#descuento').val());
@@ -72,6 +78,21 @@ $(document).ready(function() {
             data: { id_d: id_d, id_p: id_p, descuento: descuento, fecha_i: fecha_i, fecha_f: fecha_f, opcion: opcion },
             success: function(data) {
                 tablaDescuentos.ajax.reload(null, false);
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer)
+                        toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                })
+                Toast.fire({
+                    icon: 'success',
+                    title: `${mensaje}`
+                })
             }
         });
         $('#modalDescuentos').modal('hide');
@@ -82,10 +103,11 @@ $(document).ready(function() {
         $(".modal-header").css("background-color", "#198754");
         $(".modal-header").css("color", "white");
         $(".modal-title").text("Ingresar nuevo producto");
+        $("#btnGuardar").text("Guardar promocion");
         opcion = 11;
         $("#modalDescuentos").modal('show');
     });
-    $(document).on("click", ".btnEditar", function() {
+    $(document).on("click", "#btnEditar", function() {
         fila = $(this).closest('tr');
         id_d = parseInt(fila.find('td:eq(0)').text());
         id_p = parseInt(fila.find('td:eq(1)').text());
@@ -99,28 +121,52 @@ $(document).ready(function() {
         $("#fecha_f").val(fecha_f);
         $(".modal-header").css("background-color", "#0d6efd");
         $(".modal-header").css("color", "white");
-        $(".modal-title").text("Editar Descuento");
-        $("#btnGuardar").text("Editar Descuento");
+        $(".modal-title").text("Editar Promocion");
+        $("#btnGuardar").text("Editar Promocion");
         opcion = 12;
         $("#modalDescuentos").modal('show');
     });
 
-    $(document).on("click", ".btnBorrar", function() {
+    $(document).on("click", "#btnBorrar", function() {
         fila = $(this);
         id_d = parseInt($(this).closest('tr').find('td:eq(0)').text());
         opcion = 13;
-        var confirmacion = confirm("Esta seguro de eliminar el registro " + id_d + "?");
-        if (confirmacion) {
-            $.ajax({
-                url: "bd/solicitudes.php",
-                type: "post",
-                dataType: "json",
-                data: { opcion: opcion, id_d: id_d },
-                success: function() {
-                    tablaDescuentos.row(fila).parents('tr').remove().draw();
-                }
-            });
-            tablaDescuentos.ajax.reload(null, false);
-        }
+        Swal.fire({
+            title: 'esta seguro de borrar?',
+            text: "esta accion no se podra revertir!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'si, borralo!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: "bd/solicitudes.php",
+                    type: "post",
+                    dataType: "json",
+                    data: { opcion: opcion, id_d: id_d },
+                    success: function() {
+                        tablaDescuentos.row(fila).parents('tr').remove().draw();
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal.stopTimer)
+                                toast.addEventListener('mouseleave', Swal.resumeTimer)
+                            }
+                        })
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Borrado con exito'
+                        })
+                    }
+                });
+                tablaDescuentos.ajax.reload(null, false);
+            }
+        })
     });
 })

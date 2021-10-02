@@ -405,20 +405,6 @@ session_start();
     </div>
 
 
-    <div class="text-center">
-      <div class="btn-group">
-        <button id="btnEditar" type="button" class="btn btn-primary btn-sm">
-          <i id="iconitos" class="bi bi-pen"></i>Editar producto
-        </button>
-        <button type="button" class="btn btn-warning btn-sm" id="btnCambiar">
-          <i id="iconitos" class="bi bi-toggles"></i>Cambiar estado         
-          </button>
-        <button type="button" id="btnBorrar" class="btn btn-danger btn-sm">
-          <i id="iconitos" class="bi bi-trash"></i>Borrar producto          
-          </button>
-        </div>
-      </div>
-
     <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.js"></script>

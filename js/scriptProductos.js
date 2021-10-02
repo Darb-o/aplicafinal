@@ -54,11 +54,17 @@ $(document).ready(function() {
             { "data": "img" },
             { "data": "estado_producto" },
             { "data": "grupo" },
-            { "defaultContent": "<div class='text-center'><div class='btn-group'><button id='btnEditar' type='button' class='btn btn-primary btn-sm'><i id='iconitos' class='bi bi-pen'></i>Editar producto</button><button type='button' class='btn btn-warning btn-sm' id='btnCambiar'><i id='iconitos' class='bi bi-toggles'></i>Cambiar estado</button><button type='button' id='btnBorrar' class='btn btn-danger btn-sm'><i id='iconitos' class='bi bi-trash'></i>Borrar producto</button></div></div>" }
+            { "defaultContent": "<div class='text-center'><div class='row'><div class='col-12 mt-1'><button id='btnEditar' type='button' class='btn btn-primary btn-sm'><i id='iconitos' class='bi bi-pen'></i>Editar producto</button></div><div class='col-12 mt-1'><button type='button' class='btn btn-warning btn-sm' id='btnCambiar'><i id='iconitos' class='bi bi-toggles'></i>Cambiar estado</button></div><div class='col-12 mt-1'> <button type='button' id='btnBorrar' class='btn btn-danger btn-sm'><i id='iconitos' class='bi bi-trash'></i>Borrar producto</button></div></div></div>" }
         ]
     });
     var fila;
     $('#formProductos').submit(function(e) {
+        let mensaje = "";
+        if (opcion == 5) {
+            mensaje = "agregado con exito";
+        } else {
+            mensaje = "actualizado con exito";
+        }
         e.preventDefault(); //evitar la funcion del submit para recargar la pagina
         grupo = $.trim($('#seleccion').val());
         nom_p = $.trim($('#nom_p').val());
@@ -73,10 +79,27 @@ $(document).ready(function() {
             data: { id_p: id_p, nom_p: nom_p, precio: precio, desc: desc, img: img, grupo: grupo, opcion: opcion },
             success: function(data) {
                 tablaProductos.ajax.reload(null, false);
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer)
+                        toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                })
+                Toast.fire({
+                    icon: 'success',
+                    title: `${mensaje}`
+                })
+
             }
         });
         $('#modalProductos').modal('hide');
     });
+
     $('#btnnuevo').click(function() {
         opcion = 5;
         id_p = null;
@@ -120,19 +143,31 @@ $(document).ready(function() {
             estado = 1;
         }
         opcion = 10;
-        var confirmacion = confirm("Esta seguro de cambiar el estado del producto " + id_p + "?");
-        if (confirmacion) {
-            $.ajax({
-                url: "bd/solicitudes.php",
-                type: "post",
-                dataType: "json",
-                data: { opcion: opcion, id_p: id_p, estado: estado },
-                success: function() {
-                    tablaProductos.ajax.reload(null, false);
-                }
-            });
-            tablaProductos.ajax.reload(null, false);
-        }
+        $.ajax({
+            url: "bd/solicitudes.php",
+            type: "post",
+            dataType: "json",
+            data: { opcion: opcion, id_p: id_p, estado: estado },
+            success: function() {
+                tablaProductos.ajax.reload(null, false);
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer)
+                        toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                })
+                Toast.fire({
+                    icon: 'success',
+                    title: 'actualizado con exito'
+                })
+            }
+        });
+        tablaProductos.ajax.reload(null, false);
     });
 
     $(document).on("click", "#btnBorrar", function() {
@@ -140,7 +175,7 @@ $(document).ready(function() {
         id_p = parseInt($(this).closest('tr').find('td:eq(0)').text());
         opcion = 7;
         Swal.fire({
-            title: 'Seguro de borrar?',
+            title: 'esta seguro de borrar?',
             text: "esta accion no se podra revertir!",
             icon: 'warning',
             showCancelButton: true,

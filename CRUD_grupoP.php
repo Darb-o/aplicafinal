@@ -102,8 +102,8 @@ if(isset( $_SESSION['user'])){
               <h4>Listado secciones de productos</h4>
             </div> 
               <div class="col-3 mt-4 mb-3 d-flex justify-content-end">
-                  <button type="button" id="btnnuevo" class="btn btn-success" data-toggle="modal">
-                  <i id="iconitos" class="bi bi-cloud-plus-fill"></i>Agregar seccion 
+                  <button type="button" id="btnnuevo" class="btn btn-primary" data-toggle="modal">
+                  <i id="iconitos" class="bi bi-plus-circle"></i>Agregar seccion 
                   </button>
               </div>
 
@@ -145,13 +145,13 @@ if(isset( $_SESSION['user'])){
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label class="col-form-label">NOMBRE GRUPO</label>
-                                    <input type="text" class="form-control" placeholder="Digite el nombre del grupo del producto" id="nombre_grupo">
+                                    <input required type="text" class="form-control" placeholder="Digite el nombre del grupo del producto" id="nombre_grupo">
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label class="col-form-label">DESCRIPCION GRUPO</label>
-                                    <input type="text" class="form-control" placeholder="Descripcion del grupo" id="descripcion_grupo">
+                                    <input required type="text" class="form-control" placeholder="Descripcion del grupo" id="descripcion_grupo">
                                 </div>
                             </div>
                         </div>

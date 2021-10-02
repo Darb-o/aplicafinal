@@ -101,8 +101,8 @@ if(isset( $_SESSION['user'])){
               <h4>Listado de promociones</h4>
             </div> 
               <div class="col-3 mt-4 mb-3 d-flex justify-content-end">
-                  <button type="button" id="btnnuevo" class="btn btn-success" data-toggle="modal">
-                  <i id="iconitos" class="bi bi-cloud-plus-fill"></i>Agregar promocion
+                  <button type="button" id="btnnuevo" class="btn btn-primary" data-toggle="modal">
+                  <i id="iconitos" class="bi bi-plus-circle"></i>Agregar promocion
                   </button>
               </div>
 
@@ -145,27 +145,26 @@ if(isset( $_SESSION['user'])){
                             <div class="col-lg-12">
                                 <label class="col-form-label">Escoja el producto a tener descuento</label>
                                 <div class="form-group">
-                                    <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="seleccion">
-                                        <option selected>Escoja el producto</option>
+                                    <select required class="form-select form-select-sm" aria-label=".form-select-sm example" id="seleccion">
                                     </select>
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label class="col-form-label">Descuento</label>
-                                    <input type="number" class="form-control" placeholder="Digite descuento aplicado al producto" id="descuento">
+                                    <input required type="number" class="form-control" placeholder="Digite descuento aplicado al producto" id="descuento">
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label class="col-form-label">Fecha de inicio</label>
-                                    <input type="date" class="form-control" min="" id="fecha_i">
+                                    <input required type="date" class="form-control" min="" id="fecha_i">
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label class="col-form-label">Fecha de finalizacion</label>
-                                    <input type="date" class="form-control" id="fecha_f">
+                                    <input required type="date" class="form-control" id="fecha_f">
                                 </div>
                             </div>
                         </div>

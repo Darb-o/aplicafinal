@@ -101,8 +101,8 @@ if(isset( $_SESSION['user'])){
               <h4>Listado de productos</h4>
             </div> 
               <div class="col-3 mt-4 mb-3 d-flex justify-content-end">
-                  <button type="button" id="btnnuevo" class="btn btn-success" data-toggle="modal">
-                  <i id="iconitos" class="bi bi-cloud-plus-fill"></i>Agregar producto 
+                  <button type="button" id="btnnuevo" class="btn btn-primary" data-toggle="modal">
+                  <i id="iconitos" class="bi bi-plus-circle"></i>Agregar producto 
                   </button>
               </div>
             
@@ -148,33 +148,33 @@ if(isset( $_SESSION['user'])){
                             <div class="col-lg-12">
                                 <label class="col-form-label">Escoja el grupo al que pertenece el producto</label>
                                 <div class="form-group">
-                                    <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="seleccion">
-                                        <option selected>Escoja el Grupo</option>
+                                    <select required class="form-select form-select-sm" aria-label=".form-select-sm example" id="seleccion">
+                                        
                                     </select>
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label class="col-form-label">NOMBRE</label>
-                                    <input type="text" class="form-control" placeholder="Digite el nombre del producto" id="nom_p">
+                                    <input required type="text" class="form-control" placeholder="Digite el nombre del producto" id="nom_p">
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label class="col-form-label">PRECIO</label>
-                                    <input type="number" class="form-control" placeholder="Digite el precio del producto" id="precio">
+                                    <input required type="number" class="form-control" placeholder="Digite el precio del producto" id="precio">
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label class="col-form-label">DESCRIPCION</label>
-                                    <input type="text" class="form-control" placeholder="Digite la descripción del producto" id="desc">
+                                    <input required type="text" class="form-control" placeholder="Digite la descripción del producto" id="desc">
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label class="col-form-label">IMG</label>
-                                    <input type="text" class="form-control" placeholder="Digite la dirección de la imagen del productoo" id="img">
+                                    <input required type="text" class="form-control" placeholder="Digite la dirección de la imagen del productoo" id="img">
                                 </div>
                             </div>
                         </div>
