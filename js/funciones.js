@@ -520,42 +520,10 @@ $(document).ready(function() {
     })
 
     $("#btnCarro").click(() => {
-        const Toast = Swal.mixin({
-            toast: true,
-            position: 'top',
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-                toast.addEventListener('mouseenter', Swal.stopTimer)
-                toast.addEventListener('mouseleave', Swal.resumeTimer)
-            }
-        })
-
-        Toast.fire({
-            icon: 'error',
-            title: 'En construccion xd'
-        })
+        $("#modalCarrito").modal('show');
     })
 
-    $("#btnFacturaActual").click(() => {
-        const Toast = Swal.mixin({
-            toast: true,
-            position: 'top',
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-                toast.addEventListener('mouseenter', Swal.stopTimer)
-                toast.addEventListener('mouseleave', Swal.resumeTimer)
-            }
-        })
-
-        Toast.fire({
-            icon: 'error',
-            title: 'En construccion xd'
-        })
-    })
+    $("#btnFacturaActual").click(() => {})
 
     $("#btnProductos").click(() => {
         window.location.href = 'CRUD_Productos.php';

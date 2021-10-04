@@ -12,7 +12,10 @@
     $telefono=(isset($_POST['telefono'])?$_POST['telefono']:'');
     $fecha=(isset($_POST['fecha'])?$_POST['fecha']:'');
     $direccion=(isset($_POST['direccion'])?$_POST['direccion']:'');
+    $idproducto=(isset($_POST['idproducto'])?$_POST['idproducto']:'');
+    $unidades=(isset($_POST['unidades'])?$_POST['unidades']:'');
     $opcion=(isset($_REQUEST['opcion']))?$_REQUEST['opcion']:'';
+    $data = null;
 
     switch($opcion){
         case 1://login
@@ -28,20 +31,21 @@
                     $_SESSION['password'] = $password;
                     $_SESSION['datosusuario'] = $data;
                     $_SESSION['id_rol'] = $data[0]['id_rol'];
+                    $_SESSION['carrito'] = array();
                 }else{
                     $data = null;
                 }      
             }else{
                 $_SESSION['user'] = null;
-                $data = null;
             }
             break;
         case 2: //logout
             unset($_SESSION['session']);
             unset($_SESSION['user']);
             unset($_SESSION['id_rol']);
+            unset($_SESSION['password']);
             unset($_SESSION['datosusuario']);
-            unset($_SESSION['rol']);
+            unset($_SESSION['carrito']);
             session_destroy();
             break;
         case 3: //traer datos sesion
@@ -50,8 +54,6 @@
         case 4: //verificar password
             if(password_verify($password,$_SESSION['datosusuario'][0]['clave'])){      
                 $data = $_SESSION['datosusuario'];
-            }else{
-                $data = null;
             }
             break;
         case 5: //renovar sesion
@@ -60,10 +62,32 @@
             $_SESSION['datosusuario'][0]['fecha'] = $fecha;
             $_SESSION['datosusuario'][0]['direccion'] = $direccion;
             break;
-
-
+        case 6: //comprobar si existe sesion
+            if(isset($_SESSION['user'])){
+                $data = $_SESSION['user'];
+            }
+            break;
+        case 7:
+            $bandera = true;
+            foreach ($_SESSION['carrito'] as $key => $value) { 
+                if($value['idproducto'] == $idproducto){
+                    $_SESSION['carrito'][$key]['unidades'] += $unidades;
+                    $bandera = false;
+                    break;
+                }          
+            }
+            if($bandera){
+                $datos = array(
+                    "idproducto" => $idproducto,
+                    "unidades" => $unidades,
+                );
+                array_push($_SESSION['carrito'],$datos);
+            }  
+            $data = $_SESSION['carrito'];
+            break;
     }
 
-    print json_encode($data);
+    print json_encode($data,JSON_UNESCAPED_UNICODE);
     $link = null;
 ?>
+

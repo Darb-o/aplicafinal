@@ -314,42 +314,54 @@ session_start();
 
     <!-- MODAL CARRITO-->
   
-    <div class="modal fade" id="modalCarrito" data-bs-focus="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content"> 
+    <div class="modal fade"  id="modalCarrito" data-bs-focus="false" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content">                             
+          <div class="modal-body">             
+            <div class="container-xl">
+              <div class="row">
 
-                <div class="modal-header">
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true"></span>
-                    </button>          
+                <div class="col-11 mt-1 mb-3">
+                  <h4>Mi carrito</h4>
+                </div>
+
+                <div class="col-1 mt-1 mb-3 d-flex justify-content-end">
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"></span>
+                  </button>
                 </div>
                 
-                <div class="modal-body">
-                  <div class="col-12 mb-2">
-                      <img id="imgPerfil" class="img-fluid rounded mx-auto d-block" src="./image/perfil.png" alt="" width="100px" height="80px" >
+                <div class="col-lg-12">
+                  <div class="table-responsive">
+                    <table id="tablaProductos" class="table table-striped table-bordered table-condense" style="width: 100%">
+                      <thead class="text-center">
+                        <tr>
+                          <th>Producto</th>
+                          <th>Descripcion</th>
+                          <th>Precio unidad</th>
+                          <th>Descuento</th>
+                          <th>Cantidad</th>
+                          <th>Subtotal</th>
+                          <th>Eliminar</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      </tbody>
+                    </table>
                   </div>
-
-                  <!--FORMULARIO-->
-                  <form id="formCarrito">
-                  
-                    <div class="input-group input-group-sm px-5">
-                      <label for="" id="txtlabel" class="col-12 col-form-label">Nombre:</label>
-                      <span class="input-group-text material-icons">person</span>
-                      <input type="text" disabled class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"> 
-                      <button class="btn input-group-text" type="button">
-                        <span class=" material-icons" >settings</span>
-                      </button>     
-                    </div>
-
-                      <div class="input-group input-group-sm mb-3 px-5">
-                        <input type="submit"  class="form-control" value="Editar datos">
-                      </div> 
-                       
-                    </div>
-                  </form>
                 </div>
-            </div>
+
+                <div class="col-12 mt-3 mb-1 d-flex justify-content-end">
+                  <button type="button" id="btnnuevo" class="btn btn-primary" data-toggle="modal">
+                  <i id="iconitos" class="bi bi-bag"></i>Comprar 
+                  </button>
+                </div>
+
+              </div>
+            </div>                        
+          </div>
         </div>
+      </div>
     </div>
 
     <!-- Listar productos-->
@@ -387,6 +399,7 @@ session_start();
                                     <div class="form-group">
                                         <p id="descripcion" class="fs-4"></p>
                                     </div>
+                                    <input type="hidden" id="idproducto">
                                 </div>
                             </div>
                         </div>

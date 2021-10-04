@@ -26,25 +26,6 @@ $(document).ready(function() {
         cantidad = document.getElementById("cantidad");
         cantidad.stepDown();
     })
-    $('#formPedidos').submit(function(e) {
-        e.preventDefault(); //evitar la funcion del submit para recargar la pagina
-        cantidad = $.trim($('#cantidad').val());
-        opcion = 19;
-        $.ajax({
-            url: "bd/solicitudes.php",
-            type: "POST",
-            dataType: "json",
-            data: { opcion: opcion, usuario: "hugo" }, //por cambiar para usuario de verdad
-            success: function(data) {
-                if (data.length == 0) {
-                    crearNuevaFactura(cantidad);
-                } else {
-                    CrearyConsultCarrito(data, cantidad, 23);
-                }
-            }
-
-        });
-    })
 });
 
 function fillGrupo() {
@@ -126,45 +107,53 @@ function modal(id) {
         }
     });
     $("#modalPedidos").modal('show');
+    $("#idproducto").val(idcarro);
 }
 
-function crearNuevaFactura(cantidad) {
-    opcion = 20;
+$("#formPedidos").submit(function(e) {
+    opcion = 6;
+    e.preventDefault();
+    let idproducto = $.trim($('#idproducto').val());
+    let unidades = $.trim($('#cantidad').val());
     $.ajax({
-        url: "bd/solicitudes.php",
+        url: "./bd/sesiones.php",
         type: "POST",
         dataType: "json",
-        data: { opcion: opcion, usuario: "hugo" }, //por cambiar para usuario de verdad
-        success: function(data) { //data retorna id_factura
-            CrearyConsultCarrito(data, cantidad, 22);
+        data: { opcion: opcion },
+        success: function(data) {
+            if (data != null) {
+                opcion = 7;
+                $.ajax({
+                    url: "./bd/sesiones.php",
+                    type: "POST",
+                    dataType: "json",
+                    data: { opcion: opcion, idproducto: idproducto, unidades: unidades },
+                    success: function(data) {
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top',
+                            showConfirmButton: false,
+                            timer: 2000,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal.stopTimer)
+                                toast.addEventListener('mouseleave', Swal.resumeTimer)
+                            }
+                        })
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Producto agregado a tu carrito',
+                        })
+                        $("#modalPedidos").modal('hide');
+                        for (id in data) {
+                            console.log("id producto: " + data[id].idproducto + ", unidades: " + data[id].unidades);
+                        }
+                    }
+                });
+            } else {
+                $("#modalPedidos").modal('hide');
+                $("#modalInicioSesion").modal('show');
+            }
         }
     });
-}
-
-function CrearyConsultCarrito(data, cantidad, opcion) { //opcion?
-    //opcion 6 crea nuevo
-    //opcion 7 consulta el id_orden utilizando el id_factura 
-    $.ajax({
-        url: "bd/solicitudes.php",
-        type: "POST",
-        dataType: "json",
-        data: { opcion: opcion, id_factura: data[0].id_factura },
-        success: function(data) { //data retorna id_orden
-            insertarOrden_Producto(data, cantidad);
-        }
-    });
-}
-
-function insertarOrden_Producto(data, cantidad) { //data=id_orden
-    opcion = 21;
-    $.ajax({
-        url: "bd/solicitudes.php",
-        type: "POST",
-        dataType: "json",
-        data: { opcion: opcion, id_p: idcarro, id_orden: data[0].id_orden, unidades: cantidad },
-        success: function() {
-            console.log("realizado");
-        }
-    });
-    $('#modalPedidos').modal('hide');
-}
+});
