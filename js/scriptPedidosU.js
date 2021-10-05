@@ -1,9 +1,9 @@
 var descuento = new Array();
 var id_conD = new Array();
 var opcion;
-var idcarro;
 $(document).ready(function() {
     opcion = 16;
+
     $.ajax({
         url: "./bd/solicitudes.php",
         type: "POST",
@@ -18,15 +18,17 @@ $(document).ready(function() {
         }
 
     });
-    $('#botonMas').click(function() {
-        cantidad = document.getElementById("cantidad");
-        cantidad.stepUp();
-    })
-    $('#botonMenos').click(function() {
-        cantidad = document.getElementById("cantidad");
-        cantidad.stepDown();
-    })
 });
+
+$('#botonMas').click(function() {
+    cantidad = document.getElementById("cantidad");
+    cantidad.stepUp();
+})
+
+$('#botonMenos').click(function() {
+    cantidad = document.getElementById("cantidad");
+    cantidad.stepDown();
+})
 
 function fillGrupo() {
     var at = document.getElementById('contentCard');
@@ -46,35 +48,36 @@ function fillGrupo() {
 }
 
 function fillCards(grupo) {
-    var att = document.getElementById("" + grupo);
+    let att = document.getElementById("" + grupo);
     opcion = 17;
-    var pd;
-    var hecho;
+    let pd;
+    let hecho;
     $.ajax({
         url: "bd/solicitudes.php",
         type: "POST",
         dataType: "json",
         data: { opcion: opcion, grupo: grupo },
         success: function(data) {
-            for (var i = 0; i < data.length; i++) {
+            for (let i = 0; i < data.length; i++) {
                 hecho = 0;
-                for (var j = 0; j < id_conD.length; j++) {
+                for (let j = 0; j < id_conD.length; j++) {
                     if (id_conD[0] == data[i].id_producto) {
                         pd = data[i].precio - (data[i].precio * descuento[j]) / 100;
-                        att.insertAdjacentHTML('beforeend', "<div class='card' style='width: 18rem;'><img src='./Imagenes/" + data[i].img + "' class='card-img-top' style='height: 12rem;'><div class='card-body'><h5 class='card-title'>" + data[i].nombre_produc + "</h5><ul class='list-group list-group-flush'><li class='list-group-item'><p class='text-decoration-line-through fs-4 text-muted' style='display: inline-block;padding: 5px;'>$" + data[i].precio + "</p><p class='fs-4' style='display: inline-block; padding: 5px;' >$" + pd + "</p></li><a value='" + data[i].id_producto + "' class='btn btn-primary boton' id='" + data[i].id_producto + "' onclick='modal(this.id)'>Agregar a carrito</a></div></div>");
+                        desc = descuento[j];
+                        att.insertAdjacentHTML('beforeend', "<div class='card' style='width: 18rem;'><img src='./Imagenes/" + data[i].img + "' class='card-img-top' style='height: 12rem;'><div class='card-body'><h5 class='card-title'>" + data[i].nombre_produc + "</h5><ul class='list-group list-group-flush'><li class='list-group-item'><p class='text-decoration-line-through fs-4 text-muted' style='display: inline-block;padding: 5px;'>$" + data[i].precio + "</p><p class='fs-4' style='display: inline-block; padding: 5px;' >$" + pd + "</p></li><a value='" + data[i].id_producto + "' class='btn btn-primary boton' id='" + data[i].id_producto + "' onclick='modal(this.id,desc)'>Agregar a carrito</a></div></div>");
                         hecho = 1;
                     }
                 }
                 if (hecho == 0) {
-                    att.insertAdjacentHTML('beforeend', "<div class='card' style='width: 18rem;'><img src='./Imagenes/" + data[i].img + "' class='card-img-top' style='height: 12rem;'><div class='card-body'><h5 class='card-title'>" + data[i].nombre_produc + "</h5><ul class='list-group list-group-flush'><li class='list-group-item'><p class='fs-4' style='display: inline-block;padding: 5px;'>$" + data[i].precio + "</p></li><a value='" + data[i].id_producto + "' class='btn btn-primary boton' id='" + data[i].id_producto + "' onclick='modal(this.id)'>Agregar a carrito</a></div></div>");
+                    att.insertAdjacentHTML('beforeend', "<div class='card' style='width: 18rem;'><img src='./Imagenes/" + data[i].img + "' class='card-img-top' style='height: 12rem;'><div class='card-body'><h5 class='card-title'>" + data[i].nombre_produc + "</h5><ul class='list-group list-group-flush'><li class='list-group-item'><p class='fs-4' style='display: inline-block;padding: 5px;'>$" + data[i].precio + "</p></li><a value='" + data[i].id_producto + "' class='btn btn-primary boton' id='" + data[i].id_producto + "' onclick='modal(this.id,0)'>Agregar a carrito</a></div></div>");
                 }
             }
         }
     });
 }
 
-function modal(id) {
-    idcarro = parseInt(id);
+function modal(id, des) {
+    let idcarro = parseInt(id);
     opcion = 18;
     $.ajax({
         url: "bd/solicitudes.php",
@@ -108,6 +111,7 @@ function modal(id) {
     });
     $("#modalPedidos").modal('show');
     $("#idproducto").val(idcarro);
+    $("#descuento").val(des);
 }
 
 $("#formPedidos").submit(function(e) {
@@ -115,6 +119,7 @@ $("#formPedidos").submit(function(e) {
     e.preventDefault();
     let idproducto = $.trim($('#idproducto').val());
     let unidades = $.trim($('#cantidad').val());
+    let descuento = $.trim($('#descuento').val());
     $.ajax({
         url: "./bd/sesiones.php",
         type: "POST",
@@ -127,7 +132,7 @@ $("#formPedidos").submit(function(e) {
                     url: "./bd/sesiones.php",
                     type: "POST",
                     dataType: "json",
-                    data: { opcion: opcion, idproducto: idproducto, unidades: unidades },
+                    data: { opcion: opcion, idproducto: idproducto, unidades: unidades, descuento: descuento },
                     success: function(data) {
                         const Toast = Swal.mixin({
                             toast: true,
@@ -146,7 +151,7 @@ $("#formPedidos").submit(function(e) {
                         })
                         $("#modalPedidos").modal('hide');
                         for (id in data) {
-                            console.log("id producto: " + data[id].idproducto + ", unidades: " + data[id].unidades);
+                            console.log("id producto: " + data[id].idproducto + ", unidades: " + data[id].unidades + ", descuento: " + data[id].descuento);
                         }
                     }
                 });
@@ -156,4 +161,58 @@ $("#formPedidos").submit(function(e) {
             }
         }
     });
+
+});
+
+$("#btnMenuCarro").click(function(e) {
+    $("#modalCarrito").modal('show');
+    opcion = 8;
+    $.ajax({
+        url: "./bd/sesiones.php",
+        type: "POST",
+        dataType: "json",
+        data: { opcion: opcion },
+        success: function(datos) {
+            opcion = 29;
+            tablaCarrito = $('#tablaCarrito').DataTable({
+                destroy: true,
+                ajax: {
+                    url: "bd/solicitudes.php",
+                    method: "POST",
+                    data: { opcion: opcion },
+                    dataSrc: "",
+                },
+                language: {
+                    sProcessing: "Procesando...",
+                    sLengthMenu: "Mostrar _MENU_ registros",
+                    sZeroRecords: "No se encontraron resultados",
+                    sEmptyTable: "Ningún dato disponible en esta tabla",
+                    sInfo: "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                    sInfoEmpty: "Mostrando registros del 0 al 0 de un total de 0 registros",
+                    sInfoFiltered: "(filtrado de un total de _MAX_ registros)",
+                    sInfoPostFix: "",
+                    sSearch: "Buscar:",
+                    sUrl: "",
+                    sInfoThousands: ",",
+                    sLoadingRecords: "Cargando...",
+                    oPaginate: {
+                        sFirst: "Primero",
+                        sLast: "Último",
+                        sNext: "Siguiente",
+                        sPrevious: "Anterior"
+                    },
+                    oAria: {
+                        sSortAscending: ": Activar para ordenar la columna de manera ascendente",
+                        sSortDescending: ": Activar para ordenar la columna de manera descendente"
+                    }
+                },
+                columns: [
+                    { data: "nombre_produc" },
+                    { data: "descripcion" },
+                    { data: "precio" },
+                ]
+            });
+        }
+    });
+
 });

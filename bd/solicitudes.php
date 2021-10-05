@@ -25,6 +25,7 @@
     $id_orden=(isset($_POST['id_orden']))?$_POST['id_orden']:'';
     $total=(isset($_POST['total']))?$_POST['total']:'';
     $estadoP=(isset($_POST['estadoP']))?$_POST['estadoP']:'';
+    $data = null;
     
 
     switch($opcion){
@@ -226,6 +227,15 @@
             break;
         case 28://
             $sql="select valor_total FROM pedido where estado_pedido=2";
+            $res=$link->prepare($sql);
+            $res->execute();
+            $data=$res->fetchAll(PDO::FETCH_ASSOC);
+            break;
+        case 29://consultar productos para el carrito 
+            session_start();
+            //separa los ids por comas
+            $ids = implode(',',array_column($_SESSION['carrito'], 'idproducto'));
+            $sql="select * from productos where id_producto in ($ids)";
             $res=$link->prepare($sql);
             $res->execute();
             $data=$res->fetchAll(PDO::FETCH_ASSOC);

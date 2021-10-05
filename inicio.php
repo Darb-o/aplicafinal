@@ -61,7 +61,7 @@ session_start();
             </li>
 
              <li class="nav-item">
-              <button type="button" id="btnCarro" class="btn">
+              <button type="button" id="btnMenuCarro" class="btn">
                 <span id="iconosMenu" class="material-icons">shopping_cart</span>
               </button>
              </li>
@@ -333,16 +333,17 @@ session_start();
                 
                 <div class="col-lg-12">
                   <div class="table-responsive">
-                    <table id="tablaProductos" class="table table-striped table-bordered table-condense" style="width: 100%">
+                    <table id="tablaCarrito" class="table table-striped table-bordered table-condense" style="width: 100%">
                       <thead class="text-center">
                         <tr>
                           <th>Producto</th>
                           <th>Descripcion</th>
                           <th>Precio unidad</th>
+                          <!--
                           <th>Descuento</th>
                           <th>Cantidad</th>
                           <th>Subtotal</th>
-                          <th>Eliminar</th>
+                          <th>Eliminar</th>-->
                         </tr>
                       </thead>
                       <tbody>
@@ -400,6 +401,7 @@ session_start();
                                         <p id="descripcion" class="fs-4"></p>
                                     </div>
                                     <input type="hidden" id="idproducto">
+                                    <input type="hidden" id="descuento">
                                 </div>
                             </div>
                         </div>

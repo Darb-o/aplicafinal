@@ -52,6 +52,8 @@
         echo('<pre>');
         var_dump($_SESSION['user']);
         echo('</pre>');
+
+        echo implode(",",array_column($_SESSION['user'], 'idproducto'));
     ?>
 </body>
 </html>

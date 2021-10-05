@@ -14,6 +14,7 @@
     $direccion=(isset($_POST['direccion'])?$_POST['direccion']:'');
     $idproducto=(isset($_POST['idproducto'])?$_POST['idproducto']:'');
     $unidades=(isset($_POST['unidades'])?$_POST['unidades']:'');
+    $descuento=(isset($_POST['descuento'])?$_POST['descuento']:'');
     $opcion=(isset($_REQUEST['opcion']))?$_REQUEST['opcion']:'';
     $data = null;
 
@@ -67,7 +68,7 @@
                 $data = $_SESSION['user'];
             }
             break;
-        case 7:
+        case 7://agregar productos al carrito
             $bandera = true;
             foreach ($_SESSION['carrito'] as $key => $value) { 
                 if($value['idproducto'] == $idproducto){
@@ -80,10 +81,14 @@
                 $datos = array(
                     "idproducto" => $idproducto,
                     "unidades" => $unidades,
+                    "descuento" => $descuento,
                 );
                 array_push($_SESSION['carrito'],$datos);
             }  
             $data = $_SESSION['carrito'];
+            break;
+        case 8: //traer datos carrito
+            $data = $_SESSION['carrito']; 
             break;
     }
 

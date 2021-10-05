@@ -519,12 +519,6 @@ $(document).ready(function() {
         }
     })
 
-    $("#btnCarro").click(() => {
-        $("#modalCarrito").modal('show');
-    })
-
-    $("#btnFacturaActual").click(() => {})
-
     $("#btnProductos").click(() => {
         window.location.href = 'CRUD_Productos.php';
     })
