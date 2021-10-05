@@ -1,13 +1,14 @@
 <?php
     include './conexion.php';
- 
+    session_start();
     $ob=new conexion();
     $link=$ob->conectar();
-    //traer las variables enviadas desde el formulario
     $opcion=(isset($_POST['opcion']))?$_POST['opcion']:'';
+    //grupo
     $id_grupo=(isset($_POST['id_grupo']))?$_POST['id_grupo']:'';
     $nombre_grupo=(isset($_POST['nombre_grupo']))?$_POST['nombre_grupo']:'';
     $descripcion_grupo=(isset($_POST['descripcion_grupo']))?$_POST['descripcion_grupo']:'';
+    //productos
     $id_p=(isset($_POST['id_p']))?$_POST['id_p']:'';
     $nom_p=(isset($_POST['nom_p']))?$_POST['nom_p']:'';
     $precio=(isset($_POST['precio']))?$_POST['precio']:'';
@@ -231,14 +232,37 @@
             $res->execute();
             $data=$res->fetchAll(PDO::FETCH_ASSOC);
             break;
-        case 29://consultar productos para el carrito 
-            session_start();
-            //separa los ids por comas
-            $ids = implode(',',array_column($_SESSION['carrito'], 'idproducto'));
-            $sql="select * from productos where id_producto in ($ids)";
-            $res=$link->prepare($sql);
-            $res->execute();
-            $data=$res->fetchAll(PDO::FETCH_ASSOC);
+        case 29://agregar productos al carrito 
+            $bandera = true;
+            foreach ($_SESSION['carrito'] as $key => $value) { 
+                if($value['idproducto'] == $idproducto){
+                    $_SESSION['carrito'][$key]['unidades'] += $unidades;
+                    $_SESSION['carrito'][$key]['subtotal'] = $_SESSION['carrito'][$key]['precio']*$_SESSION['carrito'][$key]['unidades'];
+                    $bandera = false;
+                    break;
+                }          
+            }
+            if($bandera){
+                $unidades = (int)$unidades;
+                $precio = (double)$precio;
+                $descuento = (double)$descuento;
+                $valorunidad = $precio - (($precio*$descuento)/100);
+                $subtotal = $valorunidad * $unidades;
+                $datos = array(
+                    "idproducto" => $id_p,
+                    "nombreproducto" => $nom_p,
+                    "descripcion" => $desc,
+                    "precio" => $valorunidad,
+                    "descuento" => $descuento,
+                    "unidades" => $unidades,
+                    "subtotal" => $subtotal,    
+                );
+                array_push($_SESSION['carrito'],$datos);
+            }  
+            $data = $_SESSION['carrito'];
+            break;
+        case 30: //traer datos carrito
+            $data = $_SESSION['carrito']; 
             break;
     }
     

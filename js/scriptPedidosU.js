@@ -61,22 +61,25 @@ function fillCards(grupo) {
             for (let i = 0; i < data.length; i++) {
                 hecho = 0;
                 for (let j = 0; j < id_conD.length; j++) {
-                    if (id_conD[0] == data[i].id_producto) {
+                    if (id_conD[j] == data[i].id_producto) {
                         pd = data[i].precio - (data[i].precio * descuento[j]) / 100;
+                        nombrepro = data[i].nombre_produc;
+                        descripcion = data[i].descripcion;
+                        precio = data[i].precio;
                         desc = descuento[j];
-                        att.insertAdjacentHTML('beforeend', "<div class='card' style='width: 18rem;'><img src='./Imagenes/" + data[i].img + "' class='card-img-top' style='height: 12rem;'><div class='card-body'><h5 class='card-title'>" + data[i].nombre_produc + "</h5><ul class='list-group list-group-flush'><li class='list-group-item'><p class='text-decoration-line-through fs-4 text-muted' style='display: inline-block;padding: 5px;'>$" + data[i].precio + "</p><p class='fs-4' style='display: inline-block; padding: 5px;' >$" + pd + "</p></li><a value='" + data[i].id_producto + "' class='btn btn-primary boton' id='" + data[i].id_producto + "' onclick='modal(this.id,desc)'>Agregar a carrito</a></div></div>");
+                        att.insertAdjacentHTML('beforeend', "<div class='card' style='width: 18rem;'><img src='./Imagenes/" + data[i].img + "' class='card-img-top' style='height: 12rem;'><div class='card-body'><h5 class='card-title'>" + data[i].nombre_produc + "</h5><ul class='list-group list-group-flush'><li class='list-group-item'><p class='text-decoration-line-through fs-4 text-muted' style='display: inline-block;padding: 5px;'>$" + data[i].precio + "</p><p class='fs-4' style='display: inline-block; padding: 5px;' >$" + pd + "</p></li><a value='" + data[i].id_producto + "' class='btn btn-primary boton' id='" + data[i].id_producto + "' onclick='modal(this.id,nombrepro,descripcion,precio,desc)'>Agregar a carrito</a></div></div>");
                         hecho = 1;
                     }
                 }
                 if (hecho == 0) {
-                    att.insertAdjacentHTML('beforeend', "<div class='card' style='width: 18rem;'><img src='./Imagenes/" + data[i].img + "' class='card-img-top' style='height: 12rem;'><div class='card-body'><h5 class='card-title'>" + data[i].nombre_produc + "</h5><ul class='list-group list-group-flush'><li class='list-group-item'><p class='fs-4' style='display: inline-block;padding: 5px;'>$" + data[i].precio + "</p></li><a value='" + data[i].id_producto + "' class='btn btn-primary boton' id='" + data[i].id_producto + "' onclick='modal(this.id,0)'>Agregar a carrito</a></div></div>");
+                    att.insertAdjacentHTML('beforeend', "<div class='card' style='width: 18rem;'><img src='./Imagenes/" + data[i].img + "' class='card-img-top' style='height: 12rem;'><div class='card-body'><h5 class='card-title'>" + data[i].nombre_produc + "</h5><ul class='list-group list-group-flush'><li class='list-group-item'><p class='fs-4' style='display: inline-block;padding: 5px;'>$" + data[i].precio + "</p></li><a value='" + data[i].id_producto + "' class='btn btn-primary boton' id='" + data[i].id_producto + "' onclick='modal(this.id,nombrepro,descripcion,precio,0)'>Agregar a carrito</a></div></div>");
                 }
             }
         }
     });
 }
 
-function modal(id, des) {
+function modal(id, nombrepro, descrip, precio, desc) {
     let idcarro = parseInt(id);
     opcion = 18;
     $.ajax({
@@ -111,15 +114,21 @@ function modal(id, des) {
     });
     $("#modalPedidos").modal('show');
     $("#idproducto").val(idcarro);
-    $("#descuento").val(des);
+    $("#nombreproducto").val(nombrepro);
+    $("#descrip").val(descrip);
+    $("#precio").val(precio);
+    $("#descuento").val(desc);
 }
 
 $("#formPedidos").submit(function(e) {
     opcion = 6;
     e.preventDefault();
     let idproducto = $.trim($('#idproducto').val());
-    let unidades = $.trim($('#cantidad').val());
+    let nombreproducto = $.trim($('#nombreproducto').val());
+    let descrip = $.trim($('#descrip').val());
+    let precio = $.trim($('#precio').val());
     let descuento = $.trim($('#descuento').val());
+    let unidades = $.trim($('#cantidad').val());
     $.ajax({
         url: "./bd/sesiones.php",
         type: "POST",
@@ -127,13 +136,15 @@ $("#formPedidos").submit(function(e) {
         data: { opcion: opcion },
         success: function(data) {
             if (data != null) {
-                opcion = 7;
+                opcion = 29;
+                console.log("entre al primer ajax");
                 $.ajax({
-                    url: "./bd/sesiones.php",
+                    url: "bd/solicitudes.php",
                     type: "POST",
                     dataType: "json",
-                    data: { opcion: opcion, idproducto: idproducto, unidades: unidades, descuento: descuento },
+                    data: { opcion: opcion, id_p: idproducto, nom_p: nombreproducto, desc: descrip, precio: precio, descuento: descuento, unidades: unidades },
                     success: function(data) {
+                        console.log("entre al segundo ajax");
                         const Toast = Swal.mixin({
                             toast: true,
                             position: 'top',
@@ -166,53 +177,46 @@ $("#formPedidos").submit(function(e) {
 
 $("#btnMenuCarro").click(function(e) {
     $("#modalCarrito").modal('show');
-    opcion = 8;
-    $.ajax({
-        url: "./bd/sesiones.php",
-        type: "POST",
-        dataType: "json",
-        data: { opcion: opcion },
-        success: function(datos) {
-            opcion = 29;
-            tablaCarrito = $('#tablaCarrito').DataTable({
-                destroy: true,
-                ajax: {
-                    url: "bd/solicitudes.php",
-                    method: "POST",
-                    data: { opcion: opcion },
-                    dataSrc: "",
-                },
-                language: {
-                    sProcessing: "Procesando...",
-                    sLengthMenu: "Mostrar _MENU_ registros",
-                    sZeroRecords: "No se encontraron resultados",
-                    sEmptyTable: "Ningún dato disponible en esta tabla",
-                    sInfo: "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
-                    sInfoEmpty: "Mostrando registros del 0 al 0 de un total de 0 registros",
-                    sInfoFiltered: "(filtrado de un total de _MAX_ registros)",
-                    sInfoPostFix: "",
-                    sSearch: "Buscar:",
-                    sUrl: "",
-                    sInfoThousands: ",",
-                    sLoadingRecords: "Cargando...",
-                    oPaginate: {
-                        sFirst: "Primero",
-                        sLast: "Último",
-                        sNext: "Siguiente",
-                        sPrevious: "Anterior"
-                    },
-                    oAria: {
-                        sSortAscending: ": Activar para ordenar la columna de manera ascendente",
-                        sSortDescending: ": Activar para ordenar la columna de manera descendente"
-                    }
-                },
-                columns: [
-                    { data: "nombre_produc" },
-                    { data: "descripcion" },
-                    { data: "precio" },
-                ]
-            });
-        }
+    opcion = 30;
+    tablaCarrito = $('#tablaCarrito').DataTable({
+        destroy: true,
+        ajax: {
+            url: "bd/solicitudes.php",
+            method: "POST",
+            data: { opcion: opcion },
+            dataSrc: "",
+        },
+        language: {
+            sProcessing: "Procesando...",
+            sLengthMenu: "Mostrar _MENU_ registros",
+            sZeroRecords: "No se encontraron resultados",
+            sEmptyTable: "Ningún dato disponible en esta tabla",
+            sInfo: "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+            sInfoEmpty: "Mostrando registros del 0 al 0 de un total de 0 registros",
+            sInfoFiltered: "(filtrado de un total de _MAX_ registros)",
+            sInfoPostFix: "",
+            sSearch: "Buscar:",
+            sUrl: "",
+            sInfoThousands: ",",
+            sLoadingRecords: "Cargando...",
+            oPaginate: {
+                sFirst: "Primero",
+                sLast: "Último",
+                sNext: "Siguiente",
+                sPrevious: "Anterior"
+            },
+            oAria: {
+                sSortAscending: ": Activar para ordenar la columna de manera ascendente",
+                sSortDescending: ": Activar para ordenar la columna de manera descendente"
+            }
+        },
+        columns: [
+            { title: "Producto", data: "nombreproducto" },
+            { title: "Descripcion", data: "descripcion" },
+            { title: "Precio unidad", data: "precio" },
+            { title: "Descuento", data: "descuento" },
+            { title: "Cantidad", data: "unidades" },
+            { title: "Subtotal", data: "subtotal" },
+        ]
     });
-
 });

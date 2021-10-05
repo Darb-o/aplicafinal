@@ -339,10 +339,10 @@ session_start();
                           <th>Producto</th>
                           <th>Descripcion</th>
                           <th>Precio unidad</th>
-                          <!--
                           <th>Descuento</th>
                           <th>Cantidad</th>
                           <th>Subtotal</th>
+                          <!--
                           <th>Eliminar</th>-->
                         </tr>
                       </thead>
@@ -401,6 +401,9 @@ session_start();
                                         <p id="descripcion" class="fs-4"></p>
                                     </div>
                                     <input type="hidden" id="idproducto">
+                                    <input type="hidden" id="nombreproducto">
+                                    <input type="hidden" id="descrip">
+                                    <input type="hidden" id="precio">
                                     <input type="hidden" id="descuento">
                                 </div>
                             </div>
