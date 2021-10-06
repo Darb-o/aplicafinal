@@ -1,7 +1,161 @@
-* {
+body {
     margin: 0;
     padding: 0;
+    font-family: sans-serif;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+
+/* Cartas producto */
+
+.producto {
+    position: absolute;
+    /*top: 50%;
+    left: 50%;*/
+    transform: translateY(-50%, -50%);
+    width: 240px;
+    height: 340px;
+    background: #fff;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, .25);
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.producto .imgbox {
+    height: 100%;
     box-sizing: border-box;
+}
+
+.producto .imgbox img {
+    display: block;
+    width: 90%;
+    margin: 20px auto 0;
+}
+
+.detalle {
+    position: absolute;
+    width: 100%;
+    bottom: -80px;
+    background: #fff;
+    padding: 10px;
+    box-sizing: border-box;
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+    transition: .5s;
+}
+
+.iconodescuento {
+    position: absolute;
+}
+
+.iconodescuento h2 {
+    position: absolute;
+    top: -2px;
+    left: 14px;
+    top: 20px;
+    font-size: 18px;
+    color: #fff;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.iconodescuento span {
+    font-size: 60px;
+    color: #ff4faf;
+}
+
+.producto:hover .detalle {
+    bottom: 0;
+    box-shadow: 0 -5px 15px rgba(0, 0, 0, .25);
+}
+
+.detalle h2 {
+    margin: 0;
+    padding: 0;
+    font-size: 18px;
+    width: 100%;
+}
+
+.detalle h2 span {
+    font-size: 12px;
+    color: #A5A1A1;
+    font-weight: normal;
+}
+
+.detalle .precio {
+    position: absolute;
+    top: 5px;
+    right: 20px;
+    font-weight: bold;
+    color: #ff4faf;
+    font-size: 20px;
+}
+
+.lbls {
+    display: block;
+    margin-top: 5px;
+    font-family: bold;
+    font-size: 14px;
+}
+
+.botonMenos {
+    display: absolute;
+    color: #ff4faf;
+    margin-left: 25%;
+}
+
+.botonMenos span {
+    display: absolute;
+    margin: 0;
+    padding: 0;
+}
+
+.botonMas {
+    display: absolute;
+    color: #ff4faf;
+    margin-right: 25%;
+}
+
+.botonMas span {
+    display: absolute;
+    margin: 0;
+    padding: 0;
+}
+
+.inputcantidad {
+    display: absolute;
+    font-weight: normal;
+    text-align: center;
+    width: 3rem;
+    height: 25px;
+    border: 0;
+    outline: none;
+}
+
+.botonañadircarrito {
+    display: block;
+    padding: 5px;
+    color: #fff;
+    margin: 8px 0 0;
+    background: #ff4faf;
+    text-align: center;
+    text-decoration: none;
+    transition: .3s;
+    cursor: pointer;
+}
+
+.botonañadircarrito:hover {
+    color: #fff;
+    background: #ff209a;
 }
 
 #iconosMenu {

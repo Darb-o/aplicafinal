@@ -246,7 +246,7 @@ session_start();
                 
                 <div class="modal-body">
                   <div class="col-12 mb-2">
-                      <img id="imgPerfil" class="img-fluid rounded mx-auto d-block" src="./image/perfil.png" alt="" width="100px" height="80px" >
+                      <img id="imgPerfil" class="img-fluid rounded mx-auto d-block" src="./img/perfil.png" alt="" width="100px" height="80px" >
                   </div>
 
                   <!--FORMULARIO-->
@@ -364,6 +364,25 @@ session_start();
         </div>
       </div>
     </div>
+
+    <!-- Prueba tarjeta 
+    <div class="producto">
+      <div class="iconodescuento">       
+        <span class="material-icons">local_offer</span>
+        <h2>20%</h2>
+      </div>
+      <div class="imgbox">
+        <img src="./img/bigmac.jpg" alt="">
+      </div>
+      <div class="detalle">
+        <h2>Big mac<br><span>Doble carne, queso cheddar</span></h2>
+        <div class="precio">$13.000</div>
+        <a class="botonMenos" role="button"><span class="material-icons">remove</span></a>
+        <input type="number" class="inputcantidad" value="1" min="1" max="50">
+        <a class="botonMas" role="button"><span class="material-icons">add</span></a>        
+        <a class="botonañadircarrito" role="button">Añadir carrito</a>
+      </div>           
+    </div>-->
 
     <!-- Listar productos-->
 

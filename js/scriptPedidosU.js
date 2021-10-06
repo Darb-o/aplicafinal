@@ -1,9 +1,9 @@
 var descuento = new Array();
 var id_conD = new Array();
 var opcion;
+var datos = new Array();
 $(document).ready(function() {
     opcion = 16;
-
     $.ajax({
         url: "./bd/solicitudes.php",
         type: "POST",
@@ -50,37 +50,46 @@ function fillGrupo() {
 function fillCards(grupo) {
     let att = document.getElementById("" + grupo);
     opcion = 17;
-    let pd;
-    let hecho;
+    let pd, hecho;
+    let nombrepro = null,
+        descripcion = null,
+        precio = 0,
+        desc = 0,
+        img = null;
     $.ajax({
         url: "bd/solicitudes.php",
         type: "POST",
         dataType: "json",
         data: { opcion: opcion, grupo: grupo },
         success: function(data) {
+            datos = data;
             for (let i = 0; i < data.length; i++) {
                 hecho = 0;
+                nombrepro = data[i].nombre_produc;
+                descripcion = data[i].descripcion;
+                precio = data[i].precio;
+                img = data[i].img;
                 for (let j = 0; j < id_conD.length; j++) {
                     if (id_conD[j] == data[i].id_producto) {
                         pd = data[i].precio - (data[i].precio * descuento[j]) / 100;
-                        nombrepro = data[i].nombre_produc;
-                        descripcion = data[i].descripcion;
-                        precio = data[i].precio;
                         desc = descuento[j];
-                        att.insertAdjacentHTML('beforeend', "<div class='card' style='width: 18rem;'><img src='./Imagenes/" + data[i].img + "' class='card-img-top' style='height: 12rem;'><div class='card-body'><h5 class='card-title'>" + data[i].nombre_produc + "</h5><ul class='list-group list-group-flush'><li class='list-group-item'><p class='text-decoration-line-through fs-4 text-muted' style='display: inline-block;padding: 5px;'>$" + data[i].precio + "</p><p class='fs-4' style='display: inline-block; padding: 5px;' >$" + pd + "</p></li><a value='" + data[i].id_producto + "' class='btn btn-primary boton' id='" + data[i].id_producto + "' onclick='modal(this.id,nombrepro,descripcion,precio,desc)'>Agregar a carrito</a></div></div>");
+                        att.insertAdjacentHTML('beforeend', "<div class='card' style='width: 18rem;'><img src='./img/" + data[i].img + "' class='card-img-top' style='height: 12rem;'><div class='card-body'><h5 class='card-title'>" + data[i].nombre_produc + "</h5><ul class='list-group list-group-flush'><li class='list-group-item'><p class='text-decoration-line-through fs-4 text-muted' style='display: inline-block;padding: 5px;'>$" + data[i].precio + "</p><p class='fs-4' style='display: inline-block; padding: 5px;' >$" + pd + "</p></li><a value='" + data[i].id_producto + "' class='btn btn-primary boton' id='" + data[i].id_producto + "' onclick='modal(this.id,nombrepro,descripcion,precio,desc,img)'>Agregar a carrito</a></div></div>");
                         hecho = 1;
                     }
                 }
                 if (hecho == 0) {
-                    att.insertAdjacentHTML('beforeend', "<div class='card' style='width: 18rem;'><img src='./Imagenes/" + data[i].img + "' class='card-img-top' style='height: 12rem;'><div class='card-body'><h5 class='card-title'>" + data[i].nombre_produc + "</h5><ul class='list-group list-group-flush'><li class='list-group-item'><p class='fs-4' style='display: inline-block;padding: 5px;'>$" + data[i].precio + "</p></li><a value='" + data[i].id_producto + "' class='btn btn-primary boton' id='" + data[i].id_producto + "' onclick='modal(this.id,nombrepro,descripcion,precio,0)'>Agregar a carrito</a></div></div>");
+                    att.insertAdjacentHTML('beforeend', "<div class='card' style='width: 18rem;'><img src='./img/" + data[i].img + "' class='card-img-top' style='height: 12rem;'><div class='card-body'><h5 class='card-title'>" + data[i].nombre_produc + "</h5><ul class='list-group list-group-flush'><li class='list-group-item'><p class='fs-4' style='display: inline-block;padding: 5px;'>$" + data[i].precio + "</p></li><a value='" + data[i].id_producto + "' class='btn btn-primary boton' id='" + data[i].id_producto + "' onclick='modal(this.id,nombrepro,descripcion,precio,desc,img)'>Agregar a carrito</a></div></div>");
                 }
+                console.log("nombre p: " + nombrepro + ", descripcion: " + descripcion + ", precio: " + precio + ", descuento: " + desc + ", img: " + img);
             }
         }
     });
 }
 
+
 function modal(id, nombrepro, descrip, precio, desc) {
     let idcarro = parseInt(id);
+    console.log("Esto es lo que le llego al modal: " + idcarro + "," + nombrepro + "," + descrip + "," + precio + "," + desc);
     opcion = 18;
     $.ajax({
         url: "bd/solicitudes.php",
