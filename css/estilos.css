@@ -18,11 +18,11 @@ input[type=number] {
 /* Cartas producto */
 
 .producto {
-    position: absolute;
+    position: relative;
     /*top: 50%;
     left: 50%;*/
     transform: translateY(-50%, -50%);
-    width: 240px;
+    width: 210px;
     height: 340px;
     background: #fff;
     box-shadow: 0 5px 15px rgba(0, 0, 0, .25);
@@ -94,7 +94,7 @@ input[type=number] {
 .detalle .precio {
     position: absolute;
     top: 5px;
-    right: 20px;
+    right: 10px;
     font-weight: bold;
     color: #ff4faf;
     font-size: 20px;
@@ -110,7 +110,7 @@ input[type=number] {
 .botonMenos {
     display: absolute;
     color: #ff4faf;
-    margin-left: 25%;
+    margin-left: 20%;
 }
 
 .botonMenos span {
@@ -122,7 +122,7 @@ input[type=number] {
 .botonMas {
     display: absolute;
     color: #ff4faf;
-    margin-right: 25%;
+    margin-right: 20%;
 }
 
 .botonMas span {

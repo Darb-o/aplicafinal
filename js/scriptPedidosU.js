@@ -10,7 +10,7 @@ $(document).ready(function() {
         dataType: "json",
         data: { opcion: opcion },
         success: function(data) {
-            for (var i = 0; i < data.length; i++) {
+            for (let i = 0; i < data.length; i++) {
                 id_conD.push(data[i].id_producto);
                 descuento.push(data[i].descuento);
             }
@@ -20,18 +20,8 @@ $(document).ready(function() {
     });
 });
 
-$('#botonMas').click(function() {
-    cantidad = document.getElementById("cantidad");
-    cantidad.stepUp();
-})
-
-$('#botonMenos').click(function() {
-    cantidad = document.getElementById("cantidad");
-    cantidad.stepDown();
-})
-
 function fillGrupo() {
-    var at = document.getElementById('contentCard');
+    let at = document.getElementById('contentCard');
     opcion = 9;
     $.ajax({
         url: "bd/solicitudes.php",
@@ -51,11 +41,8 @@ function fillCards(grupo) {
     let att = document.getElementById("" + grupo);
     opcion = 17;
     let pd, hecho;
-    let nombrepro = null,
-        descripcion = null,
-        precio = 0,
-        desc = 0,
-        img = null;
+    let desc = 0;
+    let insercion = null;
     $.ajax({
         url: "bd/solicitudes.php",
         type: "POST",
@@ -65,26 +52,71 @@ function fillCards(grupo) {
             datos = data;
             for (let i = 0; i < data.length; i++) {
                 hecho = 0;
-                nombrepro = data[i].nombre_produc;
-                descripcion = data[i].descripcion;
-                precio = data[i].precio;
-                img = data[i].img;
                 for (let j = 0; j < id_conD.length; j++) {
                     if (id_conD[j] == data[i].id_producto) {
                         pd = data[i].precio - (data[i].precio * descuento[j]) / 100;
                         desc = descuento[j];
-                        att.insertAdjacentHTML('beforeend', "<div class='card' style='width: 18rem;'><img src='./img/" + data[i].img + "' class='card-img-top' style='height: 12rem;'><div class='card-body'><h5 class='card-title'>" + data[i].nombre_produc + "</h5><ul class='list-group list-group-flush'><li class='list-group-item'><p class='text-decoration-line-through fs-4 text-muted' style='display: inline-block;padding: 5px;'>$" + data[i].precio + "</p><p class='fs-4' style='display: inline-block; padding: 5px;' >$" + pd + "</p></li><a value='" + data[i].id_producto + "' class='btn btn-primary boton' id='" + data[i].id_producto + "' onclick='modal(this.id,nombrepro,descripcion,precio,desc,img)'>Agregar a carrito</a></div></div>");
+                        insercion = `<div class="col-12 col-md-3 col-sm-4 col-lg-2">
+                        <div class="card">
+                        <div class="producto">
+                            <div class="iconodescuento">       
+                                <span class="material-icons">local_offer</span>
+                                <h2>${desc}%</h2>
+                            </div>
+                            <div class="imgbox">
+                                <img src="./img/${data[i].img}" alt="">
+                            </div>
+                            <div class="detalle">
+                                <h2>${data[i].nombre_produc}<br><span>${data[i].descripcion}</span></h2>
+                                <div class="precio">$${data[i].precio}</div>
+                                <a class="botonMenos" role="button"><span class="material-icons">remove</span></a>
+                                <input type="number" class="inputcantidad" value="1" min="1" max="50">
+                                <a class="botonMas" role="button"><span class="material-icons">add</span></a>        
+                                <a class="botonañadircarrito" role="button">Añadir carrito</a>
+                            </div>           
+                        </div>
+                        </div>
+                        </div>`;
+                        att.insertAdjacentHTML('beforeend', insercion);
                         hecho = 1;
                     }
                 }
                 if (hecho == 0) {
-                    att.insertAdjacentHTML('beforeend', "<div class='card' style='width: 18rem;'><img src='./img/" + data[i].img + "' class='card-img-top' style='height: 12rem;'><div class='card-body'><h5 class='card-title'>" + data[i].nombre_produc + "</h5><ul class='list-group list-group-flush'><li class='list-group-item'><p class='fs-4' style='display: inline-block;padding: 5px;'>$" + data[i].precio + "</p></li><a value='" + data[i].id_producto + "' class='btn btn-primary boton' id='" + data[i].id_producto + "' onclick='modal(this.id,nombrepro,descripcion,precio,desc,img)'>Agregar a carrito</a></div></div>");
+                    insercion = `<div class="col-12 col-md-3 col-sm-4 col-lg-2">
+                    <div class="card">
+                        <div class="producto">
+                            <div class="imgbox">
+                                <img src="./img/${data[i].img}" alt="">
+                            </div>
+                            <div class="detalle">
+                                <h2>${data[i].nombre_produc}<br><span>${data[i].descripcion}</span></h2>
+                                <div class="precio">$${data[i].precio}</div>
+                                <a class="botonMenos" role="button"><span class="material-icons">remove</span></a>
+                                <input type="number" class="inputcantidad" value="1" min="1" max="50">
+                                <a class="botonMas" role="button"><span class="material-icons">add</span></a>        
+                                <a class="botonañadircarrito" role="button">Añadir carrito</a>
+                            </div>           
+                        </div>
+                        </div>
+                        </div>`;
+                    att.insertAdjacentHTML('beforeend', insercion);
                 }
-                console.log("nombre p: " + nombrepro + ", descripcion: " + descripcion + ", precio: " + precio + ", descuento: " + desc + ", img: " + img);
             }
         }
     });
 }
+
+$('.botonMas').click(function() {
+    cantidad = document.getElementsByClassName("inputcantidad");
+    console.log("presione el boton mas");
+    cantidad.stepUp();
+})
+
+$('.botonMenos').click(function() {
+    cantidad = document.getElementsByClassName("inputcantidad");
+    console.log("presione el boton menos");
+    cantidad.stepDown();
+})
 
 
 function modal(id, nombrepro, descrip, precio, desc) {

@@ -365,35 +365,44 @@ session_start();
       </div>
     </div>
 
-    <!-- Prueba tarjeta 
-    <div class="producto">
-      <div class="iconodescuento">       
-        <span class="material-icons">local_offer</span>
-        <h2>20%</h2>
+    <!-- Prueba tarjeta -->
+    <!--                        
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12 col-md-3 col-sm-4 col-lg-2">
+          <div class="card">
+            <div class="producto">
+              <div class="iconodescuento">       
+                <span class="material-icons">local_offer</span>
+                <h2>20%</h2>
+              </div>
+              <div class="imgbox">
+                <img src="./img/bigmac.jpg" alt="">
+              </div>
+              <div class="detalle">
+                <h2>Big mac<br><span>Doble carne, queso cheddar</span></h2>
+                <div class="precio">$13.000</div>
+                <a class="botonMenos" role="button"><span class="material-icons">remove</span></a>
+                <input type="number" class="inputcantidad" value="1" min="1" max="50">
+                <a class="botonMas" role="button"><span class="material-icons">add</span></a>        
+                <a class="botonañadircarrito" role="button">Añadir carrito</a>
+              </div>           
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="imgbox">
-        <img src="./img/bigmac.jpg" alt="">
-      </div>
-      <div class="detalle">
-        <h2>Big mac<br><span>Doble carne, queso cheddar</span></h2>
-        <div class="precio">$13.000</div>
-        <a class="botonMenos" role="button"><span class="material-icons">remove</span></a>
-        <input type="number" class="inputcantidad" value="1" min="1" max="50">
-        <a class="botonMas" role="button"><span class="material-icons">add</span></a>        
-        <a class="botonañadircarrito" role="button">Añadir carrito</a>
-      </div>           
     </div>-->
+
 
     <!-- Listar productos-->
 
-    <div class="container">
+    <div class="container-fluid">
         <div class="row" id="contentCard">
 
         </div>
     </div>
 
-    <!--ventana modal -->
-    <!-- Modal -->
+    <!--Modal cosas extra carrito 
     <div class="modal fade" id="modalPedidos" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -403,7 +412,7 @@ session_start();
                         <span aria-hidden="true"></span>
                     </button>
                 </div>
-                <!--Formulario-->
+                Formulario
                 <form id="formPedidos">
                     <div class="modal-body">
                         <div class="row">
@@ -440,7 +449,7 @@ session_start();
             </div>
         </div>
     </div>
-
+    -->
 
     <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
