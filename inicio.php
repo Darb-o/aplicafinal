@@ -12,10 +12,10 @@ session_start();
     <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs5/dt-1.11.2/datatables.min.css"/>
     <link rel="stylesheet" type="text/css" href="./css/estilos.css"/>
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css"
-    />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gemunu+Libre&display=swap" rel="stylesheet">
     <title>Inicio</title>
 </head>
 <body>
@@ -315,7 +315,7 @@ session_start();
     <!-- MODAL CARRITO-->
   
     <div class="modal fade"  id="modalCarrito" data-bs-focus="false" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-xl">
+      <div class="modal-dialog modal-lg">
         <div class="modal-content">                             
           <div class="modal-body">             
             <div class="container-xl">
@@ -336,14 +336,13 @@ session_start();
                     <table id="tablaCarrito" class="table table-striped table-bordered table-condense" style="width: 100%">
                       <thead class="text-center">
                         <tr>
+                          <th>Id</th>
                           <th>Producto</th>
-                          <th>Descripcion</th>
-                          <th>Precio unidad</th>
                           <th>Descuento</th>
                           <th>Cantidad</th>
-                          <th>Subtotal</th>
-                          <!--
-                          <th>Eliminar</th>-->
+                          <th>Precio unidad</th>                                 
+                          <th>Subtotal</th>                        
+                          <th>Acciones</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -352,10 +351,11 @@ session_start();
                   </div>
                 </div>
 
-                <div class="col-12 mt-3 mb-1 d-flex justify-content-end">
+                <div class="col-12 mt-1 mb-1 mx-1 d-flex justify-content-end">
                   <button type="button" id="btnnuevo" class="btn btn-primary" data-toggle="modal">
                   <i id="iconitos" class="bi bi-bag"></i>Comprar 
                   </button>
+                  <input type="text" class="valortotal" disabled>
                 </div>
 
               </div>
@@ -374,8 +374,9 @@ session_start();
             <div class="producto">
               <div class="iconodescuento">       
                 <span class="material-icons">local_offer</span>
-                <h2>20%</h2>
+                <h2>20%</h2>               
               </div>
+              <div class="preciosubrayado">$13.000</div>
               <div class="imgbox">
                 <img src="./img/bigmac.jpg" alt="">
               </div>
@@ -401,55 +402,6 @@ session_start();
 
         </div>
     </div>
-
-    <!--Modal cosas extra carrito 
-    <div class="modal fade" id="modalPedidos" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">NOMBRE PRODUCTO</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> 
-                        <span aria-hidden="true"></span>
-                    </button>
-                </div>
-                Formulario
-                <form id="formPedidos">
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-12 col-lg-6">
-                                <img src="" class="img-fluid imagen" alt="..." id="imagen">
-                            </div>
-                            <div class="col-12 col-lg-6">
-                                <div class="col-lg-10">
-                                    <div class="col-md-auto text-center text-md-center">
-                                        <p class="text-decoration-line-through fs-3 text-muted" id="precioTachado" style='display: inline-block;padding: 5px;'></p>
-                                        <p class="fs-3" id="precioNormal" style='display: inline-block;padding: 5px;'></p>
-                                    </div>
-                                    <div class="form-group">
-                                        <p id="descripcion" class="fs-4"></p>
-                                    </div>
-                                    <input type="hidden" id="idproducto">
-                                    <input type="hidden" id="nombreproducto">
-                                    <input type="hidden" id="descrip">
-                                    <input type="hidden" id="precio">
-                                    <input type="hidden" id="descuento">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <div class="input-group" style="width:7rem">
-                            <button type="button" id="botonMenos" class="btn btn-info ">-</button>
-                            <input type="number" id="cantidad" class="form-control " style="width: 1rem; -moz-appearance: textfield;" value="1" min="1" max="50">
-                            <button type="button" id="botonMas" class="btn btn-info ">+</button>
-                        </div>
-                        <button type="submit" id="btnGuardar" class="btn btn-primary d-inline-felx">Agregar producto</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-    -->
 
     <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>

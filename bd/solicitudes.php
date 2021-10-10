@@ -27,7 +27,9 @@
     $total=(isset($_POST['total']))?$_POST['total']:'';
     $estadoP=(isset($_POST['estadoP']))?$_POST['estadoP']:'';
     $data = null;
-    
+    $datos = null;
+    $valorunidad = 0;
+    $subtotal = 0;
 
     switch($opcion){
         //case 1 a case 4 se realiza la edicion,adicion y eliminacion de filas en la tabla grupos
@@ -235,7 +237,7 @@
         case 29://agregar productos al carrito 
             $bandera = true;
             foreach ($_SESSION['carrito'] as $key => $value) { 
-                if($value['idproducto'] == $idproducto){
+                if($value['idproducto'] == $id_p){
                     $_SESSION['carrito'][$key]['unidades'] += $unidades;
                     $_SESSION['carrito'][$key]['subtotal'] = $_SESSION['carrito'][$key]['precio']*$_SESSION['carrito'][$key]['unidades'];
                     $bandera = false;
@@ -244,15 +246,13 @@
             }
             if($bandera){
                 $unidades = (int)$unidades;
-                $precio = (double)$precio;
-                $descuento = (double)$descuento;
-                $valorunidad = $precio - (($precio*$descuento)/100);
+                $valorunidad = (double)$precio;
                 $subtotal = $valorunidad * $unidades;
                 $datos = array(
                     "idproducto" => $id_p,
                     "nombreproducto" => $nom_p,
                     "descripcion" => $desc,
-                    "precio" => $valorunidad,
+                    "precio" => $precio,
                     "descuento" => $descuento,
                     "unidades" => $unidades,
                     "subtotal" => $subtotal,    
@@ -263,6 +263,32 @@
             break;
         case 30: //traer datos carrito
             $data = $_SESSION['carrito']; 
+            break;
+        case 31: //cambiar unidades carrito
+            foreach ($_SESSION['carrito'] as $key => $value) { 
+                if($value['idproducto'] == $id_p){
+                    $_SESSION['carrito'][$key]['unidades'] = $unidades;
+                    $_SESSION['carrito'][$key]['subtotal'] = $_SESSION['carrito'][$key]['precio']*$_SESSION['carrito'][$key]['unidades'];
+                    $data =  $_SESSION['carrito'][$key]['unidades'];
+                    break;
+                }          
+            }
+            break;
+        case 32://eliminar de carrito:
+            foreach ($_SESSION['carrito'] as $key => $value) { 
+                if($value['idproducto'] == $id_p){
+                    array_splice($_SESSION['carrito'],$key,1);
+                    $data = "si sirvio";
+                    break;
+                }          
+            }
+            break;
+        case 33://valor total 
+            $valortotal = 0;
+            foreach ($_SESSION['carrito'] as $key => $value) {
+                $valortotal+=$_SESSION['carrito'][$key]['subtotal']; 
+            }
+            $data = $valortotal;
             break;
     }
     

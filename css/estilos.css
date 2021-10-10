@@ -1,8 +1,12 @@
 body {
     margin: 0;
     padding: 0;
-    font-family: sans-serif;
+    font-family: 'Gemunu Libre', sans-serif;
+    box-sizing: border-box;
 }
+
+
+/*Quitar los numeros de aumento del input*/
 
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
@@ -19,11 +23,9 @@ input[type=number] {
 
 .producto {
     position: relative;
-    /*top: 50%;
-    left: 50%;*/
     transform: translateY(-50%, -50%);
     width: 210px;
-    height: 340px;
+    height: 240px;
     background: #fff;
     box-shadow: 0 5px 15px rgba(0, 0, 0, .25);
     border-radius: 5px;
@@ -44,7 +46,7 @@ input[type=number] {
 .detalle {
     position: absolute;
     width: 100%;
-    bottom: -80px;
+    bottom: -85px;
     background: #fff;
     padding: 10px;
     box-sizing: border-box;
@@ -73,6 +75,16 @@ input[type=number] {
     color: #ff4faf;
 }
 
+.preciosubrayado {
+    position: absolute;
+    right: 10px;
+    top: 8px;
+    text-decoration: line-through;
+    font-size: 20px;
+    color: #ff4faf;
+    font-weight: bold;
+}
+
 .producto:hover .detalle {
     bottom: 0;
     box-shadow: 0 -5px 15px rgba(0, 0, 0, .25);
@@ -86,8 +98,8 @@ input[type=number] {
 }
 
 .detalle h2 span {
-    font-size: 12px;
-    color: #A5A1A1;
+    font-size: 14px;
+    color: #847B79;
     font-weight: normal;
 }
 
@@ -110,32 +122,37 @@ input[type=number] {
 .botonMenos {
     display: absolute;
     color: #ff4faf;
-    margin-left: 20%;
+    margin-left: 30%;
 }
 
-.botonMenos span {
+.botonMenos i {
     display: absolute;
     margin: 0;
     padding: 0;
+    font-size: 25px;
 }
 
 .botonMas {
     display: absolute;
     color: #ff4faf;
-    margin-right: 20%;
+    margin-right: 30%;
 }
 
-.botonMas span {
+.botonMas i {
     display: absolute;
     margin: 0;
     padding: 0;
+    font-size: 25px;
 }
 
 .inputcantidad {
     display: absolute;
     font-weight: normal;
     text-align: center;
-    width: 3rem;
+    color: #1C1A19;
+    font-family: 'Gemunu Libre', sans-serif;
+    font-size: 20px;
+    width: 14px;
     height: 25px;
     border: 0;
     outline: none;
@@ -158,6 +175,9 @@ input[type=number] {
     background: #ff209a;
 }
 
+
+/*MENUS*/
+
 #iconosMenu {
     font-size: 32px;
     color: #151313;
@@ -167,9 +187,6 @@ nav {
     padding: 20px 40px;
     height: 60px;
 }
-
-
-/*MENUS*/
 
 #menuInicio {
     background-color: #D72347;
@@ -247,4 +264,35 @@ nav {
 #iconitos {
     color: white;
     padding-right: 5px;
+}
+
+
+/*Lista carrito*/
+
+#botoneslistacarrito a i {
+    font-size: 22px;
+}
+
+#btnRestarCarrito i:hover {
+    color: #000000;
+}
+
+#btnEliminarCarrito i {
+    color: #AD2222;
+}
+
+#btnEliminarCarrito i:hover {
+    color: #F12222;
+}
+
+#btnSumarCarrito i:hover {
+    color: #000000;
+}
+
+.valortotal {
+    margin-left: 5px;
+    text-align: center;
+    color: #000000;
+    font-weight: bold;
+    width: 140px;
 }

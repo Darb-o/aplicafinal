@@ -1,7 +1,7 @@
 var opcion, id_d;
 $(document).ready(function() {
     var today = new Date().toISOString().split('T')[0];
-    document.getElementById("fecha_i").setAttribute('min', today);
+    /*document.getElementById("fecha_i").setAttribute('min', today);*/
     opcion = 15;
     $.ajax({
         url: "bd/solicitudes.php",

@@ -11,24 +11,24 @@
         session_start();
         $_SESSION['user'] = array();
         $datos = array(
-            "idproducto" => 1,
-            "unidades" => 1,
+            "idproducto" => 400,
+            "unidades" => 4,
         ); 
         $datos2 = array(
-            "idproducto" => 2,
-            "unidades" => 2,
+            "idproducto" => 250,
+            "unidades" => 22,
         );
         $datos3 = array(
-            "idproducto" => 3,
-            "unidades" => 3,
+            "idproducto" => 309,
+            "unidades" => 32,
         );
         $datos4 = array(
-            "idproducto" => 4,
+            "idproducto" => 989,
             "unidades" => 4,
         );
         $datos5 = array(
-            "idproducto" => 5,
-            "unidades" => 5,
+            "idproducto" => 153,
+            "unidades" => 23,
         );  
         array_push($_SESSION['user'],$datos);
         array_push($_SESSION['user'],$datos2);
@@ -39,21 +39,16 @@
         var_dump($_SESSION['user']);
         echo('</pre>');
 
-        $producto = 3;
+        $id = 989;
         foreach ($_SESSION['user'] as $key => $value) { 
-            echo "The index is = " . $key . ", and value is = ". $value['idproducto']; 
-            echo "<br>";
-            if($value['idproducto'] == $producto){
-                $_SESSION['user'][$key]['unidades'] = 5000;
+            if($value['idproducto'] == $id){
+                array_splice($_SESSION['user'],$key,1);
                 break;
             }          
-        } 
-        echo "<br>";
+        }
         echo('<pre>');
         var_dump($_SESSION['user']);
         echo('</pre>');
-
-        echo implode(",",array_column($_SESSION['user'], 'idproducto'));
     ?>
 </body>
 </html>

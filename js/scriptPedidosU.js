@@ -1,7 +1,6 @@
-var descuento = new Array();
-var id_conD = new Array();
 var opcion;
-var datos = new Array();
+var productos = new Array();
+var productosdescuento = new Array();
 $(document).ready(function() {
     opcion = 16;
     $.ajax({
@@ -11,8 +10,11 @@ $(document).ready(function() {
         data: { opcion: opcion },
         success: function(data) {
             for (let i = 0; i < data.length; i++) {
-                id_conD.push(data[i].id_producto);
-                descuento.push(data[i].descuento);
+                const arreglo = {
+                    idproducto: data[i].id_producto,
+                    descuento: data[i].descuento
+                };
+                productosdescuento.push(arreglo);
             }
             fillGrupo();
         }
@@ -29,7 +31,7 @@ function fillGrupo() {
         dataType: "json",
         data: { opcion: opcion },
         success: function(data) {
-            for (var i = 0; i < data.length; i++) {
+            for (i in data) {
                 at.insertAdjacentHTML('beforeend', "<div class='row' id='" + data[i].id_grupo + "'><p class='fs-2'>" + data[i].nombre_grupo + "</p></div>");
                 fillCards(data[i].id_grupo);
             }
@@ -40,8 +42,9 @@ function fillGrupo() {
 function fillCards(grupo) {
     let att = document.getElementById("" + grupo);
     opcion = 17;
-    let pd, hecho;
-    let desc = 0;
+    let bandera = true;
+    let precio = 0;
+    let descuento = 0;
     let insercion = null;
     $.ajax({
         url: "bd/solicitudes.php",
@@ -49,148 +52,113 @@ function fillCards(grupo) {
         dataType: "json",
         data: { opcion: opcion, grupo: grupo },
         success: function(data) {
-            datos = data;
-            for (let i = 0; i < data.length; i++) {
-                hecho = 0;
-                for (let j = 0; j < id_conD.length; j++) {
-                    if (id_conD[j] == data[i].id_producto) {
-                        pd = data[i].precio - (data[i].precio * descuento[j]) / 100;
-                        desc = descuento[j];
+            for (i in data) {
+                bandera = true;
+                descuento = 0;
+                precio = data[i].precio;
+                for (j in productosdescuento) {
+                    if (data[i].id_producto == productosdescuento[j].idproducto) {
+                        bandera = false;
+                        descuento = productosdescuento[j].descuento;
+                        precio = data[i].precio - (data[i].precio * descuento) / 100;
                         insercion = `<div class="col-12 col-md-3 col-sm-4 col-lg-2">
-                        <div class="card">
-                        <div class="producto">
+                        <div class="card" >
+                        <div class="producto" id="${data[i].id_producto}">
                             <div class="iconodescuento">       
                                 <span class="material-icons">local_offer</span>
-                                <h2>${desc}%</h2>
+                                <h2 class"valordescuentoicono">${descuento}%</h2>
                             </div>
+                            <div class="preciosubrayado">$${data[i].precio}</div>
                             <div class="imgbox">
                                 <img src="./img/${data[i].img}" alt="">
                             </div>
                             <div class="detalle">
                                 <h2>${data[i].nombre_produc}<br><span>${data[i].descripcion}</span></h2>
-                                <div class="precio">$${data[i].precio}</div>
-                                <a class="botonMenos" role="button"><span class="material-icons">remove</span></a>
+                                <div class="precio">$${precio}</div>
+                                <a type="button" class="botonMenos" role="button"><i class="bi bi-file-minus-fill"></i></a>
                                 <input type="number" class="inputcantidad" value="1" min="1" max="50">
-                                <a class="botonMas" role="button"><span class="material-icons">add</span></a>        
-                                <a class="botonañadircarrito" role="button">Añadir carrito</a>
+                                <a type="button" class="botonMas" role="button"><i class="bi bi-file-plus-fill"></i></a>        
+                                <a type="button" class="botonañadircarrito" role="button">Añadir carrito</a>
                             </div>           
                         </div>
                         </div>
                         </div>`;
                         att.insertAdjacentHTML('beforeend', insercion);
-                        hecho = 1;
+                        break;
                     }
                 }
-                if (hecho == 0) {
+                if (bandera) {
                     insercion = `<div class="col-12 col-md-3 col-sm-4 col-lg-2">
                     <div class="card">
-                        <div class="producto">
+                        <div class="producto" id="${data[i].id_producto}">
                             <div class="imgbox">
                                 <img src="./img/${data[i].img}" alt="">
                             </div>
                             <div class="detalle">
                                 <h2>${data[i].nombre_produc}<br><span>${data[i].descripcion}</span></h2>
                                 <div class="precio">$${data[i].precio}</div>
-                                <a class="botonMenos" role="button"><span class="material-icons">remove</span></a>
+                                <a type="button" class="botonMenos" role="button"><i class="bi bi-file-minus-fill"></i></a>
                                 <input type="number" class="inputcantidad" value="1" min="1" max="50">
-                                <a class="botonMas" role="button"><span class="material-icons">add</span></a>        
-                                <a class="botonañadircarrito" role="button">Añadir carrito</a>
+                                <a type="button" class="botonMas" role="button"><i class="bi bi-file-plus-fill"></i></a>        
+                                <a type="button" class="botonañadircarrito" role="button">Añadir carrito</a>
                             </div>           
                         </div>
                         </div>
                         </div>`;
                     att.insertAdjacentHTML('beforeend', insercion);
                 }
+                let vector = {
+                    id: data[i].id_producto,
+                    nombre: data[i].nombre_produc,
+                    descripcion: data[i].descripcion,
+                    precio: precio,
+                    descuento: descuento
+                };
+                productos.push(vector);
             }
         }
     });
 }
 
-$('.botonMas').click(function() {
-    cantidad = document.getElementsByClassName("inputcantidad");
-    console.log("presione el boton mas");
-    cantidad.stepUp();
-})
+$(document).on("click", ".botonMas", function() {
+    let input = $(this).prev();
+    numero = parseInt(input.val()) + 1;
+    input.val(numero);
+});
 
-$('.botonMenos').click(function() {
-    cantidad = document.getElementsByClassName("inputcantidad");
-    console.log("presione el boton menos");
-    cantidad.stepDown();
-})
+$(document).on("click", ".botonMenos", function() {
+    let input = $(this).next();
+    numero = parseInt(input.val()) - 1;
+    if (numero > 0) {
+        input.val(numero);
+    }
+});
 
-
-function modal(id, nombrepro, descrip, precio, desc) {
-    let idcarro = parseInt(id);
-    console.log("Esto es lo que le llego al modal: " + idcarro + "," + nombrepro + "," + descrip + "," + precio + "," + desc);
-    opcion = 18;
-    $.ajax({
-        url: "bd/solicitudes.php",
-        type: "POST",
-        dataType: "json",
-        data: { opcion: opcion, id_p: id },
-        success: function(data) {
-            $("#formPedidos").trigger("reset"); // resetear o limpiar el formulario
-            $(".modal-header").css("background-color", "#198754");
-            $(".modal-header").css("color", "white");
-            $(".modal-title").text(data[0].nombre_produc);
-            $(".imagen").attr("src", "./Imagenes/" + data[0].img);
-            $(".precio").attr("content", data[0].precio);
-            $(".precio").attr("class", "fs-2");
-            descripcion = document.getElementById("descripcion");
-            descripcion.innerHTML = data[0].descripcion;
-            for (var i = 0; i < id_conD.length; i++) {
-                if (id == id_conD[i]) {
-                    precioTachado = document.getElementById("precioTachado");
-                    precioTachado.innerHTML = "$" + data[0].precio;
-                    precioNormal = document.getElementById("precioNormal");
-                    precioNormal.innerHTML = "$" + (data[0].precio - (data[0].precio * descuento[i]) / 100);
-                } else {
-                    precioTachado = document.getElementById("precioTachado");
-                    precioTachado.innerHTML = "";
-                    precioNormal = document.getElementById("precioNormal");
-                    precioNormal.innerHTML = "$" + data[0].precio;
-                }
-            }
-        }
-    });
-    $("#modalPedidos").modal('show');
-    $("#idproducto").val(idcarro);
-    $("#nombreproducto").val(nombrepro);
-    $("#descrip").val(descrip);
-    $("#precio").val(precio);
-    $("#descuento").val(desc);
-}
-
-$("#formPedidos").submit(function(e) {
+$(document).on("click", ".botonañadircarrito", function() {
+    let id = $(this).closest(".producto").attr("id");
+    let unoatras = $(this).prev();
+    let unidades = $(unoatras).prev().val();
+    let producto = productos.find(i => i.id == id);
     opcion = 6;
-    e.preventDefault();
-    let idproducto = $.trim($('#idproducto').val());
-    let nombreproducto = $.trim($('#nombreproducto').val());
-    let descrip = $.trim($('#descrip').val());
-    let precio = $.trim($('#precio').val());
-    let descuento = $.trim($('#descuento').val());
-    let unidades = $.trim($('#cantidad').val());
     $.ajax({
-        url: "./bd/sesiones.php",
+        url: "bd/sesiones.php",
         type: "POST",
         dataType: "json",
         data: { opcion: opcion },
         success: function(data) {
+            opcion = 29;
             if (data != null) {
-                opcion = 29;
-                console.log("entre al primer ajax");
                 $.ajax({
                     url: "bd/solicitudes.php",
                     type: "POST",
                     dataType: "json",
-                    data: { opcion: opcion, id_p: idproducto, nom_p: nombreproducto, desc: descrip, precio: precio, descuento: descuento, unidades: unidades },
+                    data: { opcion: opcion, id_p: producto.id, nom_p: producto.nombre, desc: producto.descripcion, precio: producto.precio, descuento: producto.descuento, unidades: unidades },
                     success: function(data) {
-                        console.log("entre al segundo ajax");
                         const Toast = Swal.mixin({
                             toast: true,
                             position: 'top',
                             showConfirmButton: false,
-                            timer: 2000,
+                            timer: 1000,
                             timerProgressBar: true,
                             didOpen: (toast) => {
                                 toast.addEventListener('mouseenter', Swal.stopTimer)
@@ -199,16 +167,11 @@ $("#formPedidos").submit(function(e) {
                         })
                         Toast.fire({
                             icon: 'success',
-                            title: 'Producto agregado a tu carrito',
+                            title: 'Producto agregado a tu carrito'
                         })
-                        $("#modalPedidos").modal('hide');
-                        for (id in data) {
-                            console.log("id producto: " + data[id].idproducto + ", unidades: " + data[id].unidades + ", descuento: " + data[id].descuento);
-                        }
                     }
                 });
             } else {
-                $("#modalPedidos").modal('hide');
                 $("#modalInicioSesion").modal('show');
             }
         }
@@ -217,47 +180,143 @@ $("#formPedidos").submit(function(e) {
 });
 
 $("#btnMenuCarro").click(function(e) {
-    $("#modalCarrito").modal('show');
-    opcion = 30;
-    tablaCarrito = $('#tablaCarrito').DataTable({
-        destroy: true,
-        ajax: {
-            url: "bd/solicitudes.php",
-            method: "POST",
-            data: { opcion: opcion },
-            dataSrc: "",
-        },
-        language: {
-            sProcessing: "Procesando...",
-            sLengthMenu: "Mostrar _MENU_ registros",
-            sZeroRecords: "No se encontraron resultados",
-            sEmptyTable: "Ningún dato disponible en esta tabla",
-            sInfo: "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
-            sInfoEmpty: "Mostrando registros del 0 al 0 de un total de 0 registros",
-            sInfoFiltered: "(filtrado de un total de _MAX_ registros)",
-            sInfoPostFix: "",
-            sSearch: "Buscar:",
-            sUrl: "",
-            sInfoThousands: ",",
-            sLoadingRecords: "Cargando...",
-            oPaginate: {
-                sFirst: "Primero",
-                sLast: "Último",
-                sNext: "Siguiente",
-                sPrevious: "Anterior"
-            },
-            oAria: {
-                sSortAscending: ": Activar para ordenar la columna de manera ascendente",
-                sSortDescending: ": Activar para ordenar la columna de manera descendente"
+    opcion = 6
+    $.ajax({
+        url: "bd/sesiones.php",
+        type: "POST",
+        dataType: "json",
+        data: { opcion: opcion },
+        success: function(data) {
+            opcion = 30;
+            if (data != null) {
+                tablaCarrito = $('#tablaCarrito').DataTable({
+                    destroy: true,
+                    ajax: {
+                        url: "bd/solicitudes.php",
+                        method: "POST",
+                        data: { opcion: opcion },
+                        dataSrc: "",
+                    },
+                    language: {
+                        sProcessing: "Procesando...",
+                        sLengthMenu: "Mostrar _MENU_ registros",
+                        sZeroRecords: "No se encontraron resultados",
+                        sEmptyTable: "Ningún dato disponible en esta tabla",
+                        sInfo: "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                        sInfoEmpty: "Mostrando registros del 0 al 0 de un total de 0 registros",
+                        sInfoFiltered: "(filtrado de un total de _MAX_ registros)",
+                        sInfoPostFix: "",
+                        sSearch: "Buscar:",
+                        sUrl: "",
+                        sInfoThousands: ",",
+                        sLoadingRecords: "Cargando...",
+                        oPaginate: {
+                            sFirst: "Primero",
+                            sLast: "Último",
+                            sNext: "Siguiente",
+                            sPrevious: "Anterior"
+                        },
+                        oAria: {
+                            sSortAscending: ": Activar para ordenar la columna de manera ascendente",
+                            sSortDescending: ": Activar para ordenar la columna de manera descendente"
+                        }
+                    },
+                    columns: [
+                        { title: "Id", data: "idproducto" },
+                        { title: "Producto", data: "nombreproducto" },
+                        { title: "Descuento", data: "descuento" },
+                        { title: "Cantidad", data: "unidades" },
+                        { title: "Precio", data: "precio" },
+                        { title: "Subtotal", data: "subtotal" },
+                        { "defaultContent": `<div class='text-center'>
+                        <div class='btn-group' id='botoneslistacarrito'>           
+                            <a type='button' role='button' id='btnRestarCarrito'><i class='bi bi-file-minus-fill'></i></a>                    
+                            <a type='button' role='button' id='btnEliminarCarrito'><i class='bi bi-file-x-fill'></i></a>
+                            <a type='button' role='button' id='btnSumarCarrito' ><i class='bi bi-file-plus-fill'></i></a></div></div>` }
+                    ]
+                });
+                cambiarvalortotal();
+                $("#modalCarrito").modal('show');
+
+            } else {
+                $("#modalInicioSesion").modal('show');
             }
-        },
-        columns: [
-            { title: "Producto", data: "nombreproducto" },
-            { title: "Descripcion", data: "descripcion" },
-            { title: "Precio unidad", data: "precio" },
-            { title: "Descuento", data: "descuento" },
-            { title: "Cantidad", data: "unidades" },
-            { title: "Subtotal", data: "subtotal" },
-        ]
+        }
     });
+});
+
+function cambiarvalortotal() {
+    opcion = 33;
+    $.ajax({
+        url: "bd/solicitudes.php",
+        type: "POST",
+        dataType: "json",
+        data: { opcion: opcion },
+        success: function(data) {
+            if (data != null) {
+                $(".valortotal").val("Valor total: $" + data);
+            }
+        }
+    });
+}
+
+$(document).on("click", "#btnRestarCarrito", function() {
+    fila = $(this).closest('tr');
+    idp = parseInt(fila.find('td:eq(0)').text());
+    unidades = parseInt(fila.find('td:eq(3)').text());
+    unidades -= 1;
+    if (unidades == 0) {
+        unidades = 1;
+    }
+    opcion = 31;
+    $.ajax({
+        url: "bd/solicitudes.php",
+        type: "POST",
+        dataType: "json",
+        data: { opcion: opcion, id_p: idp, unidades: unidades },
+        success: function(data) {
+            if (data != null) {
+                tablaCarrito.ajax.reload(null, false);
+            }
+        }
+    });
+    cambiarvalortotal();
+});
+
+$(document).on("click", "#btnSumarCarrito", function() {
+    fila = $(this).closest('tr');
+    idp = parseInt(fila.find('td:eq(0)').text());
+    unidades = parseInt(fila.find('td:eq(3)').text());
+    unidades += 1;
+    opcion = 31;
+    $.ajax({
+        url: "bd/solicitudes.php",
+        type: "POST",
+        dataType: "json",
+        data: { opcion: opcion, id_p: idp, unidades: unidades },
+        success: function(data) {
+            if (data != null) {
+                tablaCarrito.ajax.reload(null, false);
+            }
+        }
+    });
+    cambiarvalortotal();
+});
+
+$(document).on("click", "#btnEliminarCarrito", function() {
+    fila = $(this).closest('tr');
+    idp = parseInt(fila.find('td:eq(0)').text());
+    opcion = 32;
+    $.ajax({
+        url: "bd/solicitudes.php",
+        type: "POST",
+        dataType: "json",
+        data: { opcion: opcion, id_p: idp },
+        success: function(data) {
+            if (data != null) {
+                tablaCarrito.ajax.reload(null, false);
+            }
+        }
+    });
+    cambiarvalortotal();
 });
