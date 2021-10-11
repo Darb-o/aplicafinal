@@ -33,10 +33,8 @@ $(document).ready(function() {
                     })
                 } else {
                     opcion = data[0].id_rol;
-                    if (opcion == 1) {
-                        window.location.href = 'admin.php';
-                    } else if (opcion == 2) {
-                        window.location.href = 'empleado.php';
+                    if (opcion != 3) {
+                        window.location.href = 'god.php';
                     } else {
                         window.location.href = 'inicio.php';
                     }

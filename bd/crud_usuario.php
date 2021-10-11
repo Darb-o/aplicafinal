@@ -13,6 +13,7 @@ $idpregunta=(isset($_REQUEST['idpregunta']))?$_REQUEST['idpregunta']:'';
 $respuesta=(isset($_REQUEST['respuesta']))?$_REQUEST['respuesta']:'';
 $opcion=(isset($_REQUEST['opcion']))?$_REQUEST['opcion']:'';
 $id_rol=(isset($_REQUEST['id_rol']))?$_REQUEST['id_rol']:'';
+$data = null;
 
 switch($opcion){
     case 1: //insertar
@@ -74,9 +75,15 @@ switch($opcion){
             $data = null;
         }
         break;
+    case 7://listar usuarios
+        $sql = "select u.nombre,u.correo,u.telefono from usuario u where id_rol = 3";
+        $res = $link -> prepare($sql);
+        $res->execute();
+        $data = $res->fetchAll(PDO::FETCH_ASSOC);
+        break;
 }
 
 //se envia el array en formato JSON a AJAX
-print json_encode($data);
+print json_encode($data,JSON_UNESCAPED_UNICODE);
 
 ?>
