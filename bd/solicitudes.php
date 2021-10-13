@@ -26,6 +26,8 @@
     $id_orden=(isset($_POST['id_orden']))?$_POST['id_orden']:'';
     $total=(isset($_POST['total']))?$_POST['total']:'';
     $estadoP=(isset($_POST['estadoP']))?$_POST['estadoP']:'';
+ 
+    
     $data = null;
     $datos = null;
     $valorunidad = 0;
@@ -289,6 +291,82 @@
                 $valortotal+=$_SESSION['carrito'][$key]['subtotal']; 
             }
             $data = $valortotal;
+            break;
+        case 34://insertar producto 
+            $numGrupoP = (isset($_POST['selectGrupo']))?$_POST['selectGrupo']:'';
+            $nombreP = (isset($_POST['nombrePro']))?$_POST['nombrePro']:'';
+            $precioP = (isset($_POST['precioPro']))?$_POST['precioPro']:'';
+            $descripcionP = (isset($_POST['desPro']))?$_POST['desPro']:'';
+            $imagenP =$_FILES['imgPro'];
+            $ruta = null;
+            $status = 0;
+            switch($imagenP['type']){
+                case "image/jpeg":
+                    $ruta = "../img/".md5($imagenP['tmp_name']).".jpeg";
+                    break;
+                case "image/jpg":
+                    $ruta = "../img/".md5($imagenP['tmp_name']).".jpg";
+                    break;
+                case "image/png":
+                    $ruta = "../img/".md5($imagenP['tmp_name']).".png";
+                    break;
+            }
+            if($ruta != null){
+                $sql = "insert into productos values (null,'$nombreP',$precioP,'$descripcionP','$ruta',$status,$numGrupoP)";
+                $res = $link->prepare($sql);
+                if($res->execute()){
+                    move_uploaded_file($imagenP['tmp_name'],$ruta);
+                }else{
+                    $data = "error al insertar la imagen"; 
+                }
+            }else{ 
+                $data = "formato no valido";
+            }
+            break;
+        case 35://consultar imagen
+            $sql="select img,nombre_produc from productos where id_producto = $id_p";
+            $res=$link->prepare($sql);
+            $res->execute();
+            $data=$res->fetchAll(PDO::FETCH_ASSOC);
+            break;
+        case 36: //editar producto
+            $numGrupoP = (isset($_POST['selectGrupo']))?$_POST['selectGrupo']:'';
+            $nombreP = (isset($_POST['nombrePro']))?$_POST['nombrePro']:'';
+            $precioP = (isset($_POST['precioPro']))?$_POST['precioPro']:'';
+            $descripcionP = (isset($_POST['desPro']))?$_POST['desPro']:'';
+            $idProducto = (isset($_POST['idProducto']))?$_POST['idProducto']:'';
+            $imagenP = $_FILES['imgPro'];
+            //$data = "esto llego: grupo: ".$numGrupoP.", nombre: ".$nombreP.", precio: ".$precioP.", descripcion: ".$descripcionP.", id producto: ".$idProducto;
+            if($_FILES['imgPro']['tmp_name']!=''){
+                $ruta = null;
+                $status = 0;
+                switch($imagenP['type']){
+                    case "image/jpeg":
+                        $ruta = "../img/".md5($imagenP['tmp_name']).".jpeg";
+                        break;
+                    case "image/jpg":
+                        $ruta = "../img/".md5($imagenP['tmp_name']).".jpg";
+                        break;
+                    case "image/png":
+                        $ruta = "../img/".md5($imagenP['tmp_name']).".png";
+                        break;
+                }
+                if($ruta != null){
+                    $sql = "update productos set nombre_produc = '$nombreP', precio = $precioP , descripcion= '$descripcionP', img= '$ruta', grupo = $numGrupoP where id_producto = $idProducto";
+                    $res = $link->prepare($sql);
+                    if($res->execute()){
+                        move_uploaded_file($imagenP['tmp_name'],$ruta);
+                    }else{
+                        $data = "error al insertar la imagen"; 
+                    }
+                }else{ 
+                    $data = "formato no valido";
+                }
+            }else{
+                $sql = "update productos set nombre_produc = '$nombreP', precio = $precioP , descripcion= '$descripcionP', grupo = $numGrupoP where id_producto = $idProducto";
+                $res = $link->prepare($sql);
+                $res->execute();           
+            }         
             break;
     }
     

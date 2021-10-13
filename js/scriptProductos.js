@@ -51,92 +51,278 @@ $(document).ready(function() {
             { "data": "nombre_produc" },
             { "data": "precio" },
             { "data": "descripcion" },
-            { "data": "img" },
             { "data": "estado_producto" },
             { "data": "grupo" },
-            { "defaultContent": "<div class='text-center'><div class='row'><div class='col-12 mt-1'><button id='btnEditar' type='button' class='btn btn-primary btn-sm'><i id='iconitos' class='bi bi-pen'></i>Editar producto</button></div><div class='col-12 mt-1'><button type='button' class='btn btn-warning btn-sm' id='btnCambiar'><i id='iconitos' class='bi bi-toggles'></i>Cambiar estado</button></div><div class='col-12 mt-1'> <button type='button' id='btnBorrar' class='btn btn-danger btn-sm'><i id='iconitos' class='bi bi-trash'></i>Borrar producto</button></div></div></div>" }
+            { "defaultContent": "<div class='iconosTabla'><span class='btnVerImagen'><ion-icon name='image-outline'></ion-icon></span><span class='btnEditar'><ion-icon name='create-outline'></ion-icon></span><span class='btnCambiar'><ion-icon name='swap-horizontal-outline'></ion-icon></span><span class='btnBorrar'><ion-icon name='trash-outline'></ion-icon></span></div>" }
         ]
     });
     var fila;
-    $('#formProductos').submit(function(e) {
-        let mensaje = "";
-        if (opcion == 5) {
-            mensaje = "agregado con exito";
-        } else {
-            mensaje = "actualizado con exito";
-        }
-        e.preventDefault(); //evitar la funcion del submit para recargar la pagina
-        grupo = $.trim($('#seleccion').val());
-        nom_p = $.trim($('#nom_p').val());
-        precio = $.trim($('#precio').val());
-        desc = $.trim($('#desc').val());
-        img = $.trim($('#img').val());
-        //usar el fondo de AJAX para el tratamiento de datos
+
+    $('#btnnuevo').click(function() {
+        let insercion = "";
+        let captura;
+        opcion = 9;
         $.ajax({
             url: "bd/solicitudes.php",
             type: "POST",
             dataType: "json",
-            data: { id_p: id_p, nom_p: nom_p, precio: precio, desc: desc, img: img, grupo: grupo, opcion: opcion },
+            data: { opcion: opcion },
             success: function(data) {
-                tablaProductos.ajax.reload(null, false);
-                const Toast = Swal.mixin({
-                    toast: true,
-                    position: 'top',
-                    showConfirmButton: false,
-                    timer: 3000,
-                    timerProgressBar: true,
-                    didOpen: (toast) => {
-                        toast.addEventListener('mouseenter', Swal.stopTimer)
-                        toast.addEventListener('mouseleave', Swal.resumeTimer)
-                    }
-                })
-                Toast.fire({
-                    icon: 'success',
-                    title: `${mensaje}`
-                })
+                if (data != null) {
+                    (async() => {
+                        const { value: formValues } = await Swal.fire({
+                            title: 'Insertar nuevo producto',
+                            html: `<form class="" method="POST" enctype="multipart/form-data" id="formInsertarProducto"> <label class="swal2-label">Seleccione un producto</label>
+                            <select class="swal2-select" id="selectGrupo" name="selectGrupo" required></select>                          
+                            <input id="nombrePro" name="nombrePro" placeholder="Nombre del producto" class="swal2-input" required>
+                            <input type="number" id="precioPro" name="precioPro" placeholder="Precio del producto" class="swal2-input" required>
+                            <input id="desPro" name="desPro" placeholder="Descripcion del producto" class="swal2-input" required>
+                            <input id="opcion" value="34" type="hidden" name="opcion">
+                            <input type="file" id="imgPro" name="imgPro" placeholder="Imagen del producto" class="swal2-input file" required></form>`,
+                            didOpen: () => {
+                                captura = $("#selectGrupo");
+                                for (id in data) {
+                                    insercion = `<option value="${data[id].id_grupo}">${data[id].nombre_grupo}</option>`
+                                    captura.append(insercion);
+                                }
+                            },
 
+                            preConfirm: () => {
+                                return new Promise(function(resolve) {
+                                    resolve([
+                                        $("#selectGrupo").val(),
+                                        $("#nombrePro").val(),
+                                        $("#precioPro").val(),
+                                        $("#desPro").val(),
+                                        $("#imgPro").val(),
+                                    ]);
+                                });
+                            }
+                        })
+
+                        if (formValues) {
+                            if (formValues[0] == "" || formValues[1] == "" || formValues[2] == "" || formValues[3] == "" || formValues[4] == "") {
+                                const Toast = Swal.mixin({
+                                    toast: true,
+                                    position: 'top',
+                                    showConfirmButton: false,
+                                    timer: 3000,
+                                    timerProgressBar: true,
+                                    didOpen: (toast) => {
+                                        toast.addEventListener('mouseenter', Swal.stopTimer)
+                                        toast.addEventListener('mouseleave', Swal.resumeTimer)
+                                    }
+                                })
+                                Toast.fire({
+                                    icon: 'error',
+                                    title: 'Faltaron datos por ingresar'
+                                })
+                            } else {
+                                let valores = document.getElementById('formInsertarProducto');
+                                let datos = new FormData(valores);
+                                $.ajax({
+                                    url: './bd/solicitudes.php',
+                                    type: 'POST',
+                                    contentType: false,
+                                    processData: false,
+                                    data: datos,
+                                    success: function(data) {
+                                        if (data == null) {
+                                            const Toast = Swal.mixin({
+                                                toast: true,
+                                                position: 'top',
+                                                showConfirmButton: false,
+                                                timer: 3000,
+                                                timerProgressBar: true,
+                                                didOpen: (toast) => {
+                                                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                                                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                                                }
+                                            })
+                                            Toast.fire({
+                                                icon: 'success',
+                                                title: "Producto ingresado con exito"
+                                            })
+                                            tablaProductos.ajax.reload(null, false);
+                                        } else {
+                                            const Toast = Swal.mixin({
+                                                toast: true,
+                                                position: 'top',
+                                                showConfirmButton: false,
+                                                timer: 3000,
+                                                timerProgressBar: true,
+                                                didOpen: (toast) => {
+                                                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                                                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                                                }
+                                            })
+                                            Toast.fire({
+                                                icon: 'error',
+                                                title: `${data}`
+                                            })
+                                        }
+                                    }
+                                });
+                            }
+                        }
+                    })()
+
+                }
             }
         });
-        $('#modalProductos').modal('hide');
     });
 
-    $('#btnnuevo').click(function() {
-        opcion = 5;
-        id_p = null;
-        $("#formProductos").trigger("reset"); //resetear o limpiar el formulario
-        $(".modal-header").css("background-color", "#198754");
-        $(".modal-header").css("color", "white");
-        $(".modal-title").text("Ingresar nuevo producto");
-        $("#btnGuardar").text("Guardar Producto");
-        $("#modalProductos").modal('show');
-    });
-
-    $(document).on("click", "#btnEditar", function() {
+    $(document).on("click", ".btnVerImagen", function() {
+        opcion = 35;
         fila = $(this).closest('tr');
         id_p = parseInt(fila.find('td:eq(0)').text());
+        $.ajax({
+            url: "bd/solicitudes.php",
+            type: "POST",
+            dataType: "json",
+            data: { opcion: opcion, id_p: id_p },
+            success: function(data) {
+                console.log(data[0].img);
+                Swal.fire({
+                    title: `${data[0].nombre_produc}`,
+                    imageUrl: `http://localhost/aplicafinal/img/${data[0].img}`,
+                    imageWidth: 300,
+                    imageHeight: 200,
+                    imageAlt: 'Custom image',
+                })
+            }
+        });
+
+    });
+
+    $(document).on("click", ".btnEditar", function() {
+        fila = $(this).closest('tr');
+        id_p = parseInt(fila.find('td:eq(0)').text());
+        console.log(id_p);
         nom_p = fila.find('td:eq(1)').text();
         precio = parseInt((fila.find('td:eq(2)').text()));
         desc = fila.find('td:eq(3)').text();
-        img = fila.find('td:eq(4)').text();
-        grupo = parseInt(fila.find('td:eq(6)').text());
+        grupo = parseInt(fila.find('td:eq(5)').text());
         opcion = 9;
-        $("#seleccion").val(grupo);
-        $("#nom_p").val(nom_p);
-        $("#precio").val(precio);
-        $("#desc").val(desc);
-        $("#img").val(img);
-        $(".modal-header").css("background-color", "#0d6efd");
-        $(".modal-header").css("color", "white");
-        $(".modal-title").text("Editar Producto");
-        $("#btnGuardar").text("Editar Producto");
-        opcion = 6;
-        $("#modalProductos").modal('show');
+        let insercion = "";
+        let captura;
+        $.ajax({
+            url: "bd/solicitudes.php",
+            type: "POST",
+            dataType: "json",
+            data: { opcion: opcion },
+            success: function(data) {
+                if (data != null) {
+                    (async() => {
+                        const { value: formValues } = await Swal.fire({
+                            title: 'Insertar nuevo producto',
+                            html: `<form class="" method="POST" enctype="multipart/form-data" id="formEditarProducto"> <label class="swal2-label">Seleccione un producto</label>
+                            <select class="swal2-select" id="selectGrupo" name="selectGrupo" required></select>                          
+                            <input id="nombrePro" value="${nom_p}" name="nombrePro" placeholder="Nombre del producto" class="swal2-input" required>
+                            <input type="number" value="${precio}" id="precioPro" name="precioPro" placeholder="Precio del producto" class="swal2-input" required>
+                            <input id="desPro" value="${desc}" name="desPro" placeholder="Descripcion del producto" class="swal2-input" required>
+                            <input id="opcion" value="36" type="hidden" name="opcion">
+                            <input id="idProducto" value="${id_p}" type="hidden" name="idProducto">
+                            <input type="file" id="imgPro" name="imgPro" placeholder="Imagen del producto" class="swal2-input file" required></form>`,
+                            didOpen: () => {
+                                captura = $("#selectGrupo");
+                                for (id in data) {
+                                    insercion = `<option value="${data[id].id_grupo}">${data[id].nombre_grupo}</option>`
+                                    captura.append(insercion);
+                                }
+                            },
+
+                            preConfirm: () => {
+                                return new Promise(function(resolve) {
+                                    resolve([
+                                        $("#selectGrupo").val(),
+                                        $("#nombrePro").val(),
+                                        $("#precioPro").val(),
+                                        $("#desPro").val(),
+                                        $("#imgPro").val(),
+                                    ]);
+                                });
+                            }
+                        })
+
+                        if (formValues) {
+                            if (formValues[0] == "" || formValues[1] == "" || formValues[2] == "" || formValues[3] == "") {
+                                const Toast = Swal.mixin({
+                                    toast: true,
+                                    position: 'top',
+                                    showConfirmButton: false,
+                                    timer: 3000,
+                                    timerProgressBar: true,
+                                    didOpen: (toast) => {
+                                        toast.addEventListener('mouseenter', Swal.stopTimer)
+                                        toast.addEventListener('mouseleave', Swal.resumeTimer)
+                                    }
+                                })
+                                Toast.fire({
+                                    icon: 'error',
+                                    title: 'No pueden haber datos vacios'
+                                })
+                            } else {
+                                let valores = document.getElementById('formEditarProducto');
+                                let datos = new FormData(valores);
+                                $.ajax({
+                                    url: './bd/solicitudes.php',
+                                    type: 'POST',
+                                    contentType: false,
+                                    processData: false,
+                                    data: datos,
+                                    success: function(data) {
+                                        console.log(data);
+                                        if (data != null) {
+                                            const Toast = Swal.mixin({
+                                                toast: true,
+                                                position: 'top',
+                                                showConfirmButton: false,
+                                                timer: 3000,
+                                                timerProgressBar: true,
+                                                didOpen: (toast) => {
+                                                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                                                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                                                }
+                                            })
+                                            Toast.fire({
+                                                icon: 'error',
+                                                title: `${data}`
+                                            })
+                                        } else {
+                                            const Toast = Swal.mixin({
+                                                toast: true,
+                                                position: 'top',
+                                                showConfirmButton: false,
+                                                timer: 3000,
+                                                timerProgressBar: true,
+                                                didOpen: (toast) => {
+                                                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                                                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                                                }
+                                            })
+                                            Toast.fire({
+                                                icon: 'success',
+                                                title: "Producto editado"
+                                            })
+                                        }
+                                        tablaProductos.ajax.reload(null, false);
+                                    }
+                                });
+                            }
+
+                        }
+                    })()
+
+                }
+            }
+        });
     });
 
-    $(document).on("click", "#btnCambiar", function() {
+    $(document).on("click", ".btnCambiar", function() {
         fila = $(this).closest('tr');
         id_p = parseInt(fila.find('td:eq(0)').text());
-        estado = parseInt(fila.find('td:eq(5)').text());
+        estado = parseInt(fila.find('td:eq(4)').text());
         if (estado == 1) {
             estado = 0;
         } else {
@@ -163,14 +349,14 @@ $(document).ready(function() {
                 })
                 Toast.fire({
                     icon: 'success',
-                    title: 'actualizado con exito'
+                    title: 'actualizado con exito',
                 })
             }
         });
         tablaProductos.ajax.reload(null, false);
     });
 
-    $(document).on("click", "#btnBorrar", function() {
+    $(document).on("click", ".btnBorrar", function() {
         fila = $(this);
         id_p = parseInt($(this).closest('tr').find('td:eq(0)').text());
         opcion = 7;

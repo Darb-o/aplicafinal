@@ -6,7 +6,7 @@ body {
 }
 
 
-/*Quitar los numeros de aumento del input*/
+/*Quitar las flechas de aumento del input*/
 
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {

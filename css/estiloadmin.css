@@ -377,6 +377,90 @@ body {
 }
 
 
+/* Tabla productos */
+
+.listaproductos {
+    position: relative;
+    width: 100%;
+    padding: 0px 40px 0px 60px;
+    /*Modifica el tamaño que va a tomar la tabla*/
+}
+
+.listaproductos .cardHeader {
+    padding-bottom: 10px;
+}
+
+.listaproductos table {
+    width: 100%;
+    border-collapse: separate;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 7px 25px rgba(0, 0, 0, 0.2);
+}
+
+.listaproductos table thead td {
+    font-weight: 600;
+}
+
+.listaproductos table tr {
+    color: var(--black);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.88);
+}
+
+.listaproductos table tbody tr:hover {
+    background: var(--blue);
+    color: var(--white);
+}
+
+.listaproductos table tr td {
+    padding: 10px;
+}
+
+.listaproductos table tr:last-child {
+    border-bottom: none;
+}
+
+.iconosTabla {
+    position: relative;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 3px;
+}
+
+.iconosTabla span {
+    position: relative;
+    background: var(--black1);
+    padding: 3px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.iconosTabla span:hover {
+    background: var(--black2);
+}
+
+.iconosTabla span ion-icon {
+    color: var(--white);
+    font-size: 20px;
+}
+
+
+/*Modal nuevo producto*/
+
+.modalNuevoProducto {
+    position: relative;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 3px;
+}
+
+.modalNuevoProducto input {
+    position: relative;
+}
+
+
 /* responsive desing */
 
 @media(max-width:991px) {

@@ -25,6 +25,7 @@ if(isset( $_SESSION['user'])){
 </head>
 <body>
     <div class="contenedor">
+        
         <div class="navegacion">
             <ul>
                 <li>
@@ -34,7 +35,7 @@ if(isset( $_SESSION['user'])){
                     </a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="" class="irInterfaz">
                         <span class="icono"><ion-icon name="home-outline"></ion-icon></span>
                         <span class="titulo">Interfaz</span>
                     </a>
@@ -49,7 +50,7 @@ if(isset( $_SESSION['user'])){
                     if($_SESSION['id_rol'] == 1){                   
                         echo "
                         <li>
-                            <a href='./CRUD_Productos.php' class='irProductos'>
+                            <a href='' class='irProductos'>
                                 <span class='icono'><ion-icon name='fast-food-outline'></ion-icon></ion-icon></span>
                                 <span class='titulo'>Productos</span>
                             </a>

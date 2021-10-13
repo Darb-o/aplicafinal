@@ -1,11 +1,8 @@
 <?php
     session_start();
     include('./conexion.php');
-    //crear el objeto conexion
     $con = new Conexion();
-    //apuntar a la clase
     $link = $con->Conectar();
-    //validacion de usuario y password
     $user=(isset($_POST['user'])?$_POST['user']:'');
     $password=(isset($_POST['password'])?$_POST['password']:'');
     $nombre=(isset($_POST['nombre'])?$_POST['nombre']:'');

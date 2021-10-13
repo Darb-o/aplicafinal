@@ -289,10 +289,6 @@ $(document).ready(function() {
                     data: { opcion: opcion },
                 });
                 window.location.href = 'inicio.php';
-            } else {
-                $.ajax({
-                    url: './inicio.php'
-                });
             }
         })
     })
@@ -528,7 +524,6 @@ $(document).ready(function() {
     $("#btnGrupo").click(() => {
         window.location.href = 'CRUD_grupoP.php';
     })
-
 
 
 })

@@ -54,7 +54,6 @@ function llenarUsuarios() {
         data: { opcion: opcion },
         success: function(data) {
             if (data != null) {
-                console.log(data);
                 for (i in data) {
                     insercion = `
                     <tr>
@@ -94,7 +93,11 @@ $(document).on("click", ".cerrarSesion", function() {
     })
 });
 
-/*$(document).on("click", ".irProductos", function(e) {
+$(document).on("click", ".irProductos", function(e) {
     e.preventDefault();
-
-});*/
+    $(location).attr('href', './CRUD_Productos.php');
+});
+$(document).on("click", ".irInterfaz", function(e) {
+    e.preventDefault();
+    $(location).attr('href', './god.php');
+});
