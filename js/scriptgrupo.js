@@ -38,74 +38,94 @@ $(document).ready(function() {
             { "data": "id_grupo" },
             { "data": "nombre_grupo" },
             { "data": "descripcion_grupo" },
-            { "defaultContent": "<div class='text-center'><div class='btn-group'><button id='btnEditar' type='button' class='btn btn-primary btn-sm mx-1'><i id='iconitos' class='bi bi-pen'></i>Editar grupo</button><button type='button' id='btnBorrar' class='btn btn-danger btn-sm'><i id='iconitos' class='bi bi-trash'></i>Borrar grupo</button></div></div>" }
+            { "defaultContent": "<div class='iconosTabla'><span class='btnEditar'><ion-icon name='create-outline'></ion-icon></span><span class='btnBorrar'><ion-icon name='trash-outline'></ion-icon></span></div>" }
         ]
     });
 
-    $('#formGrupoP').submit(function(e) {
-        let mensaje = "";
-        if (opcion == 1) {
-            mensaje = "agregado con exito";
-        } else {
-            mensaje = "actualizado con exito";
-        }
-        e.preventDefault(); //evitar la funcion del submit para recargar la pagina
-        nombre_g = $.trim($('#nombre_grupo').val());
-        descripcion_g = $.trim($('#descripcion_grupo').val());
-        $.ajax({
-            url: "./bd/solicitudes.php",
-            type: "POST",
-            dataType: "json",
-            data: { id_grupo: id, nombre_grupo: nombre_g, descripcion_grupo: descripcion_g, opcion: opcion },
-            success: function(data) {
-                const Toast = Swal.mixin({
-                    toast: true,
-                    position: 'top',
-                    showConfirmButton: false,
-                    timer: 3000,
-                    timerProgressBar: true,
-                    didOpen: (toast) => {
-                        toast.addEventListener('mouseenter', Swal.stopTimer)
-                        toast.addEventListener('mouseleave', Swal.resumeTimer)
-                    }
-                })
-                Toast.fire({
-                    icon: 'success',
-                    title: `${mensaje}`
-                })
-                tablaGrupos.ajax.reload();
-            }
-        });
-        $('#modalGProductos').modal('hide');
-    });
-
     $('#btnnuevo').click(function() {
-        opcion = 1;
-        id = null;
-        $("#formGrupoP").trigger("reset"); //resetear o limpiar el formulario
-        $(".modal-header").css("background-color", "#198754");
-        $(".modal-header").css("color", "white");
-        $(".modal-title").text("Ingresar nuevo grupo");
-        $("#btnGuardar").text("Guardar Grupo");
-        $("#modalGProductos").modal('show');
+        (async() => {
+            const { value: formValues } = await Swal.fire({
+                title: 'Insertar nuevo grupo',
+                html: `<label class="swal2-label">Nombre del grupo</label><br>                       
+                <input type="text" id="nomGrupo" name="nomGrupo" placeholder="Nombre del grupo" class="swal2-input" required><br><br>
+                <label class="swal2-label">Descripcion del grupo</label><br>
+                <input type="text" id="desGrupo" name="desGrupo" placeholder="Descripcion del grupo" class="swal2-input" required><br><br>`,
+                preConfirm: () => {
+                    return new Promise(function(resolve) {
+                        resolve([
+                            $("#nomGrupo").val(),
+                            $("#desGrupo").val(),
+                        ]);
+                    });
+                }
+            })
+
+            if (formValues) {
+                if (formValues[0] != "" && formValues[1] != "") {
+                    opcion = 40;
+                    $.ajax({
+                        url: "bd/solicitudes.php",
+                        type: "POST",
+                        dataType: "json",
+                        data: { opcion: opcion, nombre_grupo: formValues[0], descripcion_grupo: formValues[1] },
+                        success: function(data) {
+                            alerta('Grupo de productos agregado con exito', 'success');
+                            tablaGrupos.ajax.reload(null, false);
+                        }
+                    });
+                } else {
+                    alerta('Algunos datos no se llenaron', 'error');
+                }
+            }
+        })()
     });
 
-    $(document).on("click", "#btnEditar", function() {
-        opcion = 2;
+    $(document).on("click", ".btnEditar", function() {
         fila = $(this).closest('tr');
         id = parseInt(fila.find('td:eq(0)').text());
         nombre_g = fila.find('td:eq(1)').text();
         descripcion_g = (fila.find('td:eq(2)').text());
-        $("#nombre_grupo").val(nombre_g);
-        $("#descripcion_grupo").val(descripcion_g);
-        $(".modal-header").css("background-color", "#0d6efd");
-        $(".modal-header").css("color", "white");
-        $(".modal-title").text("Editar Grupo");
-        $("#btnGuardar").text("Editar Grupo");
-        $("#modalGProductos").modal('show');
+        (async() => {
+            const { value: formValues } = await Swal.fire({
+                title: `Editar grupo ${nombre_g}`,
+                html: `<label class="swal2-label">Nombre del grupo</label><br>                        
+                <input type="text" value="${nombre_g}" id="nomGrupo" name="nomGrupo" placeholder="Nombre del grupo" class="swal2-input" required><br><br>
+                <label class="swal2-label">Descripcion del grupo</label><br>
+                <input type="text" value="${descripcion_g}" id="desGrupo" name="desGrupo" placeholder="Descripcion del grupo" class="swal2-input" required><br><br>`,
+                preConfirm: () => {
+                    return new Promise(function(resolve) {
+                        resolve([
+                            $("#nomGrupo").val(),
+                            $("#desGrupo").val(),
+                        ]);
+                    });
+                }
+            })
+            if (formValues) {
+                if (formValues[0] != "" && formValues[1] != "") {
+                    if (formValues[0] == nombre_g && formValues[1] == descripcion_g) {
+                        alerta('No se registraron cambios', 'warning');
+                    } else {
+                        opcion = 41;
+                        $.ajax({
+                            url: "bd/solicitudes.php",
+                            type: "POST",
+                            dataType: "json",
+                            data: { opcion: opcion, id_grupo: id, nombre_grupo: formValues[0], descripcion_grupo: formValues[1] },
+                            success: function(data) {
+                                alerta('Grupo de productos editado con exito', 'success');
+                                tablaGrupos.ajax.reload(null, false);
+                            }
+                        });
+                    }
+                } else {
+                    alerta('Algunos datos no se llenaron', 'error');
+                }
+            }
+        })()
     });
 
-    $(document).on("click", "#btnBorrar", function() {
+    $(document).on("click", ".btnBorrar", function() {
         fila = $(this);
         id = parseInt($(this).closest('tr').find('td:eq(0)').text());
         console.log(id);
@@ -127,24 +147,28 @@ $(document).ready(function() {
                     data: { opcion: opcion, id_grupo: id },
                     success: function() {
                         tablaGrupos.ajax.reload(null, false);
-                        const Toast = Swal.mixin({
-                            toast: true,
-                            position: 'top',
-                            showConfirmButton: false,
-                            timer: 3000,
-                            timerProgressBar: true,
-                            didOpen: (toast) => {
-                                toast.addEventListener('mouseenter', Swal.stopTimer)
-                                toast.addEventListener('mouseleave', Swal.resumeTimer)
-                            }
-                        })
-                        Toast.fire({
-                            icon: 'success',
-                            title: 'Borrado con exito'
-                        })
+                        alerta('Grupo borrado con exito', 'success');
                     }
                 });
             }
         })
     })
+
+    function alerta(mensaje, tipo) {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+        })
+        Toast.fire({
+            icon: tipo,
+            title: mensaje
+        })
+    }
 });

@@ -15,14 +15,13 @@ $(document).ready(function() {
             }
         }
     });
-    opcion = 14;
+    opcion = 38;
     tablaDescuentos = $('#tablaDescuentos').DataTable({
         "ajax": {
             "url": "bd/solicitudes.php",
             "method": "POST",
             "data": { opcion: opcion },
             "dataSrc": "",
-
         },
         "language": {
             "sProcessing": "Procesando...",
@@ -49,85 +48,156 @@ $(document).ready(function() {
             }
         },
         "columns": [
-            { "data": "id_descuento" },
-            { "data": "id_producto" },
-            { "data": "descuento" },
-            { "data": "fecha_i" },
-            { "data": "fecha_f" },
-            { "defaultContent": "<div class='text-center'><div class='btn-group'><button id='btnEditar' type='button' class='btn btn-primary btn-sm mx-1'><i id='iconitos' class='bi bi-pen'></i>Editar descuento</button><button type='button' id='btnBorrar' class='btn btn-danger btn-sm'><i id='iconitos' class='bi bi-trash'></i>Borrar descuento</button></div></div>" }
+            { title: "Id", data: "id_descuento" },
+            { title: "Producto", data: "nombre_produc" },
+            { title: "Descuento %", data: "descuento" },
+            { title: "Fecha inicio", data: "fecha_i" },
+            { title: "Fecha final", data: "fecha_f" },
+            { "defaultContent": "<div class='iconosTabla'><span class='btnEditar'><ion-icon name='create-outline'></ion-icon></span><span class='btnBorrar'><ion-icon name='trash-outline'></ion-icon></span></div>" }
         ]
     });
     var fila;
-    $('#formDescuentos').submit(function(e) {
-        let mensaje = "";
-        if (opcion == 11) {
-            mensaje = "agregado con exito";
-        } else {
-            mensaje = "actualizado con exito";
-        }
-        e.preventDefault(); //evitar la funcion del submit para recargar la pagina
-        id_p = $.trim($('#seleccion').val());
-        descuento = $.trim($('#descuento').val());
-        fecha_i = $.trim($('#fecha_i').val());
-        fecha_f = $.trim($('#fecha_f').val());
-        //usar el fondo de AJAX para el tratamiento de datos
+
+    $('#btnnuevo').click(function() {
+        opcion = 37;
+        let insercion = "";
+        let captura;
         $.ajax({
             url: "bd/solicitudes.php",
             type: "POST",
             dataType: "json",
-            data: { id_d: id_d, id_p: id_p, descuento: descuento, fecha_i: fecha_i, fecha_f: fecha_f, opcion: opcion },
+            data: { opcion: opcion },
             success: function(data) {
-                tablaDescuentos.ajax.reload(null, false);
-                const Toast = Swal.mixin({
-                    toast: true,
-                    position: 'top',
-                    showConfirmButton: false,
-                    timer: 3000,
-                    timerProgressBar: true,
-                    didOpen: (toast) => {
-                        toast.addEventListener('mouseenter', Swal.stopTimer)
-                        toast.addEventListener('mouseleave', Swal.resumeTimer)
-                    }
-                })
-                Toast.fire({
-                    icon: 'success',
-                    title: `${mensaje}`
-                })
+                if (data != null) {
+                    (async() => {
+                        const { value: formValues } = await Swal.fire({
+                            title: 'Insertar nueva promocion',
+                            html: `<label class="swal2-label">Seleccione un producto</label>
+                            <select class="swal2-select" id="selectProducto" name="selectProducto" required></select>                          
+                            <input type="number" id="canDescuento" name="canDescuento" placeholder="Descuento del producto" class="swal2-input number" required><br><br>
+                            <label class="swal2-label">Fecha comienzo descuento</label><br>
+                            <input type="date" id="fechaInicial" name="fechaInicial" class="swal2-input date" required><br><br>
+                            <label class="swal2-label">Fecha termina descuento</label><br>
+                            <input type="date" id="fechaFinal" name="fechaFinal" class="swal2-input date" required>`,
+                            didOpen: () => {
+                                captura = $("#selectProducto");
+                                for (id in data) {
+                                    insercion = `<option value="${data[id].id_producto}">${data[id].nombre_produc}</option>`
+                                    captura.append(insercion);
+                                }
+                            },
+                            preConfirm: () => {
+                                return new Promise(function(resolve) {
+                                    resolve([
+                                        $("#selectProducto").val(),
+                                        $("#canDescuento").val(),
+                                        $("#fechaInicial").val(),
+                                        $("#fechaFinal").val(),
+                                    ]);
+                                });
+                            }
+                        })
+
+                        if (formValues) {
+                            if (formValues[0] != "" && formValues[1] != "" && formValues[2] != "" && formValues[3] != "") {
+                                if (formValues[2] > formValues[3]) {
+                                    alerta('La fecha de inicio no puede ser mayor a la fecha final', 'error');
+                                } else {
+                                    opcion = 11;
+                                    $.ajax({
+                                        url: "bd/solicitudes.php",
+                                        type: "POST",
+                                        dataType: "json",
+                                        data: { opcion: opcion, id_p: formValues[0], descuento: formValues[1], fecha_i: formValues[2], fecha_f: formValues[3] },
+                                        success: function(data) {
+                                            alerta('Promocion agregada con exito', 'success');
+                                            tablaDescuentos.ajax.reload(null, false);
+                                        }
+                                    });
+                                }
+                            } else {
+                                alerta('Algunos datos no se llenaron', 'error');
+                            }
+                        }
+                    })()
+                }
             }
         });
-        $('#modalDescuentos').modal('hide');
-    });
-    $('#btnnuevo').click(function() {
-        id_d = null;
-        $("#formDescuentos").trigger("reset"); //resetear o limpiar el formulario
-        $(".modal-header").css("background-color", "#198754");
-        $(".modal-header").css("color", "white");
-        $(".modal-title").text("Ingresar nuevo producto");
-        $("#btnGuardar").text("Guardar promocion");
-        opcion = 11;
-        $("#modalDescuentos").modal('show');
-    });
-    $(document).on("click", "#btnEditar", function() {
-        fila = $(this).closest('tr');
-        id_d = parseInt(fila.find('td:eq(0)').text());
-        id_p = parseInt(fila.find('td:eq(1)').text());
-        decuento = parseInt(fila.find('td:eq(2)').text());
-        fecha_i = fila.find('td:eq(3)').text();
-        fecha_f = fila.find('td:eq(4)').text();
-        $("#seleccion").val(id_p);
-        $("#id_d").val(id_d);
-        $("#descuento").val(decuento);
-        $("#fecha_i").val(fecha_i);
-        $("#fecha_f").val(fecha_f);
-        $(".modal-header").css("background-color", "#0d6efd");
-        $(".modal-header").css("color", "white");
-        $(".modal-title").text("Editar Promocion");
-        $("#btnGuardar").text("Editar Promocion");
-        opcion = 12;
-        $("#modalDescuentos").modal('show');
     });
 
-    $(document).on("click", "#btnBorrar", function() {
+    function alerta(mensaje, tipo) {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+        })
+        Toast.fire({
+            icon: tipo,
+            title: mensaje
+        })
+    }
+
+    $(document).on("click", ".btnEditar", function() {
+        fila = $(this).closest('tr');
+        id_d = parseInt(fila.find('td:eq(0)').text());
+        nombre = fila.find('td:eq(1)').text();
+        descuento = parseInt(fila.find('td:eq(2)').text());
+        fecha_i = fila.find('td:eq(3)').text();
+        fecha_f = fila.find('td:eq(4)').text();
+        (async() => {
+            const { value: formValues } = await Swal.fire({
+                title: `Editar promocion ${nombre}`,
+                html: ` 
+                <label class="swal2-label">Descuento</label><br>                         
+                <input type="number" value="${descuento}" id="canDescuento" name="canDescuento" placeholder="Descuento del producto" class="swal2-input number" required><br><br>
+                <label class="swal2-label">Fecha comienzo descuento</label><br>
+                <input type="date" value="${fecha_i}" id="fechaInicial" name="fechaInicial" class="swal2-input date" required><br><br>
+                <label class="swal2-label">Fecha termina descuento</label><br>
+                <input type="date" value="${fecha_f}" id="fechaFinal" name="fechaFinal" class="swal2-input date" required>`,
+                preConfirm: () => {
+                    return new Promise(function(resolve) {
+                        resolve([
+                            $("#canDescuento").val(),
+                            $("#fechaInicial").val(),
+                            $("#fechaFinal").val(),
+                        ]);
+                    });
+                }
+            })
+
+            if (formValues) {
+                if (formValues[0] != "" && formValues[1] != "" && formValues[2]) {
+                    if (formValues[1] > formValues[2]) {
+                        alerta('La fecha de inicio no puede ser mayor a la fecha final', 'error');
+                    } else if (formValues[0] == descuento && formValues[1] == fecha_i && formValues[2] == fecha_f) {
+                        alerta('No realizo ningun cambio', 'warning');
+                    } else {
+                        opcion = 39;
+                        $.ajax({
+                            url: "bd/solicitudes.php",
+                            type: "POST",
+                            dataType: "json",
+                            data: { opcion: opcion, id_d: id_d, descuento: formValues[0], fecha_i: formValues[1], fecha_f: formValues[2] },
+                            success: function(data) {
+                                alerta('Promocion agregada con exito', 'success');
+                                tablaDescuentos.ajax.reload(null, false);
+                            }
+                        });
+                    }
+                } else {
+                    alerta('No pueden existir datos vacios', 'error');
+                }
+            }
+        })()
+    });
+
+    $(document).on("click", ".btnBorrar", function() {
         fila = $(this);
         id_d = parseInt($(this).closest('tr').find('td:eq(0)').text());
         opcion = 13;
@@ -147,25 +217,10 @@ $(document).ready(function() {
                     dataType: "json",
                     data: { opcion: opcion, id_d: id_d },
                     success: function() {
-                        tablaDescuentos.row(fila).parents('tr').remove().draw();
-                        const Toast = Swal.mixin({
-                            toast: true,
-                            position: 'top',
-                            showConfirmButton: false,
-                            timer: 3000,
-                            timerProgressBar: true,
-                            didOpen: (toast) => {
-                                toast.addEventListener('mouseenter', Swal.stopTimer)
-                                toast.addEventListener('mouseleave', Swal.resumeTimer)
-                            }
-                        })
-                        Toast.fire({
-                            icon: 'success',
-                            title: 'Borrado con exito'
-                        })
+                        tablaDescuentos.ajax.reload(null, false);
+                        alerta('Promocion eliminada exitosamente', 'success');
                     }
                 });
-                tablaDescuentos.ajax.reload(null, false);
             }
         })
     });

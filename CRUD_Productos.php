@@ -25,12 +25,12 @@ if(isset( $_SESSION['user'])){
 </head>
 
 <body>
-    <!--MENU ADMIN-->
+    
     <div class="contenedor">
         <div class="navegacion">
             <ul>
                 <li>
-                    <a href="">
+                    <a href="./god.php">
                         <span class="icono"><ion-icon name="restaurant-outline"></ion-icon></span>
                         <span class="titulo">Restaurante</span>
                     </a>
@@ -57,14 +57,14 @@ if(isset( $_SESSION['user'])){
                             </a>
                         </li>
                         <li>
-                            <a href=''>
+                            <a href='./CRUD_Promo.php'>
                                 <span class='icono'><ion-icon name='pricetag-outline'></ion-icon></ion-icon></span>
                                 <span class='titulo'>Promociones</span>
                             </a>
                         </li>
                         
                         <li>
-                            <a href=''>
+                            <a href='./CRUD_grupoP.php'>
                                 <span class='icono'><ion-icon name='file-tray-stacked-outline'></ion-icon></ion-icon></span>
                                 <span class='titulo'>Secciones productos</span>
                             </a>

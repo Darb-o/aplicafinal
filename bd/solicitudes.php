@@ -89,7 +89,7 @@
             $data=$res->fetchAll(PDO::FETCH_ASSOC);
             break;
         case 7://elimina datos de la tabla productos
-            $sql="delete from productos where id_producto='$id_p'";
+            $sql="delete from productos where id_producto = $id_p";
             $res=$link->prepare($sql);
             $res->execute();
             break;
@@ -115,16 +115,10 @@
             $res->execute();
             $data=$res->fetchAll(PDO::FETCH_ASSOC);
             break;
-        //case 11 a case 16 se realiza la edicion,adicion y eliminacion de filas en la tabla descuentos
-        case 11://insertar valores id de producto, descuento, fecha de inicio, fecha final en la tabla descuentos
-            $sql="insert into descuentos (id_producto,descuento,fecha_i,fecha_f) values ('$id_p','$descuento','$fecha_i','$fecha_f')";
+        case 11://insertar descuento 
+            $sql="insert into descuentos values (null,'$id_p','$descuento','$fecha_i','$fecha_f')";
             $res=$link->prepare($sql);
             $res->execute();
-            //mostrar los datos insertados
-            $sql="select * from descuentos";
-            $res=$link->prepare($sql);
-            $res->execute();
-            $data=$res->fetchAll(PDO::FETCH_ASSOC);
             break;
         case 12://actualizacion datos de la tabla descuentos
             $sql="update descuentos set id_producto='$id_p', descuento='$descuento',fecha_i='$fecha_i',fecha_f='$fecha_f' where id_descuento='$id_d'";
@@ -316,6 +310,7 @@
                 $res = $link->prepare($sql);
                 if($res->execute()){
                     move_uploaded_file($imagenP['tmp_name'],$ruta);
+                    $data = null;
                 }else{
                     $data = "error al insertar la imagen"; 
                 }
@@ -356,6 +351,7 @@
                     $res = $link->prepare($sql);
                     if($res->execute()){
                         move_uploaded_file($imagenP['tmp_name'],$ruta);
+                        $data = null;
                     }else{
                         $data = "error al insertar la imagen"; 
                     }
@@ -365,8 +361,36 @@
             }else{
                 $sql = "update productos set nombre_produc = '$nombreP', precio = $precioP , descripcion= '$descripcionP', grupo = $numGrupoP where id_producto = $idProducto";
                 $res = $link->prepare($sql);
-                $res->execute();           
+                $res->execute();
+                $data = null;           
             }         
+            break;
+        case 37: //listar productos para el select
+            $sql = "select id_producto, nombre_produc from productos";
+            $res = $link->prepare($sql);
+            $res->execute();
+            $data=$res->fetchAll(PDO::FETCH_ASSOC);
+            break;
+        case 38: //listar descuentos para la tabla tablaDescuentos
+            $sql = "select d.id_descuento,p.nombre_produc,d.descuento,d.fecha_i,d.fecha_f from descuentos d join productos p on (d.id_producto = p.id_producto)";
+            $res = $link->prepare($sql);
+            $res->execute();
+            $data=$res->fetchAll(PDO::FETCH_ASSOC);
+            break;
+        case 39: //editar Promociones
+            $sql = "update descuentos set descuento = $descuento, fecha_i = '$fecha_i', fecha_f = '$fecha_f' where id_descuento = $id_d";
+            $res = $link->prepare($sql);
+            $res->execute();
+            break;
+        case 40://insertar grupo producto
+            $sql = "insert into grupo values (null,'$nombre_grupo','$descripcion_grupo')";
+            $res = $link->prepare($sql);
+            $res->execute();
+            break;
+        case 41://editar grupo producto
+            $sql = "update grupo set nombre_grupo = '$nombre_grupo', descripcion_grupo = '$descripcion_grupo' where id_grupo = $id_grupo";
+            $res = $link->prepare($sql);
+            $res->execute();
             break;
     }
     

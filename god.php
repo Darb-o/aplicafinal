@@ -29,13 +29,13 @@ if(isset( $_SESSION['user'])){
         <div class="navegacion">
             <ul>
                 <li>
-                    <a href="">
+                    <a href="./god.php">
                         <span class="icono"><ion-icon name="restaurant-outline"></ion-icon></span>
                         <span class="titulo">Restaurante</span>
                     </a>
                 </li>
                 <li>
-                    <a href="" class="irInterfaz">
+                    <a href="./god.php">
                         <span class="icono"><ion-icon name="home-outline"></ion-icon></span>
                         <span class="titulo">Interfaz</span>
                     </a>
@@ -50,20 +50,20 @@ if(isset( $_SESSION['user'])){
                     if($_SESSION['id_rol'] == 1){                   
                         echo "
                         <li>
-                            <a href='' class='irProductos'>
+                            <a href='./CRUD_Productos.php'>
                                 <span class='icono'><ion-icon name='fast-food-outline'></ion-icon></ion-icon></span>
                                 <span class='titulo'>Productos</span>
                             </a>
                         </li>
                         <li>
-                            <a href=''>
+                            <a href='./CRUD_Promo.php'>
                                 <span class='icono'><ion-icon name='pricetag-outline'></ion-icon></ion-icon></span>
                                 <span class='titulo'>Promociones</span>
                             </a>
                         </li>
                         
                         <li>
-                            <a href=''>
+                            <a href='./CRUD_grupoP.php'>
                                 <span class='icono'><ion-icon name='file-tray-stacked-outline'></ion-icon></ion-icon></span>
                                 <span class='titulo'>Secciones productos</span>
                             </a>

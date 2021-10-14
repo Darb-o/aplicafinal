@@ -72,7 +72,7 @@ $(document).ready(function() {
                     (async() => {
                         const { value: formValues } = await Swal.fire({
                             title: 'Insertar nuevo producto',
-                            html: `<form class="" method="POST" enctype="multipart/form-data" id="formInsertarProducto"> <label class="swal2-label">Seleccione un producto</label>
+                            html: `<form class="" method="POST" enctype="multipart/form-data" id="formInsertarProducto"> <label class="swal2-label">Seleccione un producto de la lista</label>
                             <select class="swal2-select" id="selectGrupo" name="selectGrupo" required></select>                          
                             <input id="nombrePro" name="nombrePro" placeholder="Nombre del producto" class="swal2-input" required>
                             <input type="number" id="precioPro" name="precioPro" placeholder="Precio del producto" class="swal2-input" required>
@@ -102,21 +102,7 @@ $(document).ready(function() {
 
                         if (formValues) {
                             if (formValues[0] == "" || formValues[1] == "" || formValues[2] == "" || formValues[3] == "" || formValues[4] == "") {
-                                const Toast = Swal.mixin({
-                                    toast: true,
-                                    position: 'top',
-                                    showConfirmButton: false,
-                                    timer: 3000,
-                                    timerProgressBar: true,
-                                    didOpen: (toast) => {
-                                        toast.addEventListener('mouseenter', Swal.stopTimer)
-                                        toast.addEventListener('mouseleave', Swal.resumeTimer)
-                                    }
-                                })
-                                Toast.fire({
-                                    icon: 'error',
-                                    title: 'Faltaron datos por ingresar'
-                                })
+                                alerta('No pueden haber campos vacios, faltan datos por ingresar', 'error');
                             } else {
                                 let valores = document.getElementById('formInsertarProducto');
                                 let datos = new FormData(valores);
@@ -128,39 +114,11 @@ $(document).ready(function() {
                                     data: datos,
                                     success: function(data) {
                                         if (data == null) {
-                                            const Toast = Swal.mixin({
-                                                toast: true,
-                                                position: 'top',
-                                                showConfirmButton: false,
-                                                timer: 3000,
-                                                timerProgressBar: true,
-                                                didOpen: (toast) => {
-                                                    toast.addEventListener('mouseenter', Swal.stopTimer)
-                                                    toast.addEventListener('mouseleave', Swal.resumeTimer)
-                                                }
-                                            })
-                                            Toast.fire({
-                                                icon: 'success',
-                                                title: "Producto ingresado con exito"
-                                            })
-                                            tablaProductos.ajax.reload(null, false);
+                                            alerta('Producto insertado exitosamente', 'success');
                                         } else {
-                                            const Toast = Swal.mixin({
-                                                toast: true,
-                                                position: 'top',
-                                                showConfirmButton: false,
-                                                timer: 3000,
-                                                timerProgressBar: true,
-                                                didOpen: (toast) => {
-                                                    toast.addEventListener('mouseenter', Swal.stopTimer)
-                                                    toast.addEventListener('mouseleave', Swal.resumeTimer)
-                                                }
-                                            })
-                                            Toast.fire({
-                                                icon: 'error',
-                                                title: `${data}`
-                                            })
+                                            alerta(data, 'error');
                                         }
+                                        tablaProductos.ajax.reload(null, false);
                                     }
                                 });
                             }
@@ -247,21 +205,7 @@ $(document).ready(function() {
 
                         if (formValues) {
                             if (formValues[0] == "" || formValues[1] == "" || formValues[2] == "" || formValues[3] == "") {
-                                const Toast = Swal.mixin({
-                                    toast: true,
-                                    position: 'top',
-                                    showConfirmButton: false,
-                                    timer: 3000,
-                                    timerProgressBar: true,
-                                    didOpen: (toast) => {
-                                        toast.addEventListener('mouseenter', Swal.stopTimer)
-                                        toast.addEventListener('mouseleave', Swal.resumeTimer)
-                                    }
-                                })
-                                Toast.fire({
-                                    icon: 'error',
-                                    title: 'No pueden haber datos vacios'
-                                })
+                                alerta('No pueden existir campos vacios', 'error');
                             } else {
                                 let valores = document.getElementById('formEditarProducto');
                                 let datos = new FormData(valores);
@@ -272,39 +216,11 @@ $(document).ready(function() {
                                     processData: false,
                                     data: datos,
                                     success: function(data) {
-                                        console.log(data);
+                                        console.log("Esto es data" + data);
                                         if (data != null) {
-                                            const Toast = Swal.mixin({
-                                                toast: true,
-                                                position: 'top',
-                                                showConfirmButton: false,
-                                                timer: 3000,
-                                                timerProgressBar: true,
-                                                didOpen: (toast) => {
-                                                    toast.addEventListener('mouseenter', Swal.stopTimer)
-                                                    toast.addEventListener('mouseleave', Swal.resumeTimer)
-                                                }
-                                            })
-                                            Toast.fire({
-                                                icon: 'error',
-                                                title: `${data}`
-                                            })
+                                            alerta(data, 'error');
                                         } else {
-                                            const Toast = Swal.mixin({
-                                                toast: true,
-                                                position: 'top',
-                                                showConfirmButton: false,
-                                                timer: 3000,
-                                                timerProgressBar: true,
-                                                didOpen: (toast) => {
-                                                    toast.addEventListener('mouseenter', Swal.stopTimer)
-                                                    toast.addEventListener('mouseleave', Swal.resumeTimer)
-                                                }
-                                            })
-                                            Toast.fire({
-                                                icon: 'success',
-                                                title: "Producto editado"
-                                            })
+                                            alerta('Producto editado exitosamente', 'success');
                                         }
                                         tablaProductos.ajax.reload(null, false);
                                     }
@@ -336,21 +252,7 @@ $(document).ready(function() {
             data: { opcion: opcion, id_p: id_p, estado: estado },
             success: function() {
                 tablaProductos.ajax.reload(null, false);
-                const Toast = Swal.mixin({
-                    toast: true,
-                    position: 'top',
-                    showConfirmButton: false,
-                    timer: 3000,
-                    timerProgressBar: true,
-                    didOpen: (toast) => {
-                        toast.addEventListener('mouseenter', Swal.stopTimer)
-                        toast.addEventListener('mouseleave', Swal.resumeTimer)
-                    }
-                })
-                Toast.fire({
-                    icon: 'success',
-                    title: 'actualizado con exito',
-                })
+                alerta('Estado del producto actualizado', 'success');
             }
         });
         tablaProductos.ajax.reload(null, false);
@@ -359,6 +261,7 @@ $(document).ready(function() {
     $(document).on("click", ".btnBorrar", function() {
         fila = $(this);
         id_p = parseInt($(this).closest('tr').find('td:eq(0)').text());
+        console.log(id_p);
         opcion = 7;
         Swal.fire({
             title: 'esta seguro de borrar?',
@@ -376,26 +279,30 @@ $(document).ready(function() {
                     dataType: "json",
                     data: { opcion: opcion, id_p: id_p },
                     success: function() {
-                        tablaProductos.row(fila).parents('tr').remove().draw();
-                        const Toast = Swal.mixin({
-                            toast: true,
-                            position: 'top',
-                            showConfirmButton: false,
-                            timer: 3000,
-                            timerProgressBar: true,
-                            didOpen: (toast) => {
-                                toast.addEventListener('mouseenter', Swal.stopTimer)
-                                toast.addEventListener('mouseleave', Swal.resumeTimer)
-                            }
-                        })
-                        Toast.fire({
-                            icon: 'success',
-                            title: 'Borrado con exito'
-                        })
+                        console.log("satisfactorio perro");
+                        tablaProductos.ajax.reload(null, false);
+                        alerta('Producto borrado exitosamente', 'success');
                     }
                 });
-                tablaProductos.ajax.reload(null, false);
             }
         })
     });
+
+    function alerta(mensaje, tipo) {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+        })
+        Toast.fire({
+            icon: tipo,
+            title: mensaje
+        })
+    }
 })
