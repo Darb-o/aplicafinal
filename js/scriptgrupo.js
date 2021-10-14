@@ -1,10 +1,10 @@
 var fila;
 var opcion, id;
 $(document).ready(function() {
-    opcion = 4;
+    opcion = 1;
     tablaGrupos = $('#tablaGrupos').DataTable({
         "ajax": {
-            "url": "./bd/solicitudes.php",
+            "url": "./bd/peticiones.php",
             "method": "POST",
             "data": { opcion: opcion },
             "dataSrc": "",
@@ -62,9 +62,9 @@ $(document).ready(function() {
 
             if (formValues) {
                 if (formValues[0] != "" && formValues[1] != "") {
-                    opcion = 40;
+                    opcion = 2;
                     $.ajax({
-                        url: "bd/solicitudes.php",
+                        url: "bd/peticiones.php",
                         type: "POST",
                         dataType: "json",
                         data: { opcion: opcion, nombre_grupo: formValues[0], descripcion_grupo: formValues[1] },
@@ -106,9 +106,9 @@ $(document).ready(function() {
                     if (formValues[0] == nombre_g && formValues[1] == descripcion_g) {
                         alerta('No se registraron cambios', 'warning');
                     } else {
-                        opcion = 41;
+                        opcion = 3;
                         $.ajax({
-                            url: "bd/solicitudes.php",
+                            url: "bd/peticiones.php",
                             type: "POST",
                             dataType: "json",
                             data: { opcion: opcion, id_grupo: id, nombre_grupo: formValues[0], descripcion_grupo: formValues[1] },
@@ -129,7 +129,6 @@ $(document).ready(function() {
         fila = $(this);
         id = parseInt($(this).closest('tr').find('td:eq(0)').text());
         console.log(id);
-        opcion = 3;
         Swal.fire({
             title: 'esta seguro de borrar?',
             text: "esta accion no se podra revertir!",
@@ -140,8 +139,9 @@ $(document).ready(function() {
             confirmButtonText: 'si, borralo!'
         }).then((result) => {
             if (result.isConfirmed) {
+                opcion = 4;
                 $.ajax({
-                    url: "./bd/solicitudes.php",
+                    url: "./bd/peticiones.php",
                     type: "post",
                     dataType: "json",
                     data: { opcion: opcion, id_grupo: id },
@@ -157,9 +157,9 @@ $(document).ready(function() {
     function alerta(mensaje, tipo) {
         const Toast = Swal.mixin({
             toast: true,
-            position: 'top',
+            position: 'center',
             showConfirmButton: false,
-            timer: 3000,
+            timer: 3500,
             timerProgressBar: true,
             didOpen: (toast) => {
                 toast.addEventListener('mouseenter', Swal.stopTimer)

@@ -2,9 +2,9 @@ var opcion;
 var productos = new Array();
 var productosdescuento = new Array();
 $(document).ready(function() {
-    opcion = 16;
+    opcion = 5;
     $.ajax({
-        url: "./bd/solicitudes.php",
+        url: "./bd/peticiones.php",
         type: "POST",
         dataType: "json",
         data: { opcion: opcion },
@@ -24,9 +24,9 @@ $(document).ready(function() {
 
 function fillGrupo() {
     let at = document.getElementById('contentCard');
-    opcion = 9;
+    opcion = 6;
     $.ajax({
-        url: "bd/solicitudes.php",
+        url: "bd/peticiones.php",
         type: "POST",
         dataType: "json",
         data: { opcion: opcion },
@@ -41,13 +41,13 @@ function fillGrupo() {
 
 function fillCards(grupo) {
     let att = document.getElementById("" + grupo);
-    opcion = 17;
+    opcion = 7;
     let bandera = true;
     let precio = 0;
     let descuento = 0;
     let insercion = null;
     $.ajax({
-        url: "bd/solicitudes.php",
+        url: "bd/peticiones.php",
         type: "POST",
         dataType: "json",
         data: { opcion: opcion, grupo: grupo },
@@ -146,29 +146,15 @@ $(document).on("click", ".botonañadircarrito", function() {
         dataType: "json",
         data: { opcion: opcion },
         success: function(data) {
-            opcion = 29;
+            opcion = 12;
             if (data != null) {
                 $.ajax({
-                    url: "bd/solicitudes.php",
+                    url: "bd/peticiones.php",
                     type: "POST",
                     dataType: "json",
                     data: { opcion: opcion, id_p: producto.id, nom_p: producto.nombre, desc: producto.descripcion, precio: producto.precio, descuento: producto.descuento, unidades: unidades },
                     success: function(data) {
-                        const Toast = Swal.mixin({
-                            toast: true,
-                            position: 'top',
-                            showConfirmButton: false,
-                            timer: 1000,
-                            timerProgressBar: true,
-                            didOpen: (toast) => {
-                                toast.addEventListener('mouseenter', Swal.stopTimer)
-                                toast.addEventListener('mouseleave', Swal.resumeTimer)
-                            }
-                        })
-                        Toast.fire({
-                            icon: 'success',
-                            title: 'Producto agregado a tu carrito'
-                        })
+                        alerta('Producto agregado a tu carrito', 'success');
                     }
                 });
             } else {
@@ -187,12 +173,12 @@ $("#btnMenuCarro").click(function(e) {
         dataType: "json",
         data: { opcion: opcion },
         success: function(data) {
-            opcion = 30;
+            opcion = 13;
             if (data != null) {
                 tablaCarrito = $('#tablaCarrito').DataTable({
                     destroy: true,
                     ajax: {
-                        url: "bd/solicitudes.php",
+                        url: "bd/peticiones.php",
                         method: "POST",
                         data: { opcion: opcion },
                         dataSrc: "",
@@ -237,8 +223,9 @@ $("#btnMenuCarro").click(function(e) {
                 });
                 cambiarvalortotal();
                 $("#modalCarrito").modal('show');
-
             } else {
+                $(".modal-header").css("background-color", "#D72347");
+                $(".modal-header").css("color", "white");
                 $("#modalInicioSesion").modal('show');
             }
         }
@@ -246,9 +233,9 @@ $("#btnMenuCarro").click(function(e) {
 });
 
 function cambiarvalortotal() {
-    opcion = 33;
+    opcion = 8;
     $.ajax({
-        url: "bd/solicitudes.php",
+        url: "bd/peticiones.php",
         type: "POST",
         dataType: "json",
         data: { opcion: opcion },
@@ -268,9 +255,9 @@ $(document).on("click", "#btnRestarCarrito", function() {
     if (unidades == 0) {
         unidades = 1;
     }
-    opcion = 31;
+    opcion = 9;
     $.ajax({
-        url: "bd/solicitudes.php",
+        url: "bd/peticiones.php",
         type: "POST",
         dataType: "json",
         data: { opcion: opcion, id_p: idp, unidades: unidades },
@@ -288,9 +275,9 @@ $(document).on("click", "#btnSumarCarrito", function() {
     idp = parseInt(fila.find('td:eq(0)').text());
     unidades = parseInt(fila.find('td:eq(3)').text());
     unidades += 1;
-    opcion = 31;
+    opcion = 9;
     $.ajax({
-        url: "bd/solicitudes.php",
+        url: "bd/peticiones.php",
         type: "POST",
         dataType: "json",
         data: { opcion: opcion, id_p: idp, unidades: unidades },
@@ -306,9 +293,9 @@ $(document).on("click", "#btnSumarCarrito", function() {
 $(document).on("click", "#btnEliminarCarrito", function() {
     fila = $(this).closest('tr');
     idp = parseInt(fila.find('td:eq(0)').text());
-    opcion = 32;
+    opcion = 10;
     $.ajax({
-        url: "bd/solicitudes.php",
+        url: "bd/peticiones.php",
         type: "POST",
         dataType: "json",
         data: { opcion: opcion, id_p: idp },
@@ -320,3 +307,131 @@ $(document).on("click", "#btnEliminarCarrito", function() {
     });
     cambiarvalortotal();
 });
+
+$("#btnComprar").click(function() {
+    let cantidadfilas = tablaCarrito.rows().count();
+    if (cantidadfilas > 0) {
+        $("#modalCarrito").modal('hide');
+        $("#direccionDomicilio").hide();
+        $("#horaRecoger").hide();
+        $("#btngenerarCompraDomicilio").hide();
+        $("#btngenerarCompraEnPersona").hide();
+        $("#modalCompra").modal('show');
+    } else {
+        alerta('El carrito no cuenta con ningun producto', 'warning');
+    }
+})
+
+$("#btnAdomicilio").click(function() {
+    $("#direccionDomicilio").show();
+    $("#compraDireccion").prop('required', true);
+    traerDireccion();
+    $("#compraHora").prop('required', false);
+    $("#horaRecoger").hide();
+    $("#btngenerarCompraDomicilio").show();
+    $("#btngenerarCompraEnPersona").hide();
+})
+
+$("#btnRecogerPersona").click(function() {
+    $("#horaRecoger").show();
+    $("#compraHora").prop('required', true);
+    $("#compraDireccion").prop('required', false);
+    $("#direccionDomicilio").hide();
+    $("#btngenerarCompraEnPersona").show();
+    $("#btngenerarCompraDomicilio").hide();
+})
+
+$("#btnCerrarModal").click(function() {
+    $("#modalCarrito").modal('show');
+})
+
+$("#compraAdomicilio").submit(function(e) {
+    e.preventDefault();
+    let fechaactual = moment().format('YYYY/MM/DD HH:mm');
+    let direccion = $("#compraDireccion").val();
+    let tipoPedido = 1; //a domicilio
+    let estadoPedido = 1; //pendiente
+    if (direccion === "") {
+        alerta('La direccion no puede estar vacia', 'warning');
+    } else {
+        opcion = 24;
+        $.ajax({
+            url: "bd/peticiones.php",
+            type: "POST",
+            dataType: "json",
+            data: { opcion: opcion, direccion: direccion, fechaPedido: fechaactual, tipoPedido: tipoPedido, estadoPedido: estadoPedido },
+            success: function(data) {
+                console.log(data);
+                $("#modalCompra").modal('hide');
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Tu compra se ha realizado con exito',
+                    text: 'Muchas gracias por tu compra ',
+                })
+            }
+        });
+    }
+})
+
+$("#compraEnPersona").submit(function(e) {
+    e.preventDefault();
+    let hora = $("#compraHora").val();
+    let fecha = moment().format('YYYY/MM/DD');
+    let fechaHora = fecha + " " + hora;
+    fechaHora = new Date(fechaHora);
+    let fechaactual = moment().format();
+    if (moment(fechaHora).isSameOrBefore(fechaactual)) {
+        alerta('La hora no puede ser menor a la actual', 'warning');
+    } else {
+        fechahora = moment(fechaHora).format('YYYY/MM/DD HH:mm');
+        let tipoPedido = 2; // en persona
+        let estadoPedido = 3; // en progreso
+        opcion = 24;
+        $.ajax({
+            url: "bd/peticiones.php",
+            type: "POST",
+            dataType: "json",
+            data: { opcion: opcion, fechaPedido: fechahora, tipoPedido: tipoPedido, estadoPedido: estadoPedido },
+            success: function(data) {
+                console.log(data);
+                $("#modalCompra").modal('hide');
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Tu compra se ha realizado con exito',
+                    text: `Muchas gracias por tu compra, hora de propuesta a recoger ${hora}`,
+                })
+            }
+        });
+    }
+})
+
+function traerDireccion() {
+    opcion = 3;
+    $.ajax({
+        url: "bd/sesiones.php",
+        type: "POST",
+        dataType: "json",
+        data: { opcion: opcion },
+        success: function(data) {
+            $("#compraDireccion").val(data[0].direccion);
+        }
+    });
+}
+
+function alerta(mensaje, tipo) {
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'center',
+        showConfirmButton: false,
+        timer: 1000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+    })
+    Toast.fire({
+        icon: tipo,
+        title: mensaje
+    })
+}

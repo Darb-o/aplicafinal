@@ -9,21 +9,8 @@
 </head>
 <body>
 
-
-    <div class="container-fluid d-flex justify-content-center">
-        <form class="" method="POST" enctype="multipart/form-data" id="formImagen">
-            <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Insertar imagen</label>
-                <input type="file" class="form-control" id="inputImagen" name="inputImagen" aria-describedby="emailHelp">
-                <input type="hidden" value="1" class="form-control" id="inputOpcion" name="inputOpcion" aria-describedby="emailHelp">
-            </div>
-            <button type="submit" id="enviarImagen" class="btn btn-primary">Submit</button>
-        </form>
-    </div>
-
-
     <?php
-        /*session_start();
+        session_start();
         $_SESSION['user'] = array();
         $datos = array(
             "idproducto" => 400,
@@ -54,16 +41,12 @@
         var_dump($_SESSION['user']);
         echo('</pre>');
 
+        echo "el tamaño del array es: ".sizeof($_SESSION['user']);
         $id = 989;
-        foreach ($_SESSION['user'] as $key => $value) { 
-            if($value['idproducto'] == $id){
-                array_splice($_SESSION['user'],$key,1);
-                break;
-            }          
-        }
+        array_splice($_SESSION['user'],0,sizeof($_SESSION['user']));
         echo('<pre>');
         var_dump($_SESSION['user']);
-        echo('</pre>');*/
+        echo('</pre>');
     ?>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.min.js" integrity="sha384-skAcpIdS7UcVUC05LJ9Dxay8AXcDYfBJqt1CJ85S/CFujBsIzCIv+l9liuYLaMQ/" crossorigin="anonymous"></script>

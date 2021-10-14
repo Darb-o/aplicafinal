@@ -1,8 +1,8 @@
 var opcion, id_p;
 $(document).ready(function() {
-    opcion = 9;
+    opcion = 6;
     $.ajax({
-        url: "bd/solicitudes.php",
+        url: "bd/peticiones.php",
         type: "POST",
         dataType: "json",
         data: { opcion: opcion },
@@ -13,10 +13,10 @@ $(document).ready(function() {
             }
         }
     });
-    opcion = 8;
+    opcion = 11;
     tablaProductos = $('#tablaProductos').DataTable({
         "ajax": {
-            "url": "bd/solicitudes.php",
+            "url": "bd/peticiones.php",
             "method": "POST",
             "data": { opcion: opcion },
             "dataSrc": "",
@@ -61,9 +61,9 @@ $(document).ready(function() {
     $('#btnnuevo').click(function() {
         let insercion = "";
         let captura;
-        opcion = 9;
+        opcion = 6;
         $.ajax({
-            url: "bd/solicitudes.php",
+            url: "bd/peticiones.php",
             type: "POST",
             dataType: "json",
             data: { opcion: opcion },
@@ -77,7 +77,7 @@ $(document).ready(function() {
                             <input id="nombrePro" name="nombrePro" placeholder="Nombre del producto" class="swal2-input" required>
                             <input type="number" id="precioPro" name="precioPro" placeholder="Precio del producto" class="swal2-input" required>
                             <input id="desPro" name="desPro" placeholder="Descripcion del producto" class="swal2-input" required>
-                            <input id="opcion" value="34" type="hidden" name="opcion">
+                            <input id="opcion" value="14" type="hidden" name="opcion">
                             <input type="file" id="imgPro" name="imgPro" placeholder="Imagen del producto" class="swal2-input file" required></form>`,
                             didOpen: () => {
                                 captura = $("#selectGrupo");
@@ -107,7 +107,7 @@ $(document).ready(function() {
                                 let valores = document.getElementById('formInsertarProducto');
                                 let datos = new FormData(valores);
                                 $.ajax({
-                                    url: './bd/solicitudes.php',
+                                    url: './bd/peticiones.php',
                                     type: 'POST',
                                     contentType: false,
                                     processData: false,
@@ -131,11 +131,11 @@ $(document).ready(function() {
     });
 
     $(document).on("click", ".btnVerImagen", function() {
-        opcion = 35;
+        opcion = 15;
         fila = $(this).closest('tr');
         id_p = parseInt(fila.find('td:eq(0)').text());
         $.ajax({
-            url: "bd/solicitudes.php",
+            url: "bd/peticiones.php",
             type: "POST",
             dataType: "json",
             data: { opcion: opcion, id_p: id_p },
@@ -161,11 +161,11 @@ $(document).ready(function() {
         precio = parseInt((fila.find('td:eq(2)').text()));
         desc = fila.find('td:eq(3)').text();
         grupo = parseInt(fila.find('td:eq(5)').text());
-        opcion = 9;
+        opcion = 6;
         let insercion = "";
         let captura;
         $.ajax({
-            url: "bd/solicitudes.php",
+            url: "bd/peticiones.php",
             type: "POST",
             dataType: "json",
             data: { opcion: opcion },
@@ -179,7 +179,7 @@ $(document).ready(function() {
                             <input id="nombrePro" value="${nom_p}" name="nombrePro" placeholder="Nombre del producto" class="swal2-input" required>
                             <input type="number" value="${precio}" id="precioPro" name="precioPro" placeholder="Precio del producto" class="swal2-input" required>
                             <input id="desPro" value="${desc}" name="desPro" placeholder="Descripcion del producto" class="swal2-input" required>
-                            <input id="opcion" value="36" type="hidden" name="opcion">
+                            <input id="opcion" value="16" type="hidden" name="opcion">
                             <input id="idProducto" value="${id_p}" type="hidden" name="idProducto">
                             <input type="file" id="imgPro" name="imgPro" placeholder="Imagen del producto" class="swal2-input file" required></form>`,
                             didOpen: () => {
@@ -210,7 +210,7 @@ $(document).ready(function() {
                                 let valores = document.getElementById('formEditarProducto');
                                 let datos = new FormData(valores);
                                 $.ajax({
-                                    url: './bd/solicitudes.php',
+                                    url: './bd/peticiones.php',
                                     type: 'POST',
                                     contentType: false,
                                     processData: false,
@@ -244,9 +244,9 @@ $(document).ready(function() {
         } else {
             estado = 1;
         }
-        opcion = 10;
+        opcion = 17;
         $.ajax({
-            url: "bd/solicitudes.php",
+            url: "bd/peticiones.php",
             type: "post",
             dataType: "json",
             data: { opcion: opcion, id_p: id_p, estado: estado },
@@ -262,7 +262,6 @@ $(document).ready(function() {
         fila = $(this);
         id_p = parseInt($(this).closest('tr').find('td:eq(0)').text());
         console.log(id_p);
-        opcion = 7;
         Swal.fire({
             title: 'esta seguro de borrar?',
             text: "esta accion no se podra revertir!",
@@ -273,8 +272,9 @@ $(document).ready(function() {
             confirmButtonText: 'si, borralo!'
         }).then((result) => {
             if (result.isConfirmed) {
+                opcion = 18;
                 $.ajax({
-                    url: "bd/solicitudes.php",
+                    url: "bd/peticiones.php",
                     type: "post",
                     dataType: "json",
                     data: { opcion: opcion, id_p: id_p },

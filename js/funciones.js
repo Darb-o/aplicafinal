@@ -16,21 +16,7 @@ $(document).ready(function() {
             data: { user: user, password: password, opcion: opcion },
             success: function(data) {
                 if (data == null) {
-                    const Toast = Swal.mixin({
-                        toast: true,
-                        position: 'top',
-                        showConfirmButton: false,
-                        timer: 3000,
-                        timerProgressBar: true,
-                        didOpen: (toast) => {
-                            toast.addEventListener('mouseenter', Swal.stopTimer)
-                            toast.addEventListener('mouseleave', Swal.resumeTimer)
-                        }
-                    })
-                    Toast.fire({
-                        icon: 'error',
-                        title: 'Usuario o contraseña incorrectos'
-                    })
+                    alerta('Usuario o contraseña incorrectos', 'error');
                 } else {
                     opcion = data[0].id_rol;
                     if (opcion != 3) {
@@ -46,7 +32,6 @@ $(document).ready(function() {
     $("#btnInicioSesion").click(function() {
         $(".modal-header").css("background-color", "#D72347");
         $(".modal-header").css("color", "white");
-        $(".modal-title").text("Iniciar sesion");
         $("#formInicioSesion").trigger("reset");
         $("#modalInicioSesion").modal('show');
     });
@@ -109,59 +94,16 @@ $(document).ready(function() {
                                                 dataType: 'json',
                                                 data: { correo_r: data[0].correo, password_r: newclave, opcion: opcion },
                                             })
-                                            const Toast = Swal.mixin({
-                                                toast: true,
-                                                position: 'top',
-                                                showConfirmButton: false,
-                                                timer: 5000,
-                                                timerProgressBar: true,
-                                                didOpen: (toast) => {
-                                                    toast.addEventListener('mouseenter', Swal.stopTimer)
-                                                    toast.addEventListener('mouseleave', Swal.resumeTimer)
-                                                }
-                                            })
-                                            Toast.fire({
-                                                icon: 'success',
-                                                title: 'contraseña cambiada',
-                                            })
+                                            alerta('Contraseña cambiada exitosamente', 'success');
                                         }
                                     })()
                                 } else {
-                                    const Toast = Swal.mixin({
-                                        toast: true,
-                                        position: 'top',
-                                        showConfirmButton: false,
-                                        timer: 5000,
-                                        timerProgressBar: true,
-                                        didOpen: (toast) => {
-                                            toast.addEventListener('mouseenter', Swal.stopTimer)
-                                            toast.addEventListener('mouseleave', Swal.resumeTimer)
-                                        }
-                                    })
-                                    Toast.fire({
-                                        icon: 'error',
-                                        title: 'Respuesta incorrecta',
-                                    })
+                                    alerta('Respuesta incorrecta', 'error');
                                 }
                             })()
 
                         } else {
-                            const Toast = Swal.mixin({
-                                toast: true,
-                                position: 'top',
-                                showConfirmButton: false,
-                                timer: 3000,
-                                timerProgressBar: true,
-                                didOpen: (toast) => {
-                                    toast.addEventListener('mouseenter', Swal.stopTimer)
-                                    toast.addEventListener('mouseleave', Swal.resumeTimer)
-                                }
-                            })
-                            Toast.fire({
-                                icon: 'error',
-                                title: 'usuario no registrada en el sistema',
-                                text: 'verifique su correo',
-                            })
+                            alerta('Usuario no registrado en el sistema', 'error');
                         }
                     }
                 })
@@ -201,38 +143,9 @@ $(document).ready(function() {
                     success: function(data) {
                         if (data == null) {
                             $("#modalRegistrarse").modal('hide');
-                            const Toast = Swal.mixin({
-                                toast: true,
-                                position: 'top',
-                                showConfirmButton: false,
-                                timer: 5000,
-                                timerProgressBar: true,
-                                didOpen: (toast) => {
-                                    toast.addEventListener('mouseenter', Swal.stopTimer)
-                                    toast.addEventListener('mouseleave', Swal.resumeTimer)
-                                }
-                            })
-                            Toast.fire({
-                                icon: 'success',
-                                title: `Usuario ${nombre_r} registrado con exito`
-                            })
+                            alerta(`Usuario ${nombre_r} registrado con exito`, 'success');
                         } else {
-                            const Toast = Swal.mixin({
-                                toast: true,
-                                position: 'top',
-                                showConfirmButton: false,
-                                timer: 5000,
-                                timerProgressBar: true,
-                                didOpen: (toast) => {
-                                    toast.addEventListener('mouseenter', Swal.stopTimer)
-                                    toast.addEventListener('mouseleave', Swal.resumeTimer)
-                                }
-                            })
-                            Toast.fire({
-                                icon: 'error',
-                                title: 'Correo ya registrado',
-                                text: 'El usuario ya esta registrado, acceda con su cuenta o verifique los datos',
-                            })
+                            alerta('Usuario ya registrado en el sistema, verifique sus datos', 'error');
                         }
                     }
                 });
@@ -245,27 +158,6 @@ $(document).ready(function() {
         id_rol = 3;
         $(".modal-header").css("background-color", "#D72347");
         $(".modal-header").css("color", "white");
-        $(".modal-title").text("Registrar usuario");
-        $("#formRegistrarse").trigger("reset");
-        $("#modalRegistrarse").modal('show');
-    })
-
-    $("#btnRegistrarEmpleado").click(() => {
-        opcion = 1;
-        id_rol = 2;
-        $("#formRegistrarse").trigger("reset");
-        $(".modal-header").css("background-color", "#2E54F1");
-        $(".modal-header").css("color", "white");
-        $(".modal-title").text("Registrar empleado");
-        $("#modalRegistrarse").modal('show');
-    })
-
-    $("#btnRegistrarAdmin").click(() => {
-        opcion = 1;
-        id_rol = 1;
-        $(".modal-header").css("background-color", "#2E54F1");
-        $(".modal-header").css("color", "white");
-        $(".modal-title").text("Registrar Administrador");
         $("#formRegistrarse").trigger("reset");
         $("#modalRegistrarse").modal('show');
     })
@@ -312,7 +204,6 @@ $(document).ready(function() {
         })
         $(".modal-header").css("background-color", "#D72347");
         $(".modal-header").css("color", "white");
-        $(".modal-title").text("Editar perfil");
         $("#modalEditarPerfil").modal('show');
         $("#nom_edit").prop('disabled', true);
         $("#tel_edit").prop('disabled', true);
@@ -346,21 +237,7 @@ $(document).ready(function() {
                         data: { nombre_r: nombre, correo_r: correo, tel_r: telefono, fechanac_r: fecha, direccion_r: direccion, opcion: opcion },
                         success: function(data) {
                             if (data != null) {
-                                const Toast = Swal.mixin({
-                                    toast: true,
-                                    position: 'top',
-                                    showConfirmButton: false,
-                                    timer: 3000,
-                                    timerProgressBar: true,
-                                    didOpen: (toast) => {
-                                        toast.addEventListener('mouseenter', Swal.stopTimer)
-                                        toast.addEventListener('mouseleave', Swal.resumeTimer)
-                                    }
-                                })
-                                Toast.fire({
-                                    icon: 'success',
-                                    title: 'Datos actualizados'
-                                })
+                                alerta('Datos actualizados exitosamente', 'success');
                                 $("#modalEditarPerfil").modal('hide');
                                 opcion = 5;
                                 $.ajax({
@@ -377,21 +254,7 @@ $(document).ready(function() {
                         }
                     });
                 } else {
-                    const Toast = Swal.mixin({
-                        toast: true,
-                        position: 'top',
-                        showConfirmButton: false,
-                        timer: 4000,
-                        timerProgressBar: true,
-                        didOpen: (toast) => {
-                            toast.addEventListener('mouseenter', Swal.stopTimer)
-                            toast.addEventListener('mouseleave', Swal.resumeTimer)
-                        }
-                    })
-                    Toast.fire({
-                        icon: 'error',
-                        title: 'No realizo ningun cambio'
-                    })
+                    alerta('No realizo ningun cambio', 'warning');
                     $("#modalEditarPerfil").modal('hide');
                 }
             }
@@ -433,43 +296,13 @@ $(document).ready(function() {
                                 dataType: 'json',
                                 data: { correo_r: data[0].correo, password_r: nueva, opcion: opcion },
                             })
-                            const Toast = Swal.mixin({
-                                toast: true,
-                                position: 'top',
-                                showConfirmButton: false,
-                                timer: 3000,
-                                timerProgressBar: true,
-                                didOpen: (toast) => {
-                                    toast.addEventListener('mouseenter', Swal.stopTimer)
-                                    toast.addEventListener('mouseleave', Swal.resumeTimer)
-                                }
-                            })
-                            Toast.fire({
-                                icon: 'success',
-                                title: 'contraseña actualizada'
-                            })
+                            alerta('Contraseña actualizada', 'success');
                         } else {
-                            const Toast = Swal.mixin({
-                                toast: true,
-                                position: 'top',
-                                showConfirmButton: false,
-                                timer: 3000,
-                                timerProgressBar: true,
-                                background: '',
-                                didOpen: (toast) => {
-                                    toast.addEventListener('mouseenter', Swal.stopTimer)
-                                    toast.addEventListener('mouseleave', Swal.resumeTimer)
-                                }
-                            })
-                            Toast.fire({
-                                icon: 'error',
-                                title: 'contraseña actual erronea'
-                            })
+                            alerta('Contraseña actual incorrecta', 'error');
                         }
                     }
                 })
             }
-
         })()
     })
 
@@ -513,17 +346,23 @@ $(document).ready(function() {
         }
     })
 
-    $("#btnProductos").click(() => {
-        window.location.href = 'CRUD_Productos.php';
-    })
-
-    $("#btnPromociones").click(() => {
-        window.location.href = 'CRUD_Promo.php';
-    })
-
-    $("#btnGrupo").click(() => {
-        window.location.href = 'CRUD_grupoP.php';
-    })
+    function alerta(mensaje, tipo) {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'center',
+            showConfirmButton: false,
+            timer: 3500,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+        })
+        Toast.fire({
+            icon: tipo,
+            title: mensaje
+        })
+    }
 
 
 })

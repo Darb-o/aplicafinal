@@ -1,10 +1,10 @@
 var opcion, id_d;
 $(document).ready(function() {
-    var today = new Date().toISOString().split('T')[0];
-    /*document.getElementById("fecha_i").setAttribute('min', today);*/
-    opcion = 15;
+    //var today = new Date().toISOString().split('T')[0];
+    //document.getElementById("fecha_i").setAttribute('min', today);
+    opcion = 19;
     $.ajax({
-        url: "bd/solicitudes.php",
+        url: "bd/peticiones.php",
         type: "POST",
         dataType: "json",
         data: { opcion: opcion },
@@ -15,10 +15,10 @@ $(document).ready(function() {
             }
         }
     });
-    opcion = 38;
+    opcion = 20;
     tablaDescuentos = $('#tablaDescuentos').DataTable({
         "ajax": {
-            "url": "bd/solicitudes.php",
+            "url": "bd/peticiones.php",
             "method": "POST",
             "data": { opcion: opcion },
             "dataSrc": "",
@@ -59,11 +59,11 @@ $(document).ready(function() {
     var fila;
 
     $('#btnnuevo').click(function() {
-        opcion = 37;
+        opcion = 19;
         let insercion = "";
         let captura;
         $.ajax({
-            url: "bd/solicitudes.php",
+            url: "bd/peticiones.php",
             type: "POST",
             dataType: "json",
             data: { opcion: opcion },
@@ -103,9 +103,9 @@ $(document).ready(function() {
                                 if (formValues[2] > formValues[3]) {
                                     alerta('La fecha de inicio no puede ser mayor a la fecha final', 'error');
                                 } else {
-                                    opcion = 11;
+                                    opcion = 21;
                                     $.ajax({
-                                        url: "bd/solicitudes.php",
+                                        url: "bd/peticiones.php",
                                         type: "POST",
                                         dataType: "json",
                                         data: { opcion: opcion, id_p: formValues[0], descuento: formValues[1], fecha_i: formValues[2], fecha_f: formValues[3] },
@@ -178,9 +178,9 @@ $(document).ready(function() {
                     } else if (formValues[0] == descuento && formValues[1] == fecha_i && formValues[2] == fecha_f) {
                         alerta('No realizo ningun cambio', 'warning');
                     } else {
-                        opcion = 39;
+                        opcion = 22;
                         $.ajax({
-                            url: "bd/solicitudes.php",
+                            url: "bd/peticiones.php",
                             type: "POST",
                             dataType: "json",
                             data: { opcion: opcion, id_d: id_d, descuento: formValues[0], fecha_i: formValues[1], fecha_f: formValues[2] },
@@ -200,7 +200,6 @@ $(document).ready(function() {
     $(document).on("click", ".btnBorrar", function() {
         fila = $(this);
         id_d = parseInt($(this).closest('tr').find('td:eq(0)').text());
-        opcion = 13;
         Swal.fire({
             title: 'esta seguro de borrar?',
             text: "esta accion no se podra revertir!",
@@ -211,8 +210,9 @@ $(document).ready(function() {
             confirmButtonText: 'si, borralo!'
         }).then((result) => {
             if (result.isConfirmed) {
+                opcion = 23;
                 $.ajax({
-                    url: "bd/solicitudes.php",
+                    url: "bd/peticiones.php",
                     type: "post",
                     dataType: "json",
                     data: { opcion: opcion, id_d: id_d },

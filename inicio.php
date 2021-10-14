@@ -98,7 +98,7 @@ session_start();
     <!-- MODAL INICIO SESION-->
 
     <div class="modal fade" id="modalInicioSesion" tabindex="-1" data-bs-focus="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
               
                 <div class="modal-header">
@@ -143,8 +143,8 @@ session_start();
 
     <!-- MODAL REGISTRARSE-->
 
-    <div class="modal fade" id="modalRegistrarse" tabindex="-1" data-bs-focus="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+    <div class="modal fade" id="modalRegistrarse" tabindex="-1" data-bs-focus="false" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered ">
             <div class="modal-content">
               
                 <div class="modal-header">
@@ -234,11 +234,12 @@ session_start();
 
     <!-- MODAL EDITAR PERFIL-->
 
-    <div class="modal fade" id="modalEditarPerfil" data-bs-focus="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+    <div class="modal fade" id="modalEditarPerfil" data-bs-focus="false" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content"> 
 
                 <div class="modal-header">
+                <h4 id="texto" class="modal-title">Editar perfil</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true"></span>
                     </button>          
@@ -315,7 +316,7 @@ session_start();
     <!-- MODAL CARRITO-->
   
     <div class="modal fade"  id="modalCarrito" data-bs-focus="false" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-lg">
+      <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">                             
           <div class="modal-body">             
             <div class="container-xl">
@@ -351,9 +352,9 @@ session_start();
                   </div>
                 </div>
 
-                <div class="col-12 mt-1 mb-1 mx-1 d-flex justify-content-end">
-                  <button type="button" id="btnnuevo" class="btn btn-primary" data-toggle="modal">
-                  <i id="iconitos" class="bi bi-bag"></i>Comprar 
+                <div class="col-12 mt-1 mb-1 mx-1 d-flex justify-content-center">
+                  <button type="button" id="btnComprar" class="btn btn-primary btn-md" data-toggle="modal">
+                  <i id="iconitos" class="bi bi-handbag"></i>Comprar 
                   </button>
                   <input type="text" class="valortotal" disabled>
                 </div>
@@ -365,37 +366,79 @@ session_start();
       </div>
     </div>
 
-    <!-- Prueba tarjeta -->
-    <!--                        
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-12 col-md-3 col-sm-4 col-lg-2">
-          <div class="card">
-            <div class="producto">
-              <div class="iconodescuento">       
-                <span class="material-icons">local_offer</span>
-                <h2>20%</h2>               
+
+    <!-- MODAL COMPRA-->
+  
+    <div class="modal fade" id="modalCompra" data-bs-focus="false" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-md modal-dialog-centered">
+        <div class="modal-content">                             
+          <div class="modal-body">             
+            <div class="container-xl">
+              <div class="row">
+
+                <div class="col-11 mt-1 mb-3">
+                  <h4>Elige el metodo de compra</h4>
+                </div>
+
+                <div class="col-1 mt-1 mb-3 d-flex justify-content-end">
+                  <button type="button" id="btnCerrarModal" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"></span>
+                  </button>
+                </div>             
+                
+                <div class="col-6 mt-1 mb-1 d-flex justify-content-end">
+                  <button type="button" id="btnAdomicilio" class="btn btn-primary" data-toggle="modal">
+                  <i id="iconitos" class="bi bi-truck"></i>Pedir a domicilio
+                  </button>
+                </div>
+                
+                <div class="col-6 mt-1 mb-1 d-flex justify-content-start">
+                  <button type="button" id="btnRecogerPersona" class="btn btn-primary" data-toggle="modal">
+                  <i id="iconitos" class="bi bi-shop"></i>Recoger en persona
+                  </button>
+                </div>
+
+                <form id="compraAdomicilio">
+                  <div class="col-12 mt-3 mb-3" id="direccionDomicilio">
+                    <label for="basic-url" class="form-label d-flex justify-content-center">Escriba la direccion a donde se llevará el pedido</label>                                   
+                    <div class="input-group ps-4 pe-4">
+                      <span class="input-group-text" id="basic-addon3"><i class="bi bi-house"></i></span>
+                      <input type="text" class="form-control" placeholder="Escriba su direccion" id="compraDireccion" aria-describedby="basic-addon3">   
+                    </div>       
+                  </div>
+                  <div class="col-12 mt-1 mb-1 mx-1" id="btngenerarCompraDomicilio">
+                    <div class="d-flex justify-content-center">
+                      <button type="submit" class="btn btn-primary btn-md " data-toggle="modal">
+                        <i id="iconitos" class="bi bi-handbag"></i>Realizar compra
+                      </button>
+                    </div>
+                  </div>
+                </form>
+
+                <form id="compraEnPersona">
+                  <div class="col-12 mt-3 mb-3" id="horaRecoger">
+                    <label for="basic-url" class="form-label d-flex justify-content-center">Escribe la hora en que recogerás tu pedido</label>                                   
+                    <div class="input-group ps-4 pe-4">
+                      <span class="input-group-text" id="basic-addon3"><i class="bi bi-shop-window"></i></span>
+                      <input type="time" min="07:00" max="22:00" class="form-control" placeholder="" id="compraHora" aria-describedby="basic-addon3">   
+                    </div>       
+                  </div>
+                  <div class="col-12 mt-1 mb-1 mx-1" id="btngenerarCompraEnPersona">
+                    <div class="d-flex justify-content-center">
+                      <button type="submit" class="btn btn-primary btn-md " data-toggle="modal">
+                        <i id="iconitos" class="bi bi-handbag"></i>Realizar compra
+                      </button>
+                    </div>
+                  </div>
+                </form>
+
               </div>
-              <div class="preciosubrayado">$13.000</div>
-              <div class="imgbox">
-                <img src="./img/bigmac.jpg" alt="">
-              </div>
-              <div class="detalle">
-                <h2>Big mac<br><span>Doble carne, queso cheddar</span></h2>
-                <div class="precio">$13.000</div>
-                <a class="botonMenos" role="button"><span class="material-icons">remove</span></a>
-                <input type="number" class="inputcantidad" value="1" min="1" max="50">
-                <a class="botonMas" role="button"><span class="material-icons">add</span></a>        
-                <a class="botonañadircarrito" role="button">Añadir carrito</a>
-              </div>           
-            </div>
+            </div>                        
           </div>
         </div>
       </div>
-    </div>-->
+    </div>
 
-
-    <!-- Listar productos-->
 
     <div class="container-fluid">
         <div class="row" id="contentCard">
@@ -411,5 +454,6 @@ session_start();
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="./js/funciones.js" type="text/javascript"></script>
     <script src="./js/scriptPedidosU.js" type="text/javascript"></script>
+    <script src="./js/moment.min.js" type="text/javascript"></script>
 </body>
 </html>
