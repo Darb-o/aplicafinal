@@ -286,6 +286,37 @@
             }
             array_splice($_SESSION['carrito'],0,sizeof($_SESSION['carrito']));
             break;
+        case 25: // listar las facturas
+            $sql="select * from pedido";
+            $res=$link->prepare($sql);
+            $res->execute();
+            $data=$res->fetchAll(PDO::FETCH_ASSOC);
+            break;
+        case 26: // numero de ordenes nuevas
+            $sql="select count(*) as total FROM pedido where fecha_pedido between '$fecha_i' and '$fecha_f'";
+            $res=$link->prepare($sql);
+            $res->execute();
+            $data=$res->fetchAll(PDO::FETCH_ASSOC);
+            break;
+        case 27: // numero de ventas del ultimo mes, es decir las que tienen como estado entregado
+            $sql = "select count(*) as total FROM pedido where estado_pedido = 2 and fecha_pedido between '$fecha_i' and '$fecha_f'";
+            $res=$link->prepare($sql);
+            $res->execute();
+            $data=$res->fetchAll(PDO::FETCH_ASSOC);
+            break;
+        case 28: //numero de usuarios registrados en el sistema
+            $sql = "select count(*) as total from usuario where id_rol = 3";
+            $res=$link->prepare($sql);
+            $res->execute();
+            $data=$res->fetchAll(PDO::FETCH_ASSOC);
+            break;
+        case 29: //ganancias totales del ultimo mes
+            $sql = "select SUM(valor_total) as total FROM pedido where estado_pedido = 2 and fecha_pedido between '$fecha_i' and '$fecha_f'";
+            $res=$link->prepare($sql);
+            $res->execute();
+            $data=$res->fetchAll(PDO::FETCH_ASSOC);
+            break;
+
     }
     print json_encode($data,JSON_UNESCAPED_UNICODE);
 ?>

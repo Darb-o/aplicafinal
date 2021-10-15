@@ -124,106 +124,17 @@ if(isset( $_SESSION['user'])){
                         <h2>Ordenes Recientes</h2>
                         <a href="#" class="btn">Ver todos</a>
                     </div>
-                    <table>
+                    <table >
                         <thead>
                             <tr>
                                 <td>Id</td>
-                                <td>Precio</td>
-                                <td>Pago</td>
+                                <td>Valor</td>
                                 <td>Tipo</td>
                                 <td>Fecha</td>
                                 <td>Estado</td>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>$4500</td>
-                                <td>Pendiente</td>
-                                <td>Recoger</td>
-                                <td>2021-12-10</td>
-                                <td><span class="estado entregado">entregado</span></td>
-                            </tr>
-                            <tr>
-                                <td>1</td>
-                                <td>$4500</td>
-                                <td>Pendiente</td>
-                                <td>Domicilio</td>
-                                <td>2021-12-10</td>
-                                <td><span class="estado pendiente">pendiente</span></td>
-                            </tr>
-                            <tr>
-                                <td>1</td>
-                                <td>$4500</td>
-                                <td>Pendiente</td>
-                                <td>Domicilio</td>
-                                <td>2021-12-10</td>
-                                <td><span class="estado progreso">en progreso</span></td>
-                            </tr>
-                            <tr>
-                                <td>1</td>
-                                <td>$4500</td>
-                                <td>Pendiente</td>
-                                <td>Domicilio</td>
-                                <td>2021-12-10</td>
-                                <td><span class="estado devuelto">devuelto</span></td>
-                            </tr>
-                            <tr>
-                                <td>1</td>
-                                <td>$4500</td>
-                                <td>Pendiente</td>
-                                <td>Domicilio</td>
-                                <td>2021-12-10</td>
-                                <td><span class="estado entregado">entregado</span></td>
-                            </tr>
-                            <tr>
-                                <td>1</td>
-                                <td>$4500</td>
-                                <td>Pendiente</td>
-                                <td>Domicilio</td>
-                                <td>2021-12-10</td>
-                                <td><span class="estado progreso">En progreso</span></td>
-                            </tr>
-                            <tr>
-                                <td>1</td>
-                                <td>$4500</td>
-                                <td>Pendiente</td>
-                                <td>Domicilio</td>
-                                <td>2021-12-10</td>
-                                <td><span class="estado progreso">En progreso</span></td>
-                            </tr>
-                            <tr>
-                                <td>1</td>
-                                <td>$4500</td>
-                                <td>Pendiente</td>
-                                <td>Domicilio</td>
-                                <td>2021-12-10</td>
-                                <td><span class="estado progreso">En progreso</span></td>
-                            </tr>
-                            <tr>
-                                <td>1</td>
-                                <td>$4500</td>
-                                <td>Pendiente</td>
-                                <td>Domicilio</td>
-                                <td>2021-12-10</td>
-                                <td><span class="estado progreso">En progreso</span></td>
-                            </tr>
-                            <tr>
-                                <td>1</td>
-                                <td>$4500</td>
-                                <td>Pendiente</td>
-                                <td>Domicilio</td>
-                                <td>2021-12-10</td>
-                                <td><span class="estado progreso">En progreso</span></td>
-                            </tr>
-                            <tr>
-                                <td>1</td>
-                                <td>$4500</td>
-                                <td>Pendiente</td>
-                                <td>Domicilio</td>
-                                <td>2021-12-10</td>
-                                <td><span class="estado progreso">En progreso</span></td>
-                            </tr>
+                        <tbody id="tablaOrdenesRecientes">
                         </tbody>
                     </table>
                 </div>
@@ -236,8 +147,6 @@ if(isset( $_SESSION['user'])){
                     </table>
                 </div>
             </div>
-
-
         </div>
     </div>
 
@@ -249,6 +158,7 @@ if(isset( $_SESSION['user'])){
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
     <script src="./js/funcionesadmin.js" type="text/javascript"></script>
+    <script src="./js/moment.min.js" type="text/javascript"></script>
     <script>
         //menu desplegable
         let toggle = document.querySelector('.toggle');

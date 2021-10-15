@@ -277,7 +277,7 @@ body {
 }
 
 .detalles .ordenesrecientes table tr {
-    color: var(--black2);
+    color: var(--black1);
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
