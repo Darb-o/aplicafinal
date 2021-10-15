@@ -224,4 +224,30 @@ $(document).ready(function() {
             }
         })
     });
+
+    $(document).on("click", ".cerrarSesion", function() {
+        opcion = 2;
+        Swal.fire({
+            title: 'Estas seguro?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si, cierra la sesion!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: './bd/sesiones.php',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: { opcion: opcion },
+                });
+                window.location.href = 'inicio.php';
+            } else {
+                $.ajax({
+                    url: './inicio.php'
+                });
+            }
+        })
+    });
 })

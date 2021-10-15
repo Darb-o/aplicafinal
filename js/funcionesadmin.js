@@ -218,13 +218,3 @@ $(document).on("click", ".cerrarSesion", function() {
         }
     })
 });
-
-
-$(document).on("click", ".irProductos", function(e) {
-    e.preventDefault();
-    $(location).attr('href', './CRUD_Productos.php');
-});
-$(document).on("click", ".irInterfaz", function(e) {
-    e.preventDefault();
-    $(location).attr('href', './god.php');
-});

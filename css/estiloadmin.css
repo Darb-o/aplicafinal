@@ -460,6 +460,11 @@ body {
     position: relative;
 }
 
+.grafica {
+    width: 900px;
+    height: 700px;
+}
+
 
 /* responsive desing */
 

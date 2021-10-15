@@ -39,38 +39,50 @@ if(isset( $_SESSION['user'])){
                         <span class="icono"><ion-icon name="home-outline"></ion-icon></span>
                         <span class="titulo">Interfaz</span>
                     </a>
-                </li>
+                </li> 
                 <li>
-                    <a href="">
-                        <span class="icono"><ion-icon name="receipt-outline"></ion-icon></span>
-                        <span class="titulo">Facturas</span>
+                    <a href='./comprarcaja.php'>
+                        <span class='icono'><ion-icon name="storefront-outline"></ion-icon></ion-icon></span>
+                        <span class='titulo'>Insertar compra</span>
                     </a>
                 </li>
+                <li>
+                    <a href='./facturasestado.php'>
+                        <span class='icono'><ion-icon name="reload-outline"></ion-icon></span>
+                        <span class='titulo'>Cambiar estado factura</span>
+                    </a>
+                </li>              
                 <?php 
                     if($_SESSION['id_rol'] == 1){                   
                         echo "
                         <li>
-                            <a href='./CRUD_Productos.php'>
+                            <a href='./facturas.php'>
+                                <span class='icono'><ion-icon name='receipt-outline'></ion-icon></span>
+                                <span class='titulo'>Facturas</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href='./productos.php'>
                                 <span class='icono'><ion-icon name='fast-food-outline'></ion-icon></ion-icon></span>
                                 <span class='titulo'>Productos</span>
                             </a>
                         </li>
                         <li>
-                            <a href='./CRUD_Promo.php'>
+                            <a href='./promociones.php'>
                                 <span class='icono'><ion-icon name='pricetag-outline'></ion-icon></ion-icon></span>
                                 <span class='titulo'>Promociones</span>
                             </a>
                         </li>
                         
                         <li>
-                            <a href='./CRUD_grupoP.php'>
+                            <a href='./grupoproductos.php'>
                                 <span class='icono'><ion-icon name='file-tray-stacked-outline'></ion-icon></ion-icon></span>
                                 <span class='titulo'>Secciones productos</span>
                             </a>
                         </li>";
                     }
                 ?>
-                <li>
+                <!--<li>
                     <a href="">
                         <span class="icono"><ion-icon name="people-outline"></ion-icon></span>
                         <span class="titulo">Clientes</span>
@@ -81,6 +93,12 @@ if(isset( $_SESSION['user'])){
                         <span class="icono"><ion-icon name="settings-outline"></ion-icon></span>
                         <span class="titulo">Mi perfil</span>
                     </a>
+                </li>-->
+                <li>
+                    <a href="./tabla.php" >
+                        <span class="icono"><ion-icon name="bar-chart-outline"></ion-icon></span>
+                        <span class="titulo">Graficas</span>
+                    </a>
                 </li>
                 <li>
                     <a href="#" class="cerrarSesion">
@@ -88,6 +106,7 @@ if(isset( $_SESSION['user'])){
                         <span class="titulo">Cerrar sesion</span>
                     </a>
                 </li>
+                
             </ul>
         </div>
 
